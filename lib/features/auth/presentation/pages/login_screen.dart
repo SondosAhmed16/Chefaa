@@ -1,10 +1,12 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
+import 'package:chefaa/core/routes/app_router.dart';
 import 'package:chefaa/core/utils/validator.dart';
 import 'package:chefaa/core/widgets/custom_dialog.dart';
 import 'package:chefaa/core/widgets/custom_text_feild.dart';
 import 'package:chefaa/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:chefaa/features/auth/presentation/cubit/auth_state.dart';
+import 'package:chefaa/features/auth/presentation/pages/forget_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -75,12 +77,11 @@ class LoginScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 8),
 
-                    // Forgot Password Button
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
-                          // Handle Forgot Password
+                          Navigator.pushNamed(context, Routes.forgetPassword);
                         },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
@@ -139,7 +140,6 @@ class LoginScreen extends StatelessWidget {
 
                     SizedBox(height: 30),
 
-                    // Social Media Buttons
                     _buildSocialButton(
                       text: 'Sign in with Google',
                       iconPath: 'assets/svg_images/Google.svg',
@@ -156,7 +156,6 @@ class LoginScreen extends StatelessWidget {
 
                     SizedBox(height: 30),
 
-                    // Sign Up Link
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
