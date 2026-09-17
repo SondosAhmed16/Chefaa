@@ -168,7 +168,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigate to Sign Up Screen
+                            Navigator.pushReplacementNamed(context, Routes.roleSelection);
                           },
                           child: Text(
                             'Sign Up',

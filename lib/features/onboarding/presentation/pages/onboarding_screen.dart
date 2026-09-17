@@ -21,7 +21,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     await ShareServices.saveBool("isFirstTime", false);
 
     if (!mounted) return;
-    Navigator.pushReplacementNamed(context, Routes.forgetPassword);
+    Navigator.pushReplacementNamed(context, Routes.roleSelection);
   }
 
   @override
