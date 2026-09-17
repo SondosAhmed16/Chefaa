@@ -5,10 +5,14 @@ import 'package:chefaa/features/auth/presentation/pages/forget_password_screen.d
 import 'package:chefaa/features/auth/presentation/pages/login_screen.dart';
 import 'package:chefaa/features/auth/presentation/pages/reset_password_screen.dart';
 import 'package:chefaa/features/auth/presentation/pages/verify_code_screen.dart';
+import 'package:chefaa/features/onboarding/presentation/pages/onboarding_screen.dart';
+import 'package:chefaa/features/splash/presentation/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Routes {
+  static const String splash = '/';
+  static const String onboarding = '/onboarding';
   static const String login = '/login';
   static const String home = '/home';
   static const String signUp = '/signUp';
@@ -20,6 +24,13 @@ class Routes {
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case Routes.splash:
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
+
+      case Routes.onboarding:
+        return MaterialPageRoute(builder: (_) => const OnboardingScreen());
+
+        
       case Routes.login:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
