@@ -45,7 +45,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                 child: Column(
                   children: [
                     Text(
-                      "Choose who YOu Are",
+                      "Choose who You Are",
                       style: getBoldStyle(
                         color: ColorManager.black,
                         fontSize: 20,
