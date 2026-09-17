@@ -1,3 +1,5 @@
+import 'package:chefaa/core/shared%20classes/user_entity.dart';
+
 class LoginResponseEntity {
 final String accessToken;
 final String refreshToken;
@@ -8,10 +10,3 @@ final UserEntity user;
 
 }
 
-class UserEntity{
-  final String name;
-  final String id;
-  final String role;
-
-  UserEntity({required this.name, required this.id, required this.role});
-}

@@ -1,4 +1,4 @@
-import 'package:chefaa/features/auth/domain/entities/login_response_entity.dart';
+import 'package:chefaa/core/shared%20classes/user_entity.dart';
 
 sealed class AuthState {}
 

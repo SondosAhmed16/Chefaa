@@ -4,6 +4,7 @@ class ApiEndpoints {
   static const String forgetPass = 'auth/forgot-password';
   static const String verifyCode = 'auth/verify-reset-code';
   static const String resetPass = "auth/reset-password";
+  static const String register="auth/register";
 }
 
 class ApiKey {
@@ -15,5 +16,5 @@ class ApiKey {
   static const String id = 'id';
   static const String role = 'role';
   static const String message = 'message';
-  
+
 }

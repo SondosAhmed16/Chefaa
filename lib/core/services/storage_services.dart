@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'package:chefaa/features/auth/data/model/login_response_model.dart';
+import 'package:chefaa/core/shared%20classes/user_entity.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:chefaa/core/API/api_endpoints.dart';
-import 'package:chefaa/features/auth/domain/entities/login_response_entity.dart';
 
 class StorageServices {
   static String? token;

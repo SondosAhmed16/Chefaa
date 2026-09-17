@@ -23,7 +23,11 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
     if (_selectedRole == RoleType.facility) {
       Navigator.pushNamed(context, Routes.facilitySelection);
     } else if (_selectedRole == RoleType.patient) {
-      Navigator.pushNamed(context, Routes.login);
+      Navigator.pushNamed(
+        context,
+        Routes.patientRegister,
+        arguments: RoleType.patient.name,
+      );
     } else if (_selectedRole == RoleType.doctor) {
       Navigator.pushNamed(context, Routes.forgetPassword);
     }
@@ -103,7 +107,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 24,)
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
