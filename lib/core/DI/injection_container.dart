@@ -29,6 +29,12 @@ import 'package:chefaa/features/patient/auth/data/repository/register_patient_re
 import 'package:chefaa/features/patient/auth/domain/repository/register_patient_reopsitory.dart';
 import 'package:chefaa/features/patient/auth/domain/usecases/register_patient_usecase.dart';
 import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cubit.dart';
+import 'package:chefaa/features/patient/onboarding/data/data%20source/patient_all_info_datasource.dart';
+import 'package:chefaa/features/patient/onboarding/data/data%20source/patient_all_info_datasource_imp.dart';
+import 'package:chefaa/features/patient/onboarding/data/repository/patient_all_info_repo_imp.dart';
+import 'package:chefaa/features/patient/onboarding/domain/repository/patient_all_info_repo.dart';
+import 'package:chefaa/features/patient/onboarding/domain/usecase/patient_all_info_usacse.dart';
+import 'package:chefaa/features/patient/onboarding/presentation/cubit/all_info_cubit.dart';
 import 'package:chefaa/features/pharmacy/auth/data/data%20source/data_source_pharmacy_auth.dart';
 import 'package:chefaa/features/pharmacy/auth/data/data%20source/data_source_pharmacy_auth_implement.dart';
 import 'package:chefaa/features/pharmacy/auth/data/repository/register_pharmacy_repository_implement.dart';
@@ -54,6 +60,7 @@ Future<void> initAppModule() async {
   _initAuthModuleDoctor();
   _initAuthModulePharmacy();
   _initAuthModuleFacility();
+  _initPatientOnboardingInfoModule();
 }
 
 void _initAuthModule() {
@@ -196,5 +203,28 @@ void _initAuthModuleFacility() {
 
   getIt.registerFactory<FacilityAuthCubit>(
     () => FacilityAuthCubit(useCase: getIt<FaciclityUsecaseRegister>()),
+  );
+}
+
+
+void _initPatientOnboardingInfoModule() {
+  // Data Source
+  getIt.registerLazySingleton<PatientAllInfoDatasource>(
+    () => PatientAllInfoDatasourceImp(apiConsumer: getIt<ApiConsumer>()),
+  );
+
+  // Repository
+  getIt.registerLazySingleton<PatientAllInfoRepo>(
+    () => PatientAllInfoRepoImp(datasource: getIt<PatientAllInfoDatasource>()),
+  );
+
+  // Use Case
+  getIt.registerLazySingleton<PatientAllInfoUsacse>(
+    () => PatientAllInfoUsacse(repo: getIt<PatientAllInfoRepo>()),
+  );
+
+  // Cubit
+  getIt.registerFactory<AllInfoCubit>(
+    () => AllInfoCubit(updateAllInfoUseCase: getIt<PatientAllInfoUsacse>()),
   );
 }

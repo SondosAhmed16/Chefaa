@@ -106,15 +106,17 @@ class PatientRegisterScreen extends StatelessWidget {
                             showDialog(
                               context: context,
                               barrierDismissible: false,
-                              builder: (_) => CustomDialog(
+                              builder: (dialogContext) => CustomDialog(
                                 title: "Success",
                                 message:
                                     "Your account has been successfully registered",
                                 type: DialogType.success,
                                 onPressed: () {
+
+                                  Navigator.of(dialogContext).pop();
                                   Navigator.pushNamedAndRemoveUntil(
                                     context,
-                                    Routes.login,
+                                    Routes.onboardingInfo,
                                     (route) => false,
                                   );
                                 },

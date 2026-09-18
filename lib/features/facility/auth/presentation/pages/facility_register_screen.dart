@@ -159,7 +159,6 @@ class FacilityRegisterScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 12),
 
-                            // Commercial License Number
                             const Text(
                               "Commercial License Number",
                               style: TextStyle(fontWeight: FontWeight.w600),

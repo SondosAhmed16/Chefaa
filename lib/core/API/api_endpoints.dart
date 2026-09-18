@@ -5,6 +5,7 @@ class ApiEndpoints {
   static const String verifyCode = 'auth/verify-reset-code';
   static const String resetPass = "auth/reset-password";
   static const String register = "auth/register";
+  static const String update_info = "patient/profile";
 }
 
 class ApiKey {
@@ -23,6 +24,4 @@ class ApiKey {
   static const String medicalDirectorName = "medicalDirectorName";
   static const String directorProfessionalId = "directorProfessionalId";
   static const String facilityType = "facilityType";
-
-  
 }

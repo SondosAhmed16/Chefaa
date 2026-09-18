@@ -45,4 +45,27 @@ class DioConsumer implements ApiConsumer {
       rethrow;
     }
   }
+
+  @override
+  Future<dynamic> put(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParam,
+    bool isFormated = false,
+  }) async {
+    try {
+      final response = await dio.put(
+        path,
+        data: isFormated && data is Map<String, dynamic>
+            ? FormData.fromMap(data)
+            : data,
+        queryParameters: queryParam,
+      );
+      return response.data;
+    } on DioException catch (e) {
+      handleDioExceptions(e);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
