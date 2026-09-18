@@ -22,7 +22,7 @@ class PharmacyRegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<PharmacyAuthCubit>();
     return Scaffold(
-      backgroundColor: ColorManager.white,
+      backgroundColor: Color(0xffe1e3ec),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -34,75 +34,146 @@ class PharmacyRegisterScreen extends StatelessWidget {
                 child: Form(
                   key: cubit.registerFormKey,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomTextField(
-                        controller: cubit.NameController,
-                        text: "Full Pharmacy Legal Name",
-                        validator: Validators.businessNameValidator,
+                      // Pharmacy Register Title
+                      const Text(
+                        "Pharmacy Register",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
+                      const SizedBox(height: 16),
 
-                      const SizedBox(height: 12),
-
-                      CustomTextField(
-                        controller: cubit.emailController,
-                        text: "Enter Pharmacy Email",
-                        prefixIcon: "assets/icons/Email_icon_Inactive.svg",
-                        validator: Validators.validateEmail,
-                      ),
-                      const SizedBox(height: 12),
-
-                      CustomTextField(
-                        controller: cubit.phoneController,
-                        text: "Enter Pharmacy Phone",
-                        prefixIcon: "assets/icons/Phone_icon_Inactive.svg",
-                        validator: Validators.validatePhone,
-                      ),
-                      const SizedBox(height: 12),
-
-                      CustomTextField(
-                        controller: cubit.passwordController,
-                        text: "Enter Your Password",
-                        prefixIcon: "assets/icons/Password_icon_Inactive.svg",
-                        validator: Validators.validatePassword,
-                        isPass: true,
-                      ),
-                      const SizedBox(height: 12),
-
-                      CustomTextField(
-                        controller: cubit.confirmPasswordController,
-                        text: "Confirm Your Password",
-                        prefixIcon: "assets/icons/Password_icon_Inactive.svg",
-                        validator: (value) =>
-                            Validators.validateConfirmPassword(
-                              value,
-                              cubit.passwordController.text,
+                      // White Card Containing Form Inputs
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Pharmacy Name
+                            const Text(
+                              "Pharmacy Name",
+                              style: TextStyle(fontWeight: FontWeight.w600),
                             ),
-                        isPass: true,
-                      ),
-                      const SizedBox(height: 12),
+                            const SizedBox(height: 6),
+                            CustomTextField(
+                              controller: cubit.NameController,
+                              text: "Full Pharmacy legal name",
+                              validator: Validators.businessNameValidator,
+                            ),
+                            const SizedBox(height: 12),
 
-                        CustomTextField(
-                        controller: cubit.commNumber,
-                        text: "e.g.LIC-676-78",
-                        validator: Validators.validateLicense,
-                      ),
-                      const SizedBox(height: 12),
+                            // Phone Number (Moved Up as per design)
+                            const Text(
+                              "Phone Number",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 6),
+                            CustomTextField(
+                              controller: cubit.phoneController,
+                              text: "+20 xxxxxxxx",
+                              prefixIcon:
+                                  "assets/icons/Phone_icon_Inactive.svg",
+                              validator: Validators.validatePhone,
+                            ),
+                            const SizedBox(height: 12),
 
+                            // Work Email
+                            const Text(
+                              "Work Email",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 6),
+                            CustomTextField(
+                              controller: cubit.emailController,
+                              text: "contact@pharmacy.com",
+                              prefixIcon:
+                                  "assets/icons/Email_icon_Inactive.svg",
+                              validator: Validators.validateEmail,
+                            ),
+                            const SizedBox(height: 12),
 
-                      BlocBuilder<PharmacyAuthCubit, PharmacyAuthState>(
-                        builder: (context, state) {
-                          return CustomFilePicker(
-                            selectedFile: cubit.membershipFile,
-                            label: "Upload your Membership Card",
-                            onFileSelected: (file) =>
-                                cubit.setMembershipFile(file),
-                            onFileRemoved: () => cubit.removeMembershipFile(),
-                          );
-                        },
+                            // Password
+                            const Text(
+                              "Password",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 6),
+                            CustomTextField(
+                              controller: cubit.passwordController,
+                              text: "Enter your password",
+                              prefixIcon:
+                                  "assets/icons/Password_icon_Inactive.svg",
+                              validator: Validators.validatePassword,
+                              isPass: true,
+                            ),
+                            const SizedBox(height: 12),
+
+                            // Confirm Password
+                            const Text(
+                              "Confirm Password",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 6),
+                            CustomTextField(
+                              controller: cubit.confirmPasswordController,
+                              text: "Re-enter your password",
+                              prefixIcon:
+                                  "assets/icons/Password_icon_Inactive.svg",
+                              validator: (value) =>
+                                  Validators.validateConfirmPassword(
+                                    value,
+                                    cubit.passwordController.text,
+                                  ),
+                              isPass: true,
+                            ),
+                            const SizedBox(height: 12),
+
+                            // Commercial License Number
+                            const Text(
+                              "Commercial License Number",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 6),
+                            CustomTextField(
+                              controller: cubit.commNumber,
+                              text: "e.g. LIC-676-78",
+                              validator: Validators.validateLicense,
+                            ),
+                            const SizedBox(height: 12),
+
+                            // Medical License Upload
+                            const Text(
+                              "Medical license Upload",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 6),
+                            BlocBuilder<PharmacyAuthCubit, PharmacyAuthState>(
+                              builder: (context, state) {
+                                return CustomFilePicker(
+                                  selectedFile: cubit.membershipFile,
+                                  label: "Upload your liecence",
+                                  onFileSelected: (file) =>
+                                      cubit.setMembershipFile(file),
+                                  onFileRemoved: () =>
+                                      cubit.removeMembershipFile(),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
 
                       const SizedBox(height: 16),
 
+                      // Terms and Conditions (Outside the white card)
                       BlocBuilder<PharmacyAuthCubit, PharmacyAuthState>(
                         builder: (context, state) {
                           return TermsAndConditions(
@@ -111,8 +182,10 @@ class PharmacyRegisterScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      const SizedBox(height: 24),
 
+                      const SizedBox(height: 20),
+
+                      // Submit Button
                       BlocConsumer<PharmacyAuthCubit, PharmacyAuthState>(
                         listener: (context, state) {
                           if (state is RegisterPharmacySuccessState) {
@@ -152,6 +225,7 @@ class PharmacyRegisterScreen extends StatelessWidget {
                           );
                         },
                       ),
+
                       const SizedBox(height: 16),
                       const AlreadyHaveAccount(),
                       const SizedBox(height: 24),
