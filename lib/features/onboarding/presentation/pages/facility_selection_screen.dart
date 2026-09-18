@@ -22,7 +22,7 @@ class _FacilitySelectionScreenState extends State<FacilitySelectionScreen> {
   void _onNext() {
     if (_facilityType == null) return;
     if (_facilityType == FacilityType.pharmacy) {
-      Navigator.pushNamed(context, Routes.roleSelection);
+      Navigator.pushNamed(context, Routes.pharmacyRegister,arguments: FacilityType.pharmacy.name);
     } else if (_facilityType == FacilityType.lab) {
       Navigator.pushNamed(context, Routes.login);
     }

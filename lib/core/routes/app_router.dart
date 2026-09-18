@@ -12,6 +12,8 @@ import 'package:chefaa/features/onboarding/presentation/pages/onboarding_screen.
 import 'package:chefaa/features/onboarding/presentation/pages/role_selection_screen.dart';
 import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cubit.dart';
 import 'package:chefaa/features/patient/auth/presentation/pages/patient_register_screen.dart';
+import 'package:chefaa/features/pharmacy/auth/presentation/cubit/pharmacy_auth_cubit.dart';
+import 'package:chefaa/features/pharmacy/auth/presentation/pages/pharmacy_register_screen.dart';
 import 'package:chefaa/features/splash/presentation/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +31,8 @@ class Routes {
   static const String resetPAss = '/resetPAss';
   static const String patientRegister = '/patientRegister';
   static const String doctortRegister = '/doctorRegister';
+  static const String pharmacyRegister = '/pharmacyRegister';
+  static const String labRegister = '/labRegister';
 }
 
 class AppRouter {
@@ -57,13 +61,21 @@ class AppRouter {
           ),
         );
 
-        
       case Routes.doctortRegister:
         final role = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<DoctorAuthCubit>(),
             child: DoctorRegisterScreen(role: role),
+          ),
+        );
+
+      case Routes.pharmacyRegister:
+        final role = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<PharmacyAuthCubit>(),
+            child: PharmacyRegisterScreen(role: role),
           ),
         );
 

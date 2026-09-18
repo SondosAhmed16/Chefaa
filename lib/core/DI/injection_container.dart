@@ -23,6 +23,12 @@ import 'package:chefaa/features/patient/auth/data/repository/register_patient_re
 import 'package:chefaa/features/patient/auth/domain/repository/register_patient_reopsitory.dart';
 import 'package:chefaa/features/patient/auth/domain/usecases/register_patient_usecase.dart';
 import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cubit.dart';
+import 'package:chefaa/features/pharmacy/auth/data/data%20source/data_source_pharmacy_auth.dart';
+import 'package:chefaa/features/pharmacy/auth/data/data%20source/data_source_pharmacy_auth_implement.dart';
+import 'package:chefaa/features/pharmacy/auth/data/repository/register_pharmacy_repository_implement.dart';
+import 'package:chefaa/features/pharmacy/auth/domain/repository/register_pharmacy_reopsitory.dart';
+import 'package:chefaa/features/pharmacy/auth/domain/usecases/register_pharmacy_usecase.dart';
+import 'package:chefaa/features/pharmacy/auth/presentation/cubit/pharmacy_auth_cubit.dart';
 
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -40,6 +46,7 @@ Future<void> initAppModule() async {
   _initAuthModule();
   _initAuthModulePatient();
   _initAuthModuleDoctor();
+  _initAuthModulePharmacy();
 }
 
 void _initAuthModule() {
@@ -130,5 +137,32 @@ void _initAuthModuleDoctor() {
   getIt.registerFactory<DoctorAuthCubit>(
     () =>
         DoctorAuthCubit(registerDoctorUsecase: getIt<RegisterDoctorUsecase>()),
+  );
+}
+
+void _initAuthModulePharmacy() {
+  // Data Sources
+  getIt.registerLazySingleton<DataSourcePharmacyAuth>(
+    () => DataSourcePharmacyAuthImplement(apiConsumer: getIt<ApiConsumer>()),
+  );
+
+  // Repositories
+  getIt.registerLazySingleton<RegisterPharmacyReopsitory>(
+    () => RegisterPharmacyRepositoryImplement(
+      dataSource: getIt<DataSourcePharmacyAuth>(),
+    ),
+  );
+
+  // Use Cases
+  getIt.registerLazySingleton<RegisterPharmacyUsecase>(
+    () => RegisterPharmacyUsecase(
+      registerPharmacyReopsitory: getIt<RegisterPharmacyReopsitory>(),
+    ),
+  );
+
+  getIt.registerFactory<PharmacyAuthCubit>(
+    () => PharmacyAuthCubit(
+      registerPharmacyUsecase: getIt<RegisterPharmacyUsecase>(),
+    ),
   );
 }
