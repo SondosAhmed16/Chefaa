@@ -10,13 +10,19 @@ import 'package:chefaa/features/auth/domain/useCases/login_usecase.dart';
 import 'package:chefaa/features/auth/domain/useCases/reset_password_usecase.dart';
 import 'package:chefaa/features/auth/domain/useCases/verify_code_usecase.dart';
 import 'package:chefaa/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:chefaa/features/doctor/auth/data/data%20source/data_source_doctor_auth.dart';
+import 'package:chefaa/features/doctor/auth/data/data%20source/data_source_doctor_auth_implement.dart';
+import 'package:chefaa/features/doctor/auth/data/repository/register_doctor_repository_implement.dart';
+import 'package:chefaa/features/doctor/auth/domain/repository/register_doctor_reopsitory.dart';
+import 'package:chefaa/features/doctor/auth/domain/usecases/register_doctor_usecase.dart';
+import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_cubit.dart';
 
 import 'package:chefaa/features/patient/auth/data/data%20source/data_source_patient_auth.dart';
 import 'package:chefaa/features/patient/auth/data/data%20source/data_source_patient_auth_implement.dart';
 import 'package:chefaa/features/patient/auth/data/repository/register_patient_repository_implement.dart';
 import 'package:chefaa/features/patient/auth/domain/repository/register_patient_reopsitory.dart';
 import 'package:chefaa/features/patient/auth/domain/usecases/register_patient_usecase.dart';
-import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cubit.dart'; // 👈 Import PatientAuthCubit
+import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cubit.dart';
 
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -33,6 +39,7 @@ Future<void> initAppModule() async {
   // Features - Auth
   _initAuthModule();
   _initAuthModulePatient();
+  _initAuthModuleDoctor();
 }
 
 void _initAuthModule() {
@@ -97,5 +104,31 @@ void _initAuthModulePatient() {
     () => PatientAuthCubit(
       registerPatientUsecase: getIt<RegisterPatientUsecase>(),
     ),
+  );
+}
+
+void _initAuthModuleDoctor() {
+  // Data Sources
+  getIt.registerLazySingleton<DataSourceDoctorAuth>(
+    () => DataSourceDoctorAuthImplement(apiConsumer: getIt<ApiConsumer>()),
+  );
+
+  // Repositories
+  getIt.registerLazySingleton<RegisterDoctorReopsitory>(
+    () => RegisterDoctorRepositoryImplement(
+      dataSource: getIt<DataSourceDoctorAuth>(),
+    ),
+  );
+
+  // Use Cases
+  getIt.registerLazySingleton<RegisterDoctorUsecase>(
+    () => RegisterDoctorUsecase(
+      registerDoctorReopsitory: getIt<RegisterDoctorReopsitory>(),
+    ),
+  );
+
+  getIt.registerFactory<DoctorAuthCubit>(
+    () =>
+        DoctorAuthCubit(registerDoctorUsecase: getIt<RegisterDoctorUsecase>()),
   );
 }

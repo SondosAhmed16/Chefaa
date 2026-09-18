@@ -1,9 +1,8 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-enum DialogType { success, fail, validation }
+enum DialogType { success, fail, validation, verification }
 
 class CustomDialog extends StatelessWidget {
   const CustomDialog({
@@ -38,6 +37,11 @@ class CustomDialog extends StatelessWidget {
           icon: Icons.warning_amber_rounded,
           color: Colors.orange,
         );
+      case DialogType.verification:
+        return _DialogConfig(
+          icon: Icons.access_time_rounded,
+          color: Colors.grey,
+        );
     }
   }
 
@@ -46,15 +50,15 @@ class CustomDialog extends StatelessWidget {
     final config = _getConfig();
 
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 0,
       backgroundColor: Colors.transparent,
       child: Stack(
         alignment: Alignment.topCenter,
         children: [
           Container(
-            padding: EdgeInsets.only(top: 45, bottom: 20, left: 20, right: 20),
-            margin: EdgeInsets.only(top: 35),
+            padding: const EdgeInsets.only(top: 45, bottom: 20, left: 20, right: 20),
+            margin: const EdgeInsets.only(top: 35),
             decoration: BoxDecoration(
               color: ColorManager.white,
               borderRadius: BorderRadius.circular(20),
@@ -67,8 +71,7 @@ class CustomDialog extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: getBoldStyle(color: ColorManager.black, fontSize: 18),
                 ),
-                SizedBox(height: 10),
-
+                const SizedBox(height: 10),
                 Text(
                   message,
                   textAlign: TextAlign.center,
@@ -77,8 +80,7 @@ class CustomDialog extends StatelessWidget {
                     fontSize: 14,
                   ),
                 ),
-                SizedBox(height: 20),
-
+                const SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -87,7 +89,7 @@ class CustomDialog extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -105,7 +107,6 @@ class CustomDialog extends StatelessWidget {
               ],
             ),
           ),
-
           CircleAvatar(
             radius: 35,
             backgroundColor: config.color,

@@ -5,6 +5,8 @@ import 'package:chefaa/features/auth/presentation/pages/forget_password_screen.d
 import 'package:chefaa/features/auth/presentation/pages/login_screen.dart';
 import 'package:chefaa/features/auth/presentation/pages/reset_password_screen.dart';
 import 'package:chefaa/features/auth/presentation/pages/verify_code_screen.dart';
+import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_cubit.dart';
+import 'package:chefaa/features/doctor/auth/presentation/pages/doctor_register_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/facility_selection_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/onboarding_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/role_selection_screen.dart';
@@ -26,6 +28,7 @@ class Routes {
   static const String verifyCode = '/verifyCode';
   static const String resetPAss = '/resetPAss';
   static const String patientRegister = '/patientRegister';
+  static const String doctortRegister = '/doctorRegister';
 }
 
 class AppRouter {
@@ -51,6 +54,16 @@ class AppRouter {
           builder: (_) => BlocProvider(
             create: (context) => getIt<PatientAuthCubit>(),
             child: PatientRegisterScreen(role: role),
+          ),
+        );
+
+        
+      case Routes.doctortRegister:
+        final role = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<DoctorAuthCubit>(),
+            child: DoctorRegisterScreen(role: role),
           ),
         );
 

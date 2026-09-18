@@ -29,7 +29,11 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
         arguments: RoleType.patient.name,
       );
     } else if (_selectedRole == RoleType.doctor) {
-      Navigator.pushNamed(context, Routes.forgetPassword);
+      Navigator.pushNamed(
+        context,
+        Routes.doctortRegister,
+        arguments: RoleType.doctor.name,
+      );
     }
   }
 

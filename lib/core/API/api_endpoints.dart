@@ -16,5 +16,7 @@ class ApiKey {
   static const String id = 'id';
   static const String role = 'role';
   static const String message = 'message';
+  static const String membership = 'membership';
+  static const String specialization = 'specialization';
 
 }
