@@ -1,3 +1,5 @@
+import 'package:chefaa/core/resources/color.dart';
+import 'package:chefaa/core/resources/style.dart';
 import 'package:chefaa/core/routes/app_router.dart';
 import 'package:chefaa/core/utils/validator.dart';
 import 'package:chefaa/core/widgets/already_have_account.dart';
@@ -7,19 +9,20 @@ import 'package:chefaa/core/widgets/custom_file_picker.dart';
 import 'package:chefaa/core/widgets/custom_header.dart';
 import 'package:chefaa/core/widgets/custom_text_feild.dart';
 import 'package:chefaa/core/widgets/terms_and_conditions.dart';
-import 'package:chefaa/features/pharmacy/auth/presentation/cubit/pharmacy_auth_cubit.dart';
-import 'package:chefaa/features/pharmacy/auth/presentation/cubit/pharmacy_auth_state.dart';
+import 'package:chefaa/features/facility/auth/presentation/cubit/facility_auth_cubit.dart';
+import 'package:chefaa/features/facility/auth/presentation/cubit/facility_auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-class PharmacyRegisterScreen extends StatelessWidget {
+class FacilityRegisterScreen extends StatelessWidget {
   final String role;
-  const PharmacyRegisterScreen({super.key, required this.role});
+  const FacilityRegisterScreen({super.key, required this.role});
+
+  static const List<String> facilityType = ['lab', 'radiology center', 'both'];
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<PharmacyAuthCubit>();
+    final cubit = context.read<FacilityAuthCubit>();
     return Scaffold(
       backgroundColor: Color(0xffe1e3ec),
       body: SafeArea(
@@ -35,18 +38,6 @@ class PharmacyRegisterScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Pharmacy Register Title
-                      const Text(
-                        "Pharmacy Register",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-
-                      // White Card Containing Form Inputs
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
@@ -56,20 +47,53 @@ class PharmacyRegisterScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Pharmacy Name
+                            DropdownButtonFormField(
+                              value: cubit.selectedFacility,
+                              decoration: InputDecoration(
+                                hintText: "Choose lab or radiology",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade300,
+                                  ),
+                                ),
+
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade300,
+                                  ),
+                                ),
+                              ),
+
+                              items: facilityType.map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+
+                              onChanged: (val) {
+                                cubit.selectedFacility = val;
+                              },
+                              validator: (val) => val == null
+                                  ? "Please select a specialization"
+                                  : null,
+                            ),
+                            const SizedBox(height: 12),
+
                             const Text(
-                              "Pharmacy Name",
+                              "Facility Name",
                               style: TextStyle(fontWeight: FontWeight.w600),
                             ),
                             const SizedBox(height: 6),
                             CustomTextField(
-                              controller: cubit.NameController,
-                              text: "Full Pharmacy legal name",
+                              controller: cubit.nameController,
+                              text: "e.g.Alpha Lab/Scan",
                               validator: Validators.businessNameValidator,
                             ),
                             const SizedBox(height: 12),
 
-                            // Phone Number (Moved Up as per design)
                             const Text(
                               "Phone Number",
                               style: TextStyle(fontWeight: FontWeight.w600),
@@ -92,7 +116,7 @@ class PharmacyRegisterScreen extends StatelessWidget {
                             const SizedBox(height: 6),
                             CustomTextField(
                               controller: cubit.emailController,
-                              text: "contact@pharmacy.com",
+                              text: "contact@facility.com",
                               prefixIcon:
                                   "assets/icons/Email_icon_Inactive.svg",
                               validator: Validators.validateEmail,
@@ -148,16 +172,15 @@ class PharmacyRegisterScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 12),
 
-                            // Medical License Upload
                             const Text(
                               "Medical license Upload",
                               style: TextStyle(fontWeight: FontWeight.w600),
                             ),
                             const SizedBox(height: 6),
-                            BlocBuilder<PharmacyAuthCubit, PharmacyAuthState>(
+                            BlocBuilder<FacilityAuthCubit, FacilityAuthState>(
                               builder: (context, state) {
                                 return CustomFilePicker(
-                                  selectedFile: cubit.membershipFile,
+                                  selectedFile: cubit.memberShip,
                                   label: "Upload your liecence",
                                   onFileSelected: (file) =>
                                       cubit.setMembershipFile(file),
@@ -170,10 +193,66 @@ class PharmacyRegisterScreen extends StatelessWidget {
                         ),
                       ),
 
+                      const SizedBox(height: 50),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Image.asset(
+                                  "assets/images/Hospitalist.png",
+                                  width: 30,
+                                ),
+
+                                const SizedBox(width: 5),
+                                Text(
+                                  "Medical LeaderShip",
+                                  style: getBoldStyle(
+                                    color: ColorManager.black,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            const Text(
+                              "Medical Director Name",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 6),
+                            CustomTextField(
+                              controller: cubit.directorName,
+                              text: "Doctor Full Name",
+                              validator: Validators.businessNameValidator,
+                            ),
+                            const SizedBox(height: 12),
+
+                            const Text(
+                              "Director Professional ID",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 6),
+                            CustomTextField(
+                              controller: cubit.directorId,
+                              text: "ID Number",
+                              validator: Validators.validateLicense,
+                            ),
+                            const SizedBox(height: 12),
+                          ],
+                        ),
+                      ),
+
                       const SizedBox(height: 16),
 
-                      // Terms and Conditions (Outside the white card)
-                      BlocBuilder<PharmacyAuthCubit, PharmacyAuthState>(
+                      BlocBuilder<FacilityAuthCubit, FacilityAuthState>(
                         builder: (context, state) {
                           return TermsAndConditions(
                             value: cubit.isTermsAccepted,
@@ -184,10 +263,9 @@ class PharmacyRegisterScreen extends StatelessWidget {
 
                       const SizedBox(height: 20),
 
-                      // Submit Button
-                      BlocConsumer<PharmacyAuthCubit, PharmacyAuthState>(
+                      BlocConsumer<FacilityAuthCubit, FacilityAuthState>(
                         listener: (context, state) {
-                          if (state is RegisterPharmacySuccessState) {
+                          if (state is AuthFacilitySuccessState) {
                             showDialog(
                               context: context,
                               barrierDismissible: false,
@@ -205,7 +283,7 @@ class PharmacyRegisterScreen extends StatelessWidget {
                                 },
                               ),
                             );
-                          } else if (state is RegisterPharmacyErrorState) {
+                          } else if (state is AuthFacilityErrorState) {
                             showDialog(
                               context: context,
                               builder: (_) => CustomDialog(
@@ -219,8 +297,8 @@ class PharmacyRegisterScreen extends StatelessWidget {
                         builder: (context, state) {
                           return CustemButton(
                             text: "Submit for Verification",
-                            isLoading: state is RegisterPharmacyLoadingState,
-                            onPressed: () => cubit.registerPharmacy(role: role),
+                            isLoading: state is AuthFacilityLoadingState,
+                            onPressed: () => cubit.registerfacility(role: role),
                           );
                         },
                       ),

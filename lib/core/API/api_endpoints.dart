@@ -4,7 +4,7 @@ class ApiEndpoints {
   static const String forgetPass = 'auth/forgot-password';
   static const String verifyCode = 'auth/verify-reset-code';
   static const String resetPass = "auth/reset-password";
-  static const String register="auth/register";
+  static const String register = "auth/register";
 }
 
 class ApiKey {
@@ -20,6 +20,9 @@ class ApiKey {
   static const String specialization = 'specialization';
   static const String medicalLicence = 'medicalLicence';
   static const String commercialRegisterNumber = 'commercialRegisterNumber';
+  static const String medicalDirectorName = "medicalDirectorName";
+  static const String directorProfessionalId = "directorProfessionalId";
+  static const String facilityType = "facilityType";
 
-
+  
 }

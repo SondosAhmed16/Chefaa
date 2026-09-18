@@ -16,6 +16,12 @@ import 'package:chefaa/features/doctor/auth/data/repository/register_doctor_repo
 import 'package:chefaa/features/doctor/auth/domain/repository/register_doctor_reopsitory.dart';
 import 'package:chefaa/features/doctor/auth/domain/usecases/register_doctor_usecase.dart';
 import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_cubit.dart';
+import 'package:chefaa/features/facility/auth/data/data%20source/facilitu_auth_datasource_imp.dart';
+import 'package:chefaa/features/facility/auth/data/data%20source/facility_auth_datasource.dart';
+import 'package:chefaa/features/facility/auth/data/repositiry/facility_auth_repo_imp.dart';
+import 'package:chefaa/features/facility/auth/domain/repository/facility_register_repo.dart';
+import 'package:chefaa/features/facility/auth/domain/usecase/faciclity_usecase_register.dart';
+import 'package:chefaa/features/facility/auth/presentation/cubit/facility_auth_cubit.dart';
 
 import 'package:chefaa/features/patient/auth/data/data%20source/data_source_patient_auth.dart';
 import 'package:chefaa/features/patient/auth/data/data%20source/data_source_patient_auth_implement.dart';
@@ -47,6 +53,7 @@ Future<void> initAppModule() async {
   _initAuthModulePatient();
   _initAuthModuleDoctor();
   _initAuthModulePharmacy();
+  _initAuthModuleFacility();
 }
 
 void _initAuthModule() {
@@ -164,5 +171,30 @@ void _initAuthModulePharmacy() {
     () => PharmacyAuthCubit(
       registerPharmacyUsecase: getIt<RegisterPharmacyUsecase>(),
     ),
+  );
+}
+
+void _initAuthModuleFacility() {
+  // Data Sources
+  getIt.registerLazySingleton<FacilityAuthDatasource>(
+    () => FacilituAuthDatasourceImp(apiConsumer: getIt<ApiConsumer>()),
+  );
+
+  // Repositories
+  getIt.registerLazySingleton<FacilityRegisterRepo>(
+    () => FacilityAuthRepoImp(
+      facilityAuthDatasource: getIt<FacilityAuthDatasource>(),
+    ),
+  );
+
+  // Use Cases
+  getIt.registerLazySingleton<FaciclityUsecaseRegister>(
+    () => FaciclityUsecaseRegister(
+      facilityRegisterRepo: getIt<FacilityRegisterRepo>(),
+    ),
+  );
+
+  getIt.registerFactory<FacilityAuthCubit>(
+    () => FacilityAuthCubit(useCase: getIt<FaciclityUsecaseRegister>()),
   );
 }

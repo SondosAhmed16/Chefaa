@@ -7,6 +7,8 @@ import 'package:chefaa/features/auth/presentation/pages/reset_password_screen.da
 import 'package:chefaa/features/auth/presentation/pages/verify_code_screen.dart';
 import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_cubit.dart';
 import 'package:chefaa/features/doctor/auth/presentation/pages/doctor_register_screen.dart';
+import 'package:chefaa/features/facility/auth/presentation/cubit/facility_auth_cubit.dart';
+import 'package:chefaa/features/facility/auth/presentation/pages/facility_register_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/facility_selection_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/onboarding_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/role_selection_screen.dart';
@@ -76,6 +78,14 @@ class AppRouter {
           builder: (_) => BlocProvider(
             create: (context) => getIt<PharmacyAuthCubit>(),
             child: PharmacyRegisterScreen(role: role),
+          ),
+        );
+         case Routes.labRegister:
+        final role = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<FacilityAuthCubit>(),
+            child: FacilityRegisterScreen(role: role),
           ),
         );
 
