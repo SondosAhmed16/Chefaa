@@ -16,6 +16,8 @@ import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cub
 import 'package:chefaa/features/patient/auth/presentation/pages/patient_register_screen.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/cubit/all_info_cubit.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/pages/onboarding_info.dart';
+import 'package:chefaa/features/patient/profile/presentation/cubit/profile_patient_cubit.dart';
+import 'package:chefaa/features/patient/profile/presentation/pages/patient_profile_screen.dart';
 import 'package:chefaa/features/pharmacy/auth/presentation/cubit/pharmacy_auth_cubit.dart';
 import 'package:chefaa/features/pharmacy/auth/presentation/pages/pharmacy_register_screen.dart';
 import 'package:chefaa/features/splash/presentation/pages/splash_screen.dart';
@@ -38,6 +40,7 @@ class Routes {
   static const String pharmacyRegister = '/pharmacyRegister';
   static const String labRegister = '/labRegister';
   static const String onboardingInfo = '/onboardingInfo';
+  static const String patientProfile = '/patientProfile';
 }
 
 class AppRouter {
@@ -131,6 +134,14 @@ class AppRouter {
           builder: (_) => BlocProvider.value(
             value: authCubit,
             child: const ResetPasswordScreen(),
+          ),
+        );
+
+      case Routes.patientProfile:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<PatientProfileCubit>()..getProfileData(),
+            child: const PatientProfileScreen(),
           ),
         );
 

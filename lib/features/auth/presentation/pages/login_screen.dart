@@ -28,7 +28,12 @@ class LoginScreen extends StatelessWidget {
                   title: "Yeay! Welcome Back",
                   message: "Once again you login successfully into Chefaa app",
                   type: DialogType.success,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      Routes.patientProfile,
+                      (route) => false,
+                    );
+                  },
                 ),
               );
             } else if (state is LoginErrorState) {

@@ -6,6 +6,9 @@ class ApiEndpoints {
   static const String resetPass = "auth/reset-password";
   static const String register = "auth/register";
   static const String update_info = "patient/profile";
+  static const String getProfilePat = "patient/profile";
+  static const String updateBasicInfo = "patient/profile/basic-info";
+  static const String updateMedInfo = "patient/profile/medical-info";
 }
 
 class ApiKey {
@@ -24,4 +27,9 @@ class ApiKey {
   static const String medicalDirectorName = "medicalDirectorName";
   static const String directorProfessionalId = "directorProfessionalId";
   static const String facilityType = "facilityType";
+  static const String age = "age";
+  static const String gender = "gender";
+  static const String height = "height";
+  static const String weight = "weight";
+  static const String bloodType = "bloodType";
 }
