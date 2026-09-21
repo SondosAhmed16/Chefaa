@@ -77,72 +77,78 @@ class MedicationCubit extends Cubit<MedicationState> {
       }
     } catch (e) {
       if (!isClosed)
-        emit(MedicationAdditionErrorState(errorMessage: e.toString()));
+        {emit(MedicationAdditionErrorState(errorMessage: e.toString()));
+        await getMedicationList(forceRefresh: true);}
     }
   }
 
   Future<void> getMedicationList({bool forceRefresh = false}) async {
-  if (_isMedicationListLoading) return;
-  if (_hasLoadedMedicationList && !forceRefresh) return;
+    if (_isMedicationListLoading) return;
+    if (_hasLoadedMedicationList && !forceRefresh) return;
 
-  _isMedicationListLoading = true;
-  if (!isClosed) emit(MedicationListLoadingState());
+    _isMedicationListLoading = true;
+    if (!isClosed) emit(MedicationListLoadingState());
 
-  try {
-    final medicationList = await repo.getMedicationList();
-    _hasLoadedMedicationList = true;
-    if (!isClosed) {
-      emit(MedicationListSuccessState(medications: medicationList));
-    }
-  } catch (e) {
-    if (!isClosed) {
-      String errorMsg = e is ErrorModel ? (e.message ?? 'Unknown Error') : e.toString();
-      emit(MedicationListErrorState(errorMessage: errorMsg));
-    }
-  } finally {
-    _isMedicationListLoading = false;
-  }
-}
-
-Future<void> ConfirmMedication({required String medicationId}) async {
-  if (!isClosed) emit(MedicationConfirmLoadingState());
-
-  try {
-    final confirmRes = await repo.confirmMedication(medicationId);
-
-    final currentState = state;
-    if (currentState is MedicationListSuccessState) {
-      final updateMedication = currentState.medications.medications?.map((e) {
-        if (e.id == medicationId) {
-          num? parsedAdherence = confirmRes.adherenceRate is num
-              ? confirmRes.adherenceRate as num
-              : num.tryParse(confirmRes.adherenceRate?.toString() ?? '');
-
-          return e.copyWith(adherencePercentage: parsedAdherence);
-        }
-        return e;
-      }).toList();
-
+    try {
+      final medicationList = await repo.getMedicationList();
+      _hasLoadedMedicationList = true;
       if (!isClosed) {
-        emit(
-          MedicationListSuccessState(
-            medications: currentState.medications.copyWith(
-              medications: updateMedication,
+        emit(MedicationListSuccessState(medications: medicationList));
+      }
+    } catch (e) {
+      if (!isClosed) {
+        String errorMsg = e is ErrorModel
+            ? (e.message ?? 'Unknown Error')
+            : e.toString();
+        emit(MedicationListErrorState(errorMessage: errorMsg));
+      }
+    } finally {
+      _isMedicationListLoading = false;
+    }
+  }
+
+  Future<void> ConfirmMedication({required String medicationId}) async {
+    if (!isClosed) emit(MedicationConfirmLoadingState());
+
+    try {
+      final confirmRes = await repo.confirmMedication(medicationId);
+
+      final currentState = state;
+      if (currentState is MedicationListSuccessState) {
+        final updateMedication = currentState.medications.medications?.map((e) {
+          if (e.id == medicationId) {
+            num? parsedAdherence = confirmRes.adherenceRate is num
+                ? confirmRes.adherenceRate as num
+                : num.tryParse(confirmRes.adherenceRate?.toString() ?? '');
+
+            return e.copyWith(adherencePercentage: parsedAdherence);
+          }
+          return e;
+        }).toList();
+
+        if (!isClosed) {
+          emit(
+            MedicationListSuccessState(
+              medications: currentState.medications.copyWith(
+                medications: updateMedication,
+              ),
             ),
-          ),
-        );
+          );
+        }
+      }
+      if (!isClosed) {
+        emit(MedicationConfirmSuccessState(confirmMedication: confirmRes));
+      }
+    } catch (e) {
+      if (!isClosed) {
+        String errorMsg = e is ErrorModel
+            ? (e.message ?? 'Unknown Error')
+            : e.toString();
+        emit(MedicationConfirmErrorState(errorMessage: errorMsg));
       }
     }
-    if (!isClosed) {
-      emit(MedicationConfirmSuccessState(confirmMedication: confirmRes));
-    }
-  } catch (e) {
-    if (!isClosed) {
-      String errorMsg = e is ErrorModel ? (e.message ?? 'Unknown Error') : e.toString();
-      emit(MedicationConfirmErrorState(errorMessage: errorMsg));
-    }
   }
-}
+
   Future<void> updateMedication({required String medicationId}) async {
     if (!isClosed) emit(MedicationUpdateLoadingState());
 
@@ -169,7 +175,8 @@ Future<void> ConfirmMedication({required String medicationId}) async {
       }
     } catch (e) {
       if (!isClosed)
-        emit(MedicationUpdateErrorState(errorMessage: e.toString()));
+       { emit(MedicationUpdateErrorState(errorMessage: e.toString()));
+        await getMedicationList(forceRefresh: true);}
     }
   }
 
@@ -184,9 +191,43 @@ Future<void> ConfirmMedication({required String medicationId}) async {
         );
       }
     } catch (e) {
-      if (!isClosed)
+      if (!isClosed) {
         emit(MedicationDeleteErrorState(errorMessage: e.toString()));
+        await getMedicationList(forceRefresh: true);
+      }
     }
   }
 
+  void clearControllers() {
+    nameController.clear();
+    dosageController.clear();
+    formController.clear();
+    timesPerDayController.clear();
+    scheduleController.clear();
+    startDateController.clear();
+    endDateController.clear();
+
+    isActive = false;
+    timesPerDay = 1;
+  }
+
+  void reset() {
+    _hasLoadedMedicationList = false;
+    _isMedicationListLoading = false;
+    clearControllers();
+    if (!isClosed) emit(MedicationInitialState());
+  }
+
+  @override
+  Future<void> close() {
+    nameController.dispose();
+    dosageController.dispose();
+    formController.dispose();
+    timesPerDayController.dispose();
+    scheduleController.dispose();
+    startDateController.dispose();
+    endDateController.dispose();
+
+    return super.close();
+  }
 }

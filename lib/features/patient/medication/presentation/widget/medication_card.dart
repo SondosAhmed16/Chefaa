@@ -95,24 +95,24 @@ class MedicationCard extends StatelessWidget {
                   ],
                 ),
               ),
-              
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: ColorManager.lightGreen.withAlpha(30),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Text(
-                    "${med.calculatedAdherence??0}%",
-                    style: getBoldStyle(
-                      color: ColorManager.lightGreen,
-                      fontSize: 15,
-                    ),
+
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: ColorManager.lightGreen.withAlpha(30),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Text(
+                  "${med.calculatedAdherence ?? 0}%",
+                  style: getBoldStyle(
+                    color: ColorManager.lightGreen,
+                    fontSize: 15,
                   ),
                 ),
+              ),
             ],
           ),
 
@@ -168,7 +168,7 @@ class MedicationCard extends StatelessWidget {
                   backgroundColor: ColorManager.white,
                   padding: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(10),
                     side: const BorderSide(
                       color: ColorManager.primary,
                       width: 1.5,

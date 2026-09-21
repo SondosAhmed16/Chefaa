@@ -4,6 +4,7 @@ import 'package:chefaa/core/widgets/custom_dialog.dart';
 import 'package:chefaa/core/widgets/patient_advice.dart';
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_cubit.dart';
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_state.dart';
+import 'package:chefaa/features/patient/medication/presentation/widget/bottom_sheet_medication.dart';
 import 'package:chefaa/features/patient/medication/presentation/widget/medication_card.dart';
 import 'package:chefaa/features/patient/medication/presentation/widget/state_card.dart';
 import 'package:flutter/material.dart';
@@ -78,10 +79,16 @@ class MyMedicationScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             BlocBuilder<MedicationCubit, MedicationState>(
+              buildWhen: (previous, current) {
+                return current is MedicationListSuccessState ||
+                    current is MedicationListLoadingState ||
+                    current is MedicationListErrorState;
+              },
               builder: (context, state) {
                 int activeCount = 0;
                 num avgAdherence = 0;
                 if (state is MedicationListSuccessState) {
+                  
                   final stats = state.medications.stats;
                   final list = state.medications.medications ?? [];
 
@@ -120,7 +127,6 @@ class MyMedicationScreen extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            // 2. Upcoming Dose Info Banner
             const StateCard(
               title: "Upcoming Dose",
               text: "Metformin 500mg at 8:00 PM (in 3 hours)",
@@ -137,7 +143,9 @@ class MyMedicationScreen extends StatelessWidget {
                   style: getBoldStyle(color: ColorManager.black, fontSize: 20),
                 ),
                 ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    showBottomSheetMedication(context);
+                  },
                   icon: const Icon(
                     Icons.add,
                     size: 18,
@@ -168,6 +176,11 @@ class MyMedicationScreen extends StatelessWidget {
             const SizedBox(height: 16),
 
             BlocBuilder<MedicationCubit, MedicationState>(
+              buildWhen: (previous, current) {
+                return current is MedicationListSuccessState ||
+                    current is MedicationListLoadingState ||
+                    current is MedicationListErrorState;
+              },
               builder: (context, state) {
                 if (state is MedicationListLoadingState) {
                   return const Center(child: CircularProgressIndicator());
@@ -209,10 +222,11 @@ class MyMedicationScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final item = medications[index];
                       return MedicationCard(
-                        medications:
-                            medications, 
+                        medications: medications,
                         index: index,
-                        onPressed: () {},
+                        onPressed: () {
+                          showBottomSheetMedication(context, medication: item);
+                        },
                       );
                     },
                   );
