@@ -29,6 +29,12 @@ import 'package:chefaa/features/patient/auth/data/repository/register_patient_re
 import 'package:chefaa/features/patient/auth/domain/repository/register_patient_reopsitory.dart';
 import 'package:chefaa/features/patient/auth/domain/usecases/register_patient_usecase.dart';
 import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cubit.dart';
+import 'package:chefaa/features/patient/medication/data/data%20source/medication_datasource_imp.dart';
+import 'package:chefaa/features/patient/medication/data/data%20source/medication_datasourcse.dart';
+import 'package:chefaa/features/patient/medication/data/repository/medication_repo_imp.dart';
+import 'package:chefaa/features/patient/medication/domain/repository/medication_repo.dart';
+import 'package:chefaa/features/patient/medication/presentation/cubit/medication_cubit.dart';
+
 import 'package:chefaa/features/patient/onboarding/data/data%20source/patient_all_info_datasource.dart';
 import 'package:chefaa/features/patient/onboarding/data/data%20source/patient_all_info_datasource_imp.dart';
 import 'package:chefaa/features/patient/onboarding/data/repository/patient_all_info_repo_imp.dart';
@@ -70,6 +76,7 @@ Future<void> initAppModule() async {
   _initAuthModuleFacility();
   _initPatientOnboardingInfoModule();
   _initPatientProfileModule();
+  _initPatientMedicationModule();
 }
 
 void _initAuthModule() {
@@ -268,5 +275,22 @@ void _initPatientProfileModule() {
       updateBasicInfoUsecase: getIt<UpdateBasicInfoUsecase>(),
       updateMedInfoUsecase: getIt<UpdateMedInfoUsecase>(),
     ),
+  );
+}
+
+void _initPatientMedicationModule() {
+  // 1. Data Source
+  getIt.registerLazySingleton<MedicationDataSource>(
+    () => MedicationDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+
+  // 2. Repository
+  getIt.registerLazySingleton<MedicationRepo>(
+    () => MedicationRepoImp(dataSource: getIt<MedicationDataSource>()),
+  );
+
+  // 3. Cubit 
+  getIt.registerFactory<MedicationCubit>(
+    () => MedicationCubit(repo: getIt<MedicationRepo>()),
   );
 }

@@ -9,6 +9,16 @@ class ApiEndpoints {
   static const String getProfilePat = "patient/profile";
   static const String updateBasicInfo = "patient/profile/basic-info";
   static const String updateMedInfo = "patient/profile/medical-info";
+  static const String getMedication = "patient/my-medications";
+  static const String addMedication = "patient/medications";
+  static String confirmMedication(String medicationId) =>
+      "patient/medications/$medicationId/confirm";
+
+  static String deleteMedication(String medicationId) =>
+      "patient/medications/$medicationId";
+
+  static String updateMedication(String medicationId) =>
+      "patient/medications/$medicationId";
 }
 
 class ApiKey {

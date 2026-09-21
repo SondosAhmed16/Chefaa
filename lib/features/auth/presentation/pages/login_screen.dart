@@ -6,7 +6,6 @@ import 'package:chefaa/core/widgets/custom_dialog.dart';
 import 'package:chefaa/core/widgets/custom_text_feild.dart';
 import 'package:chefaa/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:chefaa/features/auth/presentation/cubit/auth_state.dart';
-import 'package:chefaa/features/auth/presentation/pages/forget_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -86,7 +85,7 @@ class LoginScreen extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, Routes.forgetPassword);
+                          Navigator.pushNamed(context, Routes.myMed);
                         },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
@@ -173,7 +172,10 @@ class LoginScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacementNamed(context, Routes.roleSelection);
+                            Navigator.pushReplacementNamed(
+                              context,
+                              Routes.roleSelection,
+                            );
                           },
                           child: Text(
                             'Sign Up',
