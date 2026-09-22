@@ -67,20 +67,20 @@ class MedicationRepoImp implements MedicationRepo {
     }
   }
 
-@override
+  @override
   Future<MedicationList> getMedicationList() async {
     try {
       var response = await dataSource.getMedicationList();
-      
+
       // هنا response سيكون إما List مباشرة أو Map
       if (response is List) {
         List<Medications> medsList = response
             .map((e) => Medications.fromJson(e))
             .toList();
-            
+
         return MedicationList(medications: medsList);
       }
-      
+
       return MedicationList.fromJson(response);
     } on Exceptions catch (e) {
       throw e.errorModel;

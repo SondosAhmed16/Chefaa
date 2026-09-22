@@ -4,7 +4,8 @@ class MedicationResponse {
   MedicationResponse({this.message, this.medication});
 
   MedicationResponse.fromJson(dynamic json) {
-    if (json is! Map<String, dynamic>) throw const FormatException('Invalid JSON');
+    if (json is! Map<String, dynamic>)
+      throw const FormatException('Invalid JSON');
     message = json['message'];
     medication = json['medication'] != null
         ? Medication.fromJson(json['medication'])

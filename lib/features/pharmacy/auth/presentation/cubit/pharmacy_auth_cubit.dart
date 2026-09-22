@@ -32,7 +32,7 @@ class PharmacyAuthCubit extends Cubit<PharmacyAuthState> {
   String? selectedSpecialization;
   File? membershipFile;
 
-void setMembershipFile(File file) {
+  void setMembershipFile(File file) {
     membershipFile = file;
     emit(MembershipFileUpdatedState(membershipFile));
   }

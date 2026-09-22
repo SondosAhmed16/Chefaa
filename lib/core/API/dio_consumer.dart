@@ -112,7 +112,6 @@ class DioConsumer implements ApiConsumer {
     }
   }
 
-
   Future<dynamic> patch(
     String path, {
     Object? data,
@@ -134,6 +133,4 @@ class DioConsumer implements ApiConsumer {
       rethrow;
     }
   }
-
-
 }

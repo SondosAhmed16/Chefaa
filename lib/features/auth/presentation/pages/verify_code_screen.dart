@@ -127,7 +127,11 @@ class VerifyCodeScreen extends StatelessWidget {
                       BlocConsumer<AuthCubit, AuthState>(
                         listener: (context, state) {
                           if (state is ResetCodeSuccessState) {
-                            Navigator.pushNamed(context, Routes.resetPAss,arguments: cubit);
+                            Navigator.pushNamed(
+                              context,
+                              Routes.resetPAss,
+                              arguments: cubit,
+                            );
                           } else if (state is ResetCodeErrorState) {
                             showDialog(
                               context: context,

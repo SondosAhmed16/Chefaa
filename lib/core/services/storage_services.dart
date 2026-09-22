@@ -26,7 +26,7 @@ class StorageServices {
 
   static Future<void> saveUser(UserEntity value) async {
     user = value;
-    
+
     final userModel = UserModel(
       name: value.name,
       id: value.id,
@@ -42,7 +42,7 @@ class StorageServices {
     if (jsonString == null) return null;
 
     final userMap = jsonDecode(jsonString) as Map<String, dynamic>;
-    
+
     final userData = UserModel.fromJson(userMap);
     user = userData;
     return userData;

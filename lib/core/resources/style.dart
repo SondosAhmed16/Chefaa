@@ -2,8 +2,6 @@ import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/font.dart';
 import 'package:flutter/material.dart';
 
-
-
 TextStyle _getTextStyle(double fontSize, FontWeight fontWeight, Color color) {
   return TextStyle(
     fontSize: fontSize,

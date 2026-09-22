@@ -19,6 +19,8 @@ class ApiEndpoints {
 
   static String updateMedication(String medicationId) =>
       "patient/medications/$medicationId";
+
+  static const getPatientAppo = "appointments/my";
 }
 
 class ApiKey {

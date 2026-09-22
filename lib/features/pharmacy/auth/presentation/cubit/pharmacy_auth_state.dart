@@ -5,6 +5,7 @@ import 'package:chefaa/features/pharmacy/auth/domain/entities/register_pharmacy_
 sealed class PharmacyAuthState {}
 
 class AuthPharmacyInitialState extends PharmacyAuthState {}
+
 class RegisterPharmacyLoadingState extends PharmacyAuthState {}
 
 class MembershipFileUpdatedState extends PharmacyAuthState {

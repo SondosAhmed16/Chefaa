@@ -1,5 +1,5 @@
 abstract class MedicationDataSource {
-  Future<dynamic> getMedicationList(); 
+  Future<dynamic> getMedicationList();
 
   Future<dynamic> addMedication({
     required String name,

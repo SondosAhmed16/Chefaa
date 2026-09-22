@@ -24,7 +24,7 @@ class CustemButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: ColorManager.primary, 
+          backgroundColor: ColorManager.primary,
           disabledBackgroundColor: ColorManager.primary.withOpacity(0.6),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),

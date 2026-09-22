@@ -75,18 +75,16 @@ class PatientProfileScreen extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              width: 80,
-                              height: 80,
-                              padding: const EdgeInsets.all(12),
-                              decoration: const BoxDecoration(
-                                color: Colors.white24,
-                                shape: BoxShape.circle,
-                              ),
-                              child: SvgPicture.asset(
-                                "assets/svg_images/person.svg",
-                                height: 24,
-                                width: 24,
+                            CircleAvatar(
+                              radius: 35,
+                              backgroundColor: ColorManager.input,
+                              child: ClipOval(
+                                child: Image.asset(
+                                  "assets/images/patient.png",
+                                  width: 100,
+                                  height: 150,
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 12),

@@ -3,6 +3,7 @@ import 'package:chefaa/core/resources/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+
 enum _TextFieldVisualState { empty, valid, error }
 
 class CustomTextField extends StatelessWidget {
@@ -85,10 +86,7 @@ class CustomTextField extends StatelessWidget {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: validator,
               onTapOutside: (_) => FocusScope.of(context).unfocus(),
-              style: getRegularStyle(
-                color: ColorManager.black,
-                fontSize: 16,
-              ),
+              style: getRegularStyle(color: ColorManager.black, fontSize: 16),
               decoration: InputDecoration(
                 fillColor: ColorManager.white,
                 filled: true,
@@ -126,17 +124,11 @@ class CustomTextField extends StatelessWidget {
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: borderRadius,
-                  borderSide: BorderSide(
-                    color: ColorManager.error,
-                    width: 1.2,
-                  ),
+                  borderSide: BorderSide(color: ColorManager.error, width: 1.2),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
                   borderRadius: borderRadius,
-                  borderSide: BorderSide(
-                    color: ColorManager.error,
-                    width: 1.5,
-                  ),
+                  borderSide: BorderSide(color: ColorManager.error, width: 1.5),
                 ),
                 errorStyle: getMediumStyle(
                   color: ColorManager.error,
@@ -165,10 +157,7 @@ class CustomTextField extends StatelessWidget {
     }
     if (rec) {
       return IconButton(
-        icon: const Icon(
-          Icons.mic_none_outlined,
-          color: ColorManager.primary,
-        ),
+        icon: const Icon(Icons.mic_none_outlined, color: ColorManager.primary),
         onPressed: onPressMic,
       );
     }

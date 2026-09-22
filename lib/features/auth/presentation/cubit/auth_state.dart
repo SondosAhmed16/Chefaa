@@ -51,7 +51,6 @@ final class ResetCodeErrorState extends AuthState {
   ResetCodeErrorState({required this.message});
 }
 
-
 final class ResetPasswordISLoadingState extends AuthState {}
 
 final class ResetPasswordSuccessState extends AuthState {

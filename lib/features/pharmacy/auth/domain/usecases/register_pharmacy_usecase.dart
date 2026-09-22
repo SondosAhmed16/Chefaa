@@ -11,7 +11,6 @@ class RegisterPharmacyUsecase {
 
   RegisterPharmacyUsecase({required this.registerPharmacyReopsitory});
 
-
   Future<Either<ErrorModel, RegisterPharmacyResponseEntity>> call({
     required String name,
     required String userName,
@@ -29,7 +28,7 @@ class RegisterPharmacyUsecase {
       email: email,
       password: password,
       role: role,
-      membershipFile: membershipFile, 
+      membershipFile: membershipFile,
       commercialRegisterNumber: commercialRegisterNumber,
     );
   }

@@ -27,8 +27,8 @@ class ChefaaApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Chefaa',
-           initialRoute: Routes.splash,
-         // home: MyMedicationsScreen(),
+          initialRoute: Routes.splash,
+          // home: MyMedicationsScreen(),
           onGenerateRoute: appRouter.generateRoute,
         );
       },

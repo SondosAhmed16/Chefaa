@@ -14,8 +14,8 @@ class RegisterPharmacyModel extends RegisterPharmacyResponseEntity {
     return RegisterPharmacyModel(
       accessToken: json[ApiKey.accessToken] ?? '',
       refreshToken: json[ApiKey.refreshToken] ?? '',
-      user: json[ApiKey.user] != null 
-          ? UserModel.fromJson(json[ApiKey.user]) 
+      user: json[ApiKey.user] != null
+          ? UserModel.fromJson(json[ApiKey.user])
           : null,
       message: json[ApiKey.message] ?? '',
     );

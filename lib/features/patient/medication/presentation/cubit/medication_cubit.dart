@@ -76,9 +76,10 @@ class MedicationCubit extends Cubit<MedicationState> {
         );
       }
     } catch (e) {
-      if (!isClosed)
-        {emit(MedicationAdditionErrorState(errorMessage: e.toString()));
-        await getMedicationList(forceRefresh: true);}
+      if (!isClosed) {
+        emit(MedicationAdditionErrorState(errorMessage: e.toString()));
+        await getMedicationList(forceRefresh: true);
+      }
     }
   }
 
@@ -174,9 +175,10 @@ class MedicationCubit extends Cubit<MedicationState> {
         );
       }
     } catch (e) {
-      if (!isClosed)
-       { emit(MedicationUpdateErrorState(errorMessage: e.toString()));
-        await getMedicationList(forceRefresh: true);}
+      if (!isClosed) {
+        emit(MedicationUpdateErrorState(errorMessage: e.toString()));
+        await getMedicationList(forceRefresh: true);
+      }
     }
   }
 

@@ -6,7 +6,8 @@ import 'all_info_state.dart';
 class AllInfoCubit extends Cubit<AllInfoState> {
   final PatientAllInfoUsacse updateAllInfoUseCase;
 
-  AllInfoCubit({required this.updateAllInfoUseCase}) : super(AllInfoInitialState());
+  AllInfoCubit({required this.updateAllInfoUseCase})
+    : super(AllInfoInitialState());
 
   static AllInfoCubit get(context) => BlocProvider.of(context);
 

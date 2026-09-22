@@ -12,8 +12,12 @@ import 'package:chefaa/features/facility/auth/presentation/pages/facility_regist
 import 'package:chefaa/features/onboarding/presentation/pages/facility_selection_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/onboarding_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/role_selection_screen.dart';
+import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_cubit.dart';
+import 'package:chefaa/features/patient/appointment/presentation/pages/my_appointment_screen.dart';
 import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cubit.dart';
 import 'package:chefaa/features/patient/auth/presentation/pages/patient_register_screen.dart';
+import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart';
+import 'package:chefaa/features/patient/home/presentation/pages/home_patient.dart';
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_cubit.dart';
 import 'package:chefaa/features/patient/medication/presentation/pages/my_medication_screen.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/cubit/all_info_cubit.dart';
@@ -44,6 +48,8 @@ class Routes {
   static const String onboardingInfo = '/onboardingInfo';
   static const String patientProfile = '/patientProfile';
   static const String myMed = '/myMed';
+  static const String homePatient = '/homePatient';
+  static const String getPatientAppo = '/getPatientAppo';
 }
 
 class AppRouter {
@@ -153,6 +159,35 @@ class AppRouter {
           builder: (_) => BlocProvider(
             create: (context) => getIt<MedicationCubit>()..getMedicationList(),
             child: const MyMedicationScreen(),
+          ),
+        );
+
+      case Routes.homePatient:
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<UsersCubit>()..loadUserFromPrefs(),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    getIt<MedicationCubit>()..getMedicationList(),
+              ),
+             BlocProvider(
+                create: (context) =>
+                    getIt<AppointmentCubit>()..fetchAppointments(),
+              ),
+            ],
+            child: const HomePatient(),
+          ),
+        );
+
+
+              case Routes.getPatientAppo:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<AppointmentCubit>()..fetchAppointments(),
+            child: const MyAppointmentScreen(),
           ),
         );
 

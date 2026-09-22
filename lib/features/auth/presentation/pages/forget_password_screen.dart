@@ -230,13 +230,11 @@ class ForgetPasswordScreen extends StatelessWidget {
                     BlocConsumer<AuthCubit, AuthState>(
                       listener: (context, state) {
                         if (state is ForgetPasswordSuccessState) {
-                         
-                            Navigator.pushNamed(
-                              context,
-                              Routes.verifyCode,
-                              arguments: cubit,
-                            );
-                          
+                          Navigator.pushNamed(
+                            context,
+                            Routes.verifyCode,
+                            arguments: cubit,
+                          );
                         } else if (state is ForgetPasswordErrorState) {
                           showDialog(
                             context: context,

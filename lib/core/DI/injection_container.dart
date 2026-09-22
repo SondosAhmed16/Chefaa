@@ -22,6 +22,12 @@ import 'package:chefaa/features/facility/auth/data/repositiry/facility_auth_repo
 import 'package:chefaa/features/facility/auth/domain/repository/facility_register_repo.dart';
 import 'package:chefaa/features/facility/auth/domain/usecase/faciclity_usecase_register.dart';
 import 'package:chefaa/features/facility/auth/presentation/cubit/facility_auth_cubit.dart';
+import 'package:chefaa/features/patient/appointment/data/data%20source/appointment_datasource.dart';
+import 'package:chefaa/features/patient/appointment/data/data%20source/appointment_datasourcse_imp.dart';
+import 'package:chefaa/features/patient/appointment/data/repository/appointment_repo_imp.dart';
+import 'package:chefaa/features/patient/appointment/domain/repository/appointment_repo.dart';
+import 'package:chefaa/features/patient/appointment/domain/use%20cases/get_patient_appo.dart';
+import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_cubit.dart';
 
 import 'package:chefaa/features/patient/auth/data/data%20source/data_source_patient_auth.dart';
 import 'package:chefaa/features/patient/auth/data/data%20source/data_source_patient_auth_implement.dart';
@@ -29,6 +35,9 @@ import 'package:chefaa/features/patient/auth/data/repository/register_patient_re
 import 'package:chefaa/features/patient/auth/domain/repository/register_patient_reopsitory.dart';
 import 'package:chefaa/features/patient/auth/domain/usecases/register_patient_usecase.dart';
 import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cubit.dart';
+import 'package:chefaa/features/patient/home/domain/repository/home_patient_repo.dart';
+import 'package:chefaa/features/patient/home/domain/use%20cases/user_usecase.dart';
+import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart';
 import 'package:chefaa/features/patient/medication/data/data%20source/medication_datasource_imp.dart';
 import 'package:chefaa/features/patient/medication/data/data%20source/medication_datasourcse.dart';
 import 'package:chefaa/features/patient/medication/data/repository/medication_repo_imp.dart';
@@ -77,6 +86,8 @@ Future<void> initAppModule() async {
   _initPatientOnboardingInfoModule();
   _initPatientProfileModule();
   _initPatientMedicationModule();
+  _initPatientHomeModule();
+  _initPatientAppointmentModule();
 }
 
 void _initAuthModule() {
@@ -289,8 +300,35 @@ void _initPatientMedicationModule() {
     () => MedicationRepoImp(dataSource: getIt<MedicationDataSource>()),
   );
 
-  // 3. Cubit 
+  // 3. Cubit
   getIt.registerFactory<MedicationCubit>(
     () => MedicationCubit(repo: getIt<MedicationRepo>()),
+  );
+}
+
+void _initPatientHomeModule() {
+  getIt.registerLazySingleton<UserUseCase>(() => UserUseCase());
+
+  getIt.registerFactory<UsersCubit>(() => UsersCubit(getIt<UserUseCase>()));
+}
+
+void _initPatientAppointmentModule() {
+  // Data Sources
+  getIt.registerLazySingleton<AppointmentDatasource>(
+    () => AppointmentDatasourcseImp(api: getIt<ApiConsumer>()),
+  );
+
+  // Repositories
+  getIt.registerLazySingleton<AppointmentRepo>(
+    () => AppointmentRepoImp(datasource: getIt<AppointmentDatasource>()),
+  );
+
+  // Use Cases
+  getIt.registerLazySingleton<GetPatientAppo>(
+    () => GetPatientAppo(repo: getIt<AppointmentRepo>()),
+  );
+
+  getIt.registerFactory<AppointmentCubit>(
+    () => AppointmentCubit(usecase: getIt<GetPatientAppo>()),
   );
 }

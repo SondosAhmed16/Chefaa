@@ -28,8 +28,12 @@ class LoginScreen extends StatelessWidget {
                   message: "Once again you login successfully into Chefaa app",
                   type: DialogType.success,
                   onPressed: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
+                    /*  Navigator.of(context).pushNamedAndRemoveUntil(
                       Routes.patientProfile,
+                      (route) => false,
+                    );*/
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      Routes.homePatient,
                       (route) => false,
                     );
                   },
@@ -85,7 +89,7 @@ class LoginScreen extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, Routes.myMed);
+                          Navigator.pushNamed(context, Routes.forgetPassword);
                         },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,

@@ -13,4 +13,3 @@ class RegisterPatientResponseEntity {
     required this.message,
   });
 }
-

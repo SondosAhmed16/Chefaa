@@ -15,25 +15,31 @@ class Medications {
     this.adherenceHistory,
   });
 
- Medications.fromJson(dynamic json) {
+  Medications.fromJson(dynamic json) {
     id = json['_id']?.toString();
     name = json['name']?.toString();
     dosage = json['dosage']?.toString();
     form = json['form']?.toString();
-    
-    timesPerDay = json['timesPerDay'] is num ? json['timesPerDay'] : num.tryParse(json['timesPerDay']?.toString() ?? '');
-    adherencePercentage = json['adherencePercentage'] is num ? json['adherencePercentage'] : num.tryParse(json['adherencePercentage']?.toString() ?? '');
-    
+
+    timesPerDay = json['timesPerDay'] is num
+        ? json['timesPerDay']
+        : num.tryParse(json['timesPerDay']?.toString() ?? '');
+    adherencePercentage = json['adherencePercentage'] is num
+        ? json['adherencePercentage']
+        : num.tryParse(json['adherencePercentage']?.toString() ?? '');
+
     if (json['schedule'] != null) {
       schedule = List<String>.from(json['schedule'].map((x) => x.toString()));
     } else {
       schedule = [];
     }
-    
+
     startDate = json['startDate']?.toString();
     endDate = json['endDate']?.toString();
-    isActive = json['isActive'] is bool ? json['isActive'] : (json['isActive']?.toString() == 'true');
-    
+    isActive = json['isActive'] is bool
+        ? json['isActive']
+        : (json['isActive']?.toString() == 'true');
+
     if (json['adherenceHistory'] != null) {
       adherenceHistory = [];
       json['adherenceHistory'].forEach((v) {
@@ -102,17 +108,15 @@ class Medications {
     );
   }
 
-num? get calculatedAdherence {
-  if (adherencePercentage != null) return adherencePercentage;
-  
-  if (adherenceHistory == null || adherenceHistory!.isEmpty) {
-    return null; 
+  num? get calculatedAdherence {
+    if (adherencePercentage != null) return adherencePercentage;
+
+    if (adherenceHistory == null || adherenceHistory!.isEmpty) {
+      return null;
+    }
+
+    int takenDoses = adherenceHistory!.where((h) => h.status == 'taken').length;
+
+    return ((takenDoses / adherenceHistory!.length) * 100).round();
   }
-
-  int takenDoses = adherenceHistory!
-      .where((h) => h.status == 'taken')
-      .length;
-
-  return ((takenDoses / adherenceHistory!.length) * 100).round();
-}
 }

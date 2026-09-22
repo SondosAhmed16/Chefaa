@@ -5,12 +5,11 @@ import 'package:chefaa/features/patient/profile/domain/entity/profile_patient_en
 import 'package:chefaa/features/patient/profile/domain/repository/patient_profile_repo.dart';
 import 'package:dartz/dartz.dart';
 
-class PatientProfileRepoImp implements PatientProfileRepo{
-
+class PatientProfileRepoImp implements PatientProfileRepo {
   final PatientProfileDataSource dataSource;
 
   PatientProfileRepoImp({required this.dataSource});
- @override
+  @override
   Future<Either<ErrorModel, ProfilePatientEntity>> getProfileData() async {
     try {
       final remoteData = await dataSource.getProfileData();

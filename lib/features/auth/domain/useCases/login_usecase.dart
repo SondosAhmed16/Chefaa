@@ -8,11 +8,10 @@ class LoginUsecase {
 
   LoginUsecase({required this.authRepository});
 
-  Future<Either<ErrorModel,LoginResponseEntity>> call({
+  Future<Either<ErrorModel, LoginResponseEntity>> call({
     required String identity,
-    required String password
-
-  })async{
+    required String password,
+  }) async {
     return await authRepository.login(identity: identity, password: password);
   }
 }

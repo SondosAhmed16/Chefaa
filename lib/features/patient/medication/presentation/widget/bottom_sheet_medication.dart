@@ -57,7 +57,8 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
     return BlocListener<MedicationCubit, MedicationState>(
       listener: (context, state) {
         if (state is MedicationAdditionSuccessState ||
-            state is MedicationUpdateSuccessState ||state is MedicationDeleteSuccessState) {
+            state is MedicationUpdateSuccessState ||
+            state is MedicationDeleteSuccessState) {
           Navigator.pop(context);
           cubit.getMedicationList(forceRefresh: true);
         }
@@ -82,6 +83,13 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
                     decoration: BoxDecoration(
                       color: Colors.grey[400],
                       borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.03),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -354,11 +362,11 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
         color: ColorManager.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey.shade200),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: ColorManager.gray,
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: Offset(1, 5),
           ),
         ],
       ),

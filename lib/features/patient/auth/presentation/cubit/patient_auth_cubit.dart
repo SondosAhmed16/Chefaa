@@ -7,7 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class PatientAuthCubit extends Cubit<PatientAuthState> {
   final RegisterPatientUsecase registerPatientUsecase;
 
-  PatientAuthCubit({required this.registerPatientUsecase}) : super(AuthInitialState());
+  PatientAuthCubit({required this.registerPatientUsecase})
+    : super(AuthInitialState());
 
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();

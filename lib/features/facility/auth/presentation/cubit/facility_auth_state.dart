@@ -11,17 +11,17 @@ class AuthFacilityLoadingState extends FacilityAuthState {}
 class MembershipFileUpdatedState extends FacilityAuthState {
   final File? memberShip;
 
-  MembershipFileUpdatedState(  this.memberShip);
+  MembershipFileUpdatedState(this.memberShip);
 }
 
 class AuthFacilitySuccessState extends FacilityAuthState {
   final FacilityRegisterEntity authResult;
 
-  AuthFacilitySuccessState( this.authResult);
+  AuthFacilitySuccessState(this.authResult);
 }
 
 class AuthFacilityErrorState extends FacilityAuthState {
   final String message;
 
-  AuthFacilityErrorState( this.message);
+  AuthFacilityErrorState(this.message);
 }

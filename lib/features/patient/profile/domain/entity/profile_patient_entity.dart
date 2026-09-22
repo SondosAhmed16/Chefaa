@@ -20,7 +20,7 @@ class ProfilePatientEntity {
     this.allergiesList,
     this.chronicConditionsList,
   });
-ProfilePatientEntity copyWith({
+  ProfilePatientEntity copyWith({
     String? userName,
     num? age,
     String? gender,
@@ -38,7 +38,8 @@ ProfilePatientEntity copyWith({
       weight: weight ?? this.weight,
       bloodType: bloodType ?? this.bloodType,
       allergiesList: allergiesList ?? this.allergiesList,
-      chronicConditionsList: chronicConditionsList ?? this.chronicConditionsList,
+      chronicConditionsList:
+          chronicConditionsList ?? this.chronicConditionsList,
     );
   }
 }

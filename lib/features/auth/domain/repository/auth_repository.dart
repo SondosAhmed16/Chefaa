@@ -9,18 +9,15 @@ abstract class AuthRepository {
     required String password,
   });
 
-
   Future<Either<ErrorModel, ResetPasswordEntity>> forgetPass({
     required String identity,
   });
-
 
   Future<Either<ErrorModel, ResetPasswordEntity>> verifyCode({
     required String identity,
     required String code,
   });
 
-  
   Future<Either<ErrorModel, ResetPasswordEntity>> resetPass({
     required String identity,
     required String code,

@@ -10,7 +10,6 @@ class DataSourcePharmacyAuthImplement implements DataSourcePharmacyAuth {
 
   DataSourcePharmacyAuthImplement({required this.apiConsumer});
 
-
   @override
   Future<RegisterPharmacyModel> register({
     required String name,
@@ -21,7 +20,6 @@ class DataSourcePharmacyAuthImplement implements DataSourcePharmacyAuth {
     required String role,
     required File membershipFile,
     required String commercialRegisterNumber,
-
   }) async {
     final response = await apiConsumer.post(
       ApiEndpoints.register,
@@ -32,7 +30,7 @@ class DataSourcePharmacyAuthImplement implements DataSourcePharmacyAuth {
         "password": password,
         "phoneNumber": phone,
         "role": role,
-        "commercialRegisterNumber":commercialRegisterNumber,
+        "commercialRegisterNumber": commercialRegisterNumber,
         "medicalLicence": await MultipartFile.fromFile(
           membershipFile.path,
           filename: membershipFile.path.split('/').last,

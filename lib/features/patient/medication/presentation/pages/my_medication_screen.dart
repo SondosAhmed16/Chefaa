@@ -88,7 +88,6 @@ class MyMedicationScreen extends StatelessWidget {
                 int activeCount = 0;
                 num avgAdherence = 0;
                 if (state is MedicationListSuccessState) {
-                  
                   final stats = state.medications.stats;
                   final list = state.medications.medications ?? [];
 

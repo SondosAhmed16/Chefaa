@@ -28,7 +28,9 @@ class SanitizedDioLogger extends Interceptor {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     if (!kDebugMode) return super.onResponse(response, handler);
 
-    debugPrint("⬅️ RESPONSE [${response.statusCode}] => PATH: ${response.requestOptions.path}");
+    debugPrint(
+      "⬅️ RESPONSE [${response.statusCode}] => PATH: ${response.requestOptions.path}",
+    );
     debugPrint("⬅️ DATA: ${response.data}");
 
     super.onResponse(response, handler);
@@ -38,7 +40,9 @@ class SanitizedDioLogger extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (!kDebugMode) return super.onError(err, handler);
 
-    debugPrint("❌ ERROR [${err.response?.statusCode}] => PATH: ${err.requestOptions.path}");
+    debugPrint(
+      "❌ ERROR [${err.response?.statusCode}] => PATH: ${err.requestOptions.path}",
+    );
     debugPrint("❌ MESSAGE: ${err.message}");
     if (err.response?.data != null) {
       debugPrint("❌ RESPONSE DATA: ${err.response?.data}");
@@ -49,10 +53,18 @@ class SanitizedDioLogger extends Interceptor {
 
   Map<String, dynamic> _sanitizeMap(Map<String, dynamic> map) {
     final sanitized = <String, dynamic>{};
-    final sensitiveKeys = ['password', 'token', 'oldPassword', 'newPassword', 'accessToken'];
-    
+    final sensitiveKeys = [
+      'password',
+      'token',
+      'oldPassword',
+      'newPassword',
+      'accessToken',
+    ];
+
     map.forEach((key, value) {
-      if (sensitiveKeys.any((sensitive) => key.toLowerCase().contains(sensitive.toLowerCase()))) {
+      if (sensitiveKeys.any(
+        (sensitive) => key.toLowerCase().contains(sensitive.toLowerCase()),
+      )) {
         sanitized[key] = '********';
       } else if (value is Map<String, dynamic>) {
         sanitized[key] = _sanitizeMap(value);

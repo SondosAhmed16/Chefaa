@@ -112,7 +112,6 @@ class PatientRegisterScreen extends StatelessWidget {
                                     "Your account has been successfully registered",
                                 type: DialogType.success,
                                 onPressed: () {
-
                                   Navigator.of(dialogContext).pop();
                                   Navigator.pushNamedAndRemoveUntil(
                                     context,

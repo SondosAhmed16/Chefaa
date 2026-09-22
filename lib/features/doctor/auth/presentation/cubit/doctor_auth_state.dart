@@ -2,7 +2,8 @@ import 'package:chefaa/features/doctor/auth/domain/entities/register_doctor_resp
 
 sealed class DoctorAuthState {}
 
-class AuthDoctorInitialState extends DoctorAuthState{}
+class AuthDoctorInitialState extends DoctorAuthState {}
+
 class RegisterDoctorLoadingState extends DoctorAuthState {}
 
 class RegisterOctorSuccessState extends DoctorAuthState {

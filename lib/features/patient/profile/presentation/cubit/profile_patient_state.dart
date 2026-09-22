@@ -42,4 +42,5 @@ class UpdateMedInfoErrorState extends ProfilePatientState {
 }
 
 class GenderChangedState extends ProfilePatientState {}
+
 class BloodTypeChangedState extends ProfilePatientState {}

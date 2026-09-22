@@ -2,7 +2,8 @@ import 'package:chefaa/features/patient/auth/domain/entities/register_patient_re
 
 sealed class PatientAuthState {}
 
-class AuthInitialState extends PatientAuthState{}
+class AuthInitialState extends PatientAuthState {}
+
 class RegisterLoadingState extends PatientAuthState {}
 
 class RegisterSuccessState extends PatientAuthState {

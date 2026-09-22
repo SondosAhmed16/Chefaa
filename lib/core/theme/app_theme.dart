@@ -1,10 +1,8 @@
-
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/font.dart';
 import 'package:chefaa/core/resources/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 
 class AppTheme {
   static ThemeData theme = ThemeData(

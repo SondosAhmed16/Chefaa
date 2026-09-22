@@ -12,6 +12,5 @@ abstract class DataSourcePharmacyAuth {
     required String role,
     required File membershipFile,
     required String commercialRegisterNumber,
-
   });
 }
