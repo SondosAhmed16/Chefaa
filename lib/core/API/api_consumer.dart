@@ -19,6 +19,13 @@ abstract class ApiConsumer {
     bool isFormated = false,
   });
 
+  Future<dynamic> patch(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParam,
+    bool isFormated = false,
+  });
+
   Future<dynamic> delete(
     String path, {
     Object? data,

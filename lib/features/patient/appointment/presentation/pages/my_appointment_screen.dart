@@ -3,9 +3,20 @@ import 'package:chefaa/core/resources/style.dart';
 import 'package:chefaa/features/patient/appointment/data/model/datum.dart';
 import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_cubit.dart';
 import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_state.dart';
+import 'package:chefaa/features/patient/appointment/presentation/pages/reschedual_screen.dart';
 import 'package:chefaa/features/patient/appointment/presentation/widget/appointment_card.dart';
+import 'package:chefaa/features/patient/search/data/model/break.dart'
+    as search_break;
+import 'package:chefaa/features/patient/search/data/model/day.dart'
+    as search_day;
+import 'package:chefaa/features/patient/search/data/model/default_schedule.dart'
+    as search_schedule;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:chefaa/features/patient/search/data/model/clinic.dart'
+    as search_clinic;
 
 class MyAppointmentScreen extends StatefulWidget {
   const MyAppointmentScreen({super.key});
@@ -71,10 +82,26 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen> {
                       backgroundColor: ColorManager.error,
                     ),
                   );
+                } else if (state is CancelSuccessState) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Appointment cancelled successfully!'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                  context.read<AppointmentCubit>().fetchAppointments();
+                } else if (state is CancelErrorState) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.error),
+                      backgroundColor: ColorManager.error,
+                    ),
+                  );
                 }
               },
               builder: (context, state) {
-                if (state is AppointmentLoading) {
+                if (state is AppointmentLoading ||
+                    state is CancelLoadingState) {
                   return Center(
                     child: CircularProgressIndicator(
                       color: ColorManager.primary,
@@ -157,6 +184,14 @@ void _handleDecline(BuildContext context, String? appointmentId) {
         TextButton(
           onPressed: () {
             Navigator.pop(dialogContext);
+
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (context.mounted) {
+                context.read<AppointmentCubit>().cancelAppo(
+                  appointmentId: appointmentId,
+                );
+              }
+            });
           },
           child: const Text('Yes, Cancel', style: TextStyle(color: Colors.red)),
         ),
@@ -165,4 +200,61 @@ void _handleDecline(BuildContext context, String? appointmentId) {
   );
 }
 
-void _handleReschedule(BuildContext context, Datum appointment) {}
+void _handleReschedule(BuildContext context, Datum appointment) async {
+  final clinicData = appointment.clinic;
+
+  print("DEBUG defaultSchedule: ${appointment.clinic?.defaultSchedule}");
+  search_schedule.DefaultSchedule? mappedSchedule;
+
+  final scheduleSource = clinicData?.defaultSchedule;
+
+  if (scheduleSource != null) {
+    mappedSchedule = search_schedule.DefaultSchedule(
+      slotDuration: scheduleSource.slotDuration ?? 30,
+      dailyCapacity: scheduleSource.dailyCapacity,
+      patientsPerSlot: scheduleSource.patientsPerSlot,
+      days: scheduleSource.days?.map((day) {
+        return search_day.Day(
+          day: day.day,
+          isActive: day.isActive,
+          open: day.open,
+          close: day.close,
+          slotDuration: day.slotDuration,
+          dailyCapacity: day.dailyCapacity,
+          patientsPerSlot: day.patientsPerSlot,
+          isDayLocked: day.isDayLocked,
+          isBookingLocked: day.isBookingLocked,
+          breaks: day.breaks?.map((b) {
+            return search_break.Break(
+              start: b.start,
+              end: b.end,
+              label: b.label,
+            );
+          }).toList(),
+        );
+      }).toList(),
+    );
+  }
+
+  final search_clinic.Clinic clinic = search_clinic.Clinic(
+    id: clinicData?.id,
+    name: clinicData?.name,
+    address: clinicData?.address,
+    price: clinicData?.price,
+    defaultSchedule: mappedSchedule,
+  );
+
+  final result = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => BlocProvider.value(
+        value: context.read<AppointmentCubit>(),
+        child: ReschedualScreen(appointment: appointment, clinic: clinic),
+      ),
+    ),
+  );
+
+  if (result == true && context.mounted) {
+    context.read<AppointmentCubit>().fetchAppointments();
+  }
+}

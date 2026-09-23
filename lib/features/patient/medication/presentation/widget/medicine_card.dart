@@ -1,6 +1,5 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
-import 'package:chefaa/features/patient/medication/data/model/confirm_medication.dart';
 import 'package:chefaa/features/patient/medication/data/model/medications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,22 +15,26 @@ class MedicineCard extends StatefulWidget {
   });
 
   @override
-  State<MedicineCard> createState() => MedicineCardState();
+  State<MedicineCard> createState() => _MedicineCardState();
 }
 
-class MedicineCardState extends State<MedicineCard> {
-  final Map<String, ConfirmMedication> _confirmed = {};
+class _MedicineCardState extends State<MedicineCard> {
+  late final ScrollController _scrollController;
 
-  void updateConfirmed(ConfirmMedication result) {
-    final id = result.medication?.id;
-    if (id == null) return;
-    setState(() => _confirmed[id] = result);
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final ScrollController scrollController = ScrollController();
-
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: 80.h, maxHeight: 200.h),
       child: Container(
@@ -44,7 +47,7 @@ class MedicineCardState extends State<MedicineCard> {
           ],
         ),
         child: RawScrollbar(
-          controller: scrollController,
+          controller: _scrollController,
           thumbVisibility: true,
           thickness: 5,
           radius: const Radius.circular(10),
@@ -52,7 +55,7 @@ class MedicineCardState extends State<MedicineCard> {
           thumbColor: ColorManager.gray.withAlpha(80),
           minThumbLength: 30,
           child: ListView.separated(
-            controller: scrollController,
+            controller: _scrollController,
             shrinkWrap: true,
             itemCount: widget.medications.length,
             physics: const BouncingScrollPhysics(),
@@ -61,17 +64,12 @@ class MedicineCardState extends State<MedicineCard> {
             itemBuilder: (_, index) {
               final med = widget.medications[index];
 
-              final localOverride = _confirmed[med.id ?? ''];
-
               final lastHistoryStatus = med.adherenceHistory?.isNotEmpty == true
                   ? med.adherenceHistory!.last.status
                   : null;
 
-              final isAlreadyTakenFromServer =
+              final isAlreadyTaken =
                   lastHistoryStatus?.toLowerCase() == 'taken';
-
-              final displayConfirmed =
-                  localOverride != null || isAlreadyTakenFromServer;
 
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -100,22 +98,9 @@ class MedicineCardState extends State<MedicineCard> {
                     ),
                   ),
                   12.horizontalSpace,
-                  displayConfirmed
+                  isAlreadyTaken
                       ? _ConfirmedStatus(
-                          statusText: localOverride != null
-                              ? (localOverride
-                                            .medication
-                                            ?.adherenceHistory
-                                            ?.isNotEmpty ==
-                                        true
-                                    ? localOverride
-                                              .medication!
-                                              .adherenceHistory!
-                                              .last
-                                              .status ??
-                                          'Taken'
-                                    : 'Taken')
-                              : lastHistoryStatus ?? 'Taken',
+                          statusText: lastHistoryStatus ?? 'Taken',
                         )
                       : _ConfirmActions(onConfirm: () => widget.onPressed(med)),
                 ],

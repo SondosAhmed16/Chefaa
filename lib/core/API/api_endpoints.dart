@@ -21,6 +21,12 @@ class ApiEndpoints {
       "patient/medications/$medicationId";
 
   static const getPatientAppo = "appointments/my";
+
+  static String reschedualAppointment(String appointmentId) =>
+      "appointments/$appointmentId/reschedule";
+
+      static String cancelAppointment(String appointmentId) =>
+      "appointments/$appointmentId/cancel";
 }
 
 class ApiKey {

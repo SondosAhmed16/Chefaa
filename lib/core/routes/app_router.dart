@@ -173,7 +173,7 @@ class AppRouter {
                 create: (context) =>
                     getIt<MedicationCubit>()..getMedicationList(),
               ),
-             BlocProvider(
+              BlocProvider(
                 create: (context) =>
                     getIt<AppointmentCubit>()..fetchAppointments(),
               ),
@@ -182,8 +182,7 @@ class AppRouter {
           ),
         );
 
-
-              case Routes.getPatientAppo:
+      case Routes.getPatientAppo:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<AppointmentCubit>()..fetchAppointments(),

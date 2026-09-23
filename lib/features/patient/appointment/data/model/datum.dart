@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:chefaa/features/patient/search/data/model/clinic.dart';
 import 'package:collection/collection.dart';
 
-import 'clinic.dart';
 import 'doctor.dart';
 import 'patient.dart';
 
@@ -52,17 +52,21 @@ class Datum {
 
   factory Datum.fromMap(Map<String, dynamic> data) => Datum(
     id: data['_id'] as String?,
-    patient: data['patient'] == null
-        ? null
-        : Patient.fromMap(data['patient'] as Map<String, dynamic>),
-    doctor: data['doctor'] == null
-        ? null
-        : Doctor.fromMap(data['doctor'] as Map<String, dynamic>),
-    clinic: data['clinic'] == null
-        ? null
-        : Clinic.fromMap(data['clinic'] as Map<String, dynamic>),
+    // ✅ التحقق الآمن من نوع البيانات قبل عمل cast
+    patient:
+        (data['patient'] != null && data['patient'] is Map<String, dynamic>)
+        ? Patient.fromMap(data['patient'] as Map<String, dynamic>)
+        : null,
+    doctor: (data['doctor'] != null && data['doctor'] is Map<String, dynamic>)
+        ? Doctor.fromMap(data['doctor'] as Map<String, dynamic>)
+        : null,
+    clinic: (data['clinic'] != null && data['clinic'] is Map<String, dynamic>)
+        ? Clinic.fromMap(data['clinic'] as Map<String, dynamic>)
+        : null,
     prescription: data['prescription'] as dynamic,
-    date: data['date'] == null ? null : DateTime.parse(data['date'] as String),
+    date: data['date'] != null
+        ? DateTime.tryParse(data['date'].toString())?.toLocal()
+        : null,
     timeChosed: data['timeChosed'] as String?,
     slotStart: data['slotStart'] as String?,
     slotEnd: data['slotEnd'] as String?,
@@ -73,10 +77,10 @@ class Datum {
     paidAt: data['paidAt'] as dynamic,
     createdAt: data['createdAt'] == null
         ? null
-        : DateTime.parse(data['createdAt'] as String),
+        : DateTime.tryParse(data['createdAt'].toString()),
     updatedAt: data['updatedAt'] == null
         ? null
-        : DateTime.parse(data['updatedAt'] as String),
+        : DateTime.tryParse(data['updatedAt'].toString()),
     v: data['__v'] as int?,
   );
 

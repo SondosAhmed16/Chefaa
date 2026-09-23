@@ -112,6 +112,7 @@ class DioConsumer implements ApiConsumer {
     }
   }
 
+  @override
   Future<dynamic> patch(
     String path, {
     Object? data,
@@ -119,7 +120,7 @@ class DioConsumer implements ApiConsumer {
     bool isFormated = false,
   }) async {
     try {
-      final response = await dio.put(
+      final response = await dio.patch(
         path,
         data: isFormated && data is Map<String, dynamic>
             ? FormData.fromMap(data)

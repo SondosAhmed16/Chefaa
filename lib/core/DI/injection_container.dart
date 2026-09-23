@@ -26,7 +26,9 @@ import 'package:chefaa/features/patient/appointment/data/data%20source/appointme
 import 'package:chefaa/features/patient/appointment/data/data%20source/appointment_datasourcse_imp.dart';
 import 'package:chefaa/features/patient/appointment/data/repository/appointment_repo_imp.dart';
 import 'package:chefaa/features/patient/appointment/domain/repository/appointment_repo.dart';
+import 'package:chefaa/features/patient/appointment/domain/use%20cases/cancel_appointment_usecase.dart';
 import 'package:chefaa/features/patient/appointment/domain/use%20cases/get_patient_appo.dart';
+import 'package:chefaa/features/patient/appointment/domain/use%20cases/reschedual_appo_usecase.dart';
 import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_cubit.dart';
 
 import 'package:chefaa/features/patient/auth/data/data%20source/data_source_patient_auth.dart';
@@ -313,22 +315,35 @@ void _initPatientHomeModule() {
 }
 
 void _initPatientAppointmentModule() {
-  // Data Sources
+  // 1. Data Sources
   getIt.registerLazySingleton<AppointmentDatasource>(
     () => AppointmentDatasourcseImp(api: getIt<ApiConsumer>()),
   );
 
-  // Repositories
+  // 2. Repositories
   getIt.registerLazySingleton<AppointmentRepo>(
     () => AppointmentRepoImp(datasource: getIt<AppointmentDatasource>()),
   );
 
-  // Use Cases
+  // 3. Use Cases
   getIt.registerLazySingleton<GetPatientAppo>(
     () => GetPatientAppo(repo: getIt<AppointmentRepo>()),
   );
 
+  getIt.registerLazySingleton<ReschedualAppoUsecase>(
+    () => ReschedualAppoUsecase(repo: getIt<AppointmentRepo>()),
+  );
+
+  getIt.registerLazySingleton<CancelAppointmentUsecase>(
+    () => CancelAppointmentUsecase(repo: getIt<AppointmentRepo>()),
+  );
+
+  // 4. Cubit
   getIt.registerFactory<AppointmentCubit>(
-    () => AppointmentCubit(usecase: getIt<GetPatientAppo>()),
+    () => AppointmentCubit(
+      usecase: getIt<GetPatientAppo>(),
+      reschedualAppoUsecase: getIt<ReschedualAppoUsecase>(),
+      cancelAppointmentUsecase: getIt<CancelAppointmentUsecase>(),
+    ),
   );
 }

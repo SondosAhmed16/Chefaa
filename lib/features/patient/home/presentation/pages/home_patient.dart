@@ -5,6 +5,7 @@ import 'package:chefaa/core/services/share_services.dart';
 import 'package:chefaa/core/widgets/custom_bar_layout.dart';
 import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_cubit.dart';
 import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_state.dart';
+import 'package:chefaa/features/patient/appointment/presentation/pages/reschedual_screen.dart';
 import 'package:chefaa/features/patient/appointment/presentation/widget/appointment_card.dart';
 import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart';
 import 'package:chefaa/features/patient/home/presentation/cubit/user_state.dart';
@@ -40,8 +41,6 @@ class _HomePatientState extends State<HomePatient> {
     context.read<UsersCubit>().loadUserFromPrefs();
   }
 
-  final GlobalKey<MedicineCardState> _medicineCardKey =
-      GlobalKey<MedicineCardState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,9 +70,7 @@ class _HomePatientState extends State<HomePatient> {
             current is MedicationListErrorState,
         listener: (context, state) {
           if (state is MedicationConfirmSuccessState) {
-            _medicineCardKey.currentState?.updateConfirmed(
-              state.confirmMedication,
-            );
+            context.read<MedicationCubit>().getMedicationList();
           }
 
           if (state is MedicationListErrorState) {
@@ -268,7 +265,6 @@ class _HomePatientState extends State<HomePatient> {
                           }
 
                           return MedicineCard(
-                            key: _medicineCardKey,
                             medications: medications,
                             onPressed: (med) {
                               context.read<MedicationCubit>().ConfirmMedication(
@@ -284,15 +280,85 @@ class _HomePatientState extends State<HomePatient> {
                     45.verticalSpace,
 
                     BlocBuilder<AppointmentCubit, AppointmentState>(
+                      buildWhen: (previous, current) =>
+                          current is AppointmentLoading ||
+                          current is AppointmentSuccess ||
+                          current is AppointmentError,
                       builder: (context, state) {
+                        if (state is AppointmentLoading) {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 20),
+                              child: CircularProgressIndicator(
+                                color: ColorManager.primary,
+                              ),
+                            ),
+                          );
+                        }
+
                         if (state is AppointmentSuccess) {
                           final appointments = state.appointments;
 
                           if (appointments.isEmpty) {
-                            return const SizedBox.shrink();
+                            return Container(
+                              width: double.infinity,
+                              margin: EdgeInsets.only(bottom: 24.h),
+                              padding: EdgeInsets.all(16.r),
+                              decoration: BoxDecoration(
+                                color: ColorManager.lightGray,
+                                borderRadius: BorderRadius.circular(16.r),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.calendar_today_outlined,
+                                    color: ColorManager.primary,
+                                    size: 30.sp,
+                                  ),
+                                  12.horizontalSpace,
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "No Upcoming Appointments",
+                                          style: getBoldStyle(
+                                            color: ColorManager.black,
+                                            fontSize: 14.sp,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Book doctor appointments easily",
+                                          style: getMediumStyle(
+                                            color: ColorManager.gray,
+                                            fontSize: 12.sp,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.getPatientAppo,
+                                      );
+                                    },
+                                    child: Text(
+                                      "Book Now",
+                                      style: getBoldStyle(
+                                        color: ColorManager.primary,
+                                        fontSize: 13.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
                           }
 
-                          final latestAppointment = appointments.last;
+                          final upcomingAppointment = appointments.last;
 
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -333,20 +399,31 @@ class _HomePatientState extends State<HomePatient> {
                               ),
                               const SizedBox(height: 12),
                               AppointmentCard(
-                                appointment: latestAppointment,
+                                appointment: upcomingAppointment,
                                 onDecline: () {},
-                                onReschedule: () {},
+                                onReschedule: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => BlocProvider.value(
+                                        value: context.read<AppointmentCubit>(),
+                                        child: ReschedualScreen(
+                                          appointment: upcomingAppointment,
+                                          clinic: upcomingAppointment.clinic!,
+                                        ),
+                                      ),
+                                    ),
+                                  ).then((updated) {
+                                    if (updated == true) {
+                                      context
+                                          .read<AppointmentCubit>()
+                                          .fetchAppointments();
+                                    }
+                                  });
+                                },
                               ),
                               const SizedBox(height: 24),
                             ],
-                          );
-                        }
-
-                        if (state is AppointmentLoading) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: ColorManager.primary,
-                            ),
                           );
                         }
 

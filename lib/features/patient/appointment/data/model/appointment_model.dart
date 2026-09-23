@@ -16,13 +16,14 @@ class AppointmentModel {
     return 'AppointmentModel(success: $success, count: $count, data: $data)';
   }
 
-  factory AppointmentModel.fromMap(Map<String, dynamic> data) => AppointmentModel(
-    success: data['success'] as bool?,
-    count: data['count'] as int?,
-    data: (data['data'] as List<dynamic>?)
-        ?.map((e) => Datum.fromMap(e as Map<String, dynamic>))
-        .toList(),
-  );
+  factory AppointmentModel.fromMap(Map<String, dynamic> data) =>
+      AppointmentModel(
+        success: data['success'] as bool?,
+        count: data['count'] as int?,
+        data: (data['data'] as List<dynamic>?)
+            ?.map((e) => Datum.fromMap(e as Map<String, dynamic>))
+            .toList(),
+      );
 
   Map<String, dynamic> toMap() => {
     'success': success,
