@@ -13,6 +13,8 @@ import 'package:chefaa/features/patient/home/presentation/widget/quick_actions.d
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_cubit.dart';
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_state.dart';
 import 'package:chefaa/features/patient/medication/presentation/widget/medicine_card.dart';
+import 'package:chefaa/features/patient/notification/presentation/cubit/notification_cubit.dart';
+import 'package:chefaa/features/patient/notification/presentation/cubit/notification_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,6 +41,7 @@ class _HomePatientState extends State<HomePatient> {
     });
 
     context.read<UsersCubit>().loadUserFromPrefs();
+    context.read<NotificationCubit>().getNotification();
   }
 
   @override
@@ -55,11 +58,21 @@ class _HomePatientState extends State<HomePatient> {
               return "Patient";
             });
 
+            final hasUnread = context.select<NotificationCubit, bool>((cubit) {
+              final state = cubit.state;
+              if (state is NotificationSuccessState) {
+                return state.notification.any((e) => e.isRead != true);
+              }
+              return false;
+            });
+
             return CustomAppBarLayout(
               title1: "Hello",
               title2: userName,
-
-              onPressed: () {},
+              hasUnreadNotifications: hasUnread,
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.getPatientnotification);
+              },
             );
           },
         ),

@@ -12,5 +12,5 @@ abstract class AppointmentDatasource {
     required String timeChosed,
   });
 
-  Future<ReschedualModelResponse> cancelApoo({required String appointmentId,});
+  Future<ReschedualModelResponse> cancelApoo({required String appointmentId});
 }

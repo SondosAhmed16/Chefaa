@@ -45,6 +45,12 @@ import 'package:chefaa/features/patient/medication/data/data%20source/medication
 import 'package:chefaa/features/patient/medication/data/repository/medication_repo_imp.dart';
 import 'package:chefaa/features/patient/medication/domain/repository/medication_repo.dart';
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_cubit.dart';
+import 'package:chefaa/features/patient/notification/data/data%20source/notification_datasource.dart';
+import 'package:chefaa/features/patient/notification/data/data%20source/notification_datasourcse_imp.dart';
+import 'package:chefaa/features/patient/notification/data/repository/notification_repo_imp.dart';
+import 'package:chefaa/features/patient/notification/domain/repository/notification_repo.dart';
+import 'package:chefaa/features/patient/notification/domain/usecase/get_notification_usecase.dart';
+import 'package:chefaa/features/patient/notification/presentation/cubit/notification_cubit.dart';
 
 import 'package:chefaa/features/patient/onboarding/data/data%20source/patient_all_info_datasource.dart';
 import 'package:chefaa/features/patient/onboarding/data/data%20source/patient_all_info_datasource_imp.dart';
@@ -90,6 +96,7 @@ Future<void> initAppModule() async {
   _initPatientMedicationModule();
   _initPatientHomeModule();
   _initPatientAppointmentModule();
+  _initPatientNotificationModule();
 }
 
 void _initAuthModule() {
@@ -345,5 +352,27 @@ void _initPatientAppointmentModule() {
       reschedualAppoUsecase: getIt<ReschedualAppoUsecase>(),
       cancelAppointmentUsecase: getIt<CancelAppointmentUsecase>(),
     ),
+  );
+}
+
+void _initPatientNotificationModule() {
+  // 1. Data Sources
+  getIt.registerLazySingleton<NotificationDatasource>(
+    () => NotificationDatasourcseImp(api: getIt<ApiConsumer>()),
+  );
+
+  // 2. Repositories
+  getIt.registerLazySingleton<NotificationRepo>(
+    () => NotificationRepoImp(datasource: getIt<NotificationDatasource>()),
+  );
+
+  // 3. Use Cases
+  getIt.registerLazySingleton<GetNotificationUsecase>(
+    () => GetNotificationUsecase(repo: getIt<NotificationRepo>()),
+  );
+
+  // 4. Cubit
+  getIt.registerFactory<NotificationCubit>(
+    () => NotificationCubit(usecase: getIt<GetNotificationUsecase>()),
   );
 }

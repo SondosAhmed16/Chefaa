@@ -28,9 +28,10 @@ class SchedualAdapter {
 
     final int openMinutes = day.open ?? 0;
     final int closeMinutes = day.close ?? 0;
-    
+
     // تحويل آمن لتجنب Exception
-    final int duration = int.tryParse(day.slotDuration?.toString() ?? '') ?? defaultSlotDuration;
+    final int duration =
+        int.tryParse(day.slotDuration?.toString() ?? '') ?? defaultSlotDuration;
     if (duration <= 0) return [];
 
     final breaks = day.breaks ?? [];

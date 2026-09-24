@@ -14,5 +14,7 @@ abstract class AppointmentRepo {
     required String timeChosed,
   });
 
-  Future<Either<ErrorModel,ReschedualModelResponse>> cancelAppo({required String appointmentId,});
+  Future<Either<ErrorModel, ReschedualModelResponse>> cancelAppo({
+    required String appointmentId,
+  });
 }

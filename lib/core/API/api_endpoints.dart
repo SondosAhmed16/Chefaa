@@ -11,6 +11,7 @@ class ApiEndpoints {
   static const String updateMedInfo = "patient/profile/medical-info";
   static const String getMedication = "patient/my-medications";
   static const String addMedication = "patient/medications";
+  static const String getNotification="patient/notifications";
   static String confirmMedication(String medicationId) =>
       "patient/medications/$medicationId/confirm";
 
@@ -25,7 +26,7 @@ class ApiEndpoints {
   static String reschedualAppointment(String appointmentId) =>
       "appointments/$appointmentId/reschedule";
 
-      static String cancelAppointment(String appointmentId) =>
+  static String cancelAppointment(String appointmentId) =>
       "appointments/$appointmentId/cancel";
 }
 

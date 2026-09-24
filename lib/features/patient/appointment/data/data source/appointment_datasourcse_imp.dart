@@ -38,11 +38,13 @@ class AppointmentDatasourcseImp implements AppointmentDatasource {
   }
 
   @override
-  Future<ReschedualModelResponse> cancelApoo({required String appointmentId})async {
-    final response=await api.patch(ApiEndpoints.cancelAppointment(appointmentId));
+  Future<ReschedualModelResponse> cancelApoo({
+    required String appointmentId,
+  }) async {
+    final response = await api.patch(
+      ApiEndpoints.cancelAppointment(appointmentId),
+    );
 
     return ReschedualModelResponse.fromMap(response);
   }
-
-  
 }

@@ -20,6 +20,8 @@ import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart'
 import 'package:chefaa/features/patient/home/presentation/pages/home_patient.dart';
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_cubit.dart';
 import 'package:chefaa/features/patient/medication/presentation/pages/my_medication_screen.dart';
+import 'package:chefaa/features/patient/notification/presentation/cubit/notification_cubit.dart';
+import 'package:chefaa/features/patient/notification/presentation/pages/notification_screen.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/cubit/all_info_cubit.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/pages/onboarding_info.dart';
 import 'package:chefaa/features/patient/profile/presentation/cubit/profile_patient_cubit.dart';
@@ -50,6 +52,7 @@ class Routes {
   static const String myMed = '/myMed';
   static const String homePatient = '/homePatient';
   static const String getPatientAppo = '/getPatientAppo';
+  static const String getPatientnotification = '/getPatientNotification';
 }
 
 class AppRouter {
@@ -177,6 +180,10 @@ class AppRouter {
                 create: (context) =>
                     getIt<AppointmentCubit>()..fetchAppointments(),
               ),
+              BlocProvider(
+                create: (context) =>
+                    getIt<NotificationCubit>()..getNotification(),
+              ),
             ],
             child: const HomePatient(),
           ),
@@ -187,6 +194,14 @@ class AppRouter {
           builder: (_) => BlocProvider(
             create: (context) => getIt<AppointmentCubit>()..fetchAppointments(),
             child: const MyAppointmentScreen(),
+          ),
+        );
+
+      case Routes.getPatientnotification:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<NotificationCubit>()..getNotification(),
+            child: const NotificationScreen(),
           ),
         );
 
