@@ -50,10 +50,10 @@ class Model {
     yearsOfExperience: data['yearsOfExperience'] as int?,
     image: data['image'] as String?,
     about: data['about'] as String?,
-    degrees: data['degrees'] as List<String>?,
+    degrees: (data['degrees'] as List?)?.cast<String>(),
+    prePaymentNumbers: (data['prePaymentNumbers'] as List?)?.cast<String>(),
     gender: data['gender'] as String?,
     rating: data['rating'] as int?,
-    prePaymentNumbers: data['prePaymentNumbers'] as List<String>?,
     clinicConsultationPrice: data['clinicConsultationPrice'] as int?,
     reviews: data['reviews'] as List<dynamic>?,
     clinics: (data['clinics'] as List<dynamic>?)

@@ -66,6 +66,16 @@ import 'package:chefaa/features/patient/profile/domain/usecase/get_profile_useca
 import 'package:chefaa/features/patient/profile/domain/usecase/update_basic_info_usecase.dart';
 import 'package:chefaa/features/patient/profile/domain/usecase/update_med_info_usecase.dart';
 import 'package:chefaa/features/patient/profile/presentation/cubit/profile_patient_cubit.dart';
+import 'package:chefaa/features/patient/search/data/data%20source/local/search_doctor_local_ds.dart';
+import 'package:chefaa/features/patient/search/data/data%20source/local/search_doctor_local_ds_imp.dart';
+import 'package:chefaa/features/patient/search/data/data%20source/remote/search_doctor_remote_ds.dart';
+import 'package:chefaa/features/patient/search/data/data%20source/remote/search_doctor_remote_ds_imp.dart';
+import 'package:chefaa/features/patient/search/data/repository/search_doctor_repo_imp.dart';
+import 'package:chefaa/features/patient/search/domain/repository/search_doctor_repo.dart';
+import 'package:chefaa/features/patient/search/domain/usecase/get_search_history_usecase.dart';
+import 'package:chefaa/features/patient/search/domain/usecase/save_search_query_usecase.dart';
+import 'package:chefaa/features/patient/search/domain/usecase/search_doctor_usecase.dart';
+import 'package:chefaa/features/patient/search/presentation/cubit/search_doctor_cubit.dart';
 import 'package:chefaa/features/pharmacy/auth/data/data%20source/data_source_pharmacy_auth.dart';
 import 'package:chefaa/features/pharmacy/auth/data/data%20source/data_source_pharmacy_auth_implement.dart';
 import 'package:chefaa/features/pharmacy/auth/data/repository/register_pharmacy_repository_implement.dart';
@@ -75,10 +85,13 @@ import 'package:chefaa/features/pharmacy/auth/presentation/cubit/pharmacy_auth_c
 
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
 Future<void> initAppModule() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
   // Core
   getIt.registerLazySingleton<Dio>(() => Dio());
   getIt.registerLazySingleton<ApiConsumer>(
@@ -97,6 +110,7 @@ Future<void> initAppModule() async {
   _initPatientHomeModule();
   _initPatientAppointmentModule();
   _initPatientNotificationModule();
+  _initPatientSearchModule();
 }
 
 void _initAuthModule() {
@@ -374,5 +388,29 @@ void _initPatientNotificationModule() {
   // 4. Cubit
   getIt.registerFactory<NotificationCubit>(
     () => NotificationCubit(usecase: getIt<GetNotificationUsecase>()),
+  );
+}
+
+
+void _initPatientSearchModule() {
+  // 1. Data Sources
+  getIt.registerLazySingleton<SearchDoctorLocalDs>(
+    () => SearchDoctorLocalDsImp(sharedPreferences: getIt<SharedPreferences>()),
+  );
+
+  getIt.registerLazySingleton<SearchDoctorRemoteDs>(
+    () => SearchDoctorRemoteDsImp(api: getIt<ApiConsumer>()),
+  );
+
+  // 2. Repository
+  getIt.registerLazySingleton<SearchDoctorRepo>(
+    () => SearchDoctorRepoImp(
+      remoteDs: getIt<SearchDoctorRemoteDs>(),
+      localDs: getIt<SearchDoctorLocalDs>(),
+    ),
+  );
+
+  getIt.registerFactory<SearchDoctorCubit>(
+    () => SearchDoctorCubit(searchDoctorRepo: getIt<SearchDoctorRepo>()),
   );
 }

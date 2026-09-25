@@ -13,7 +13,9 @@ class Location {
 
   factory Location.fromMap(Map<String, dynamic> data) => Location(
     type: data['type'] as String?,
-    coordinates: data['coordinates'] as List<double>?,
+    coordinates: (data['coordinates'] as List?)
+    ?.map((e) => (e as num).toDouble())
+    .toList(),
   );
 
   Map<String, dynamic> toMap() => {'type': type, 'coordinates': coordinates};

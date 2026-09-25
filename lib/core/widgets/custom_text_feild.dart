@@ -21,6 +21,8 @@ class CustomTextField extends StatelessWidget {
     this.inputFormatters,
     this.textInputAction,
     this.onPressMic,
+    this.isSearch=false ,
+      this.onPressSearch,
   }) : isObscureNotifier = ValueNotifier<bool>(isPass);
 
   final TextEditingController controller;
@@ -28,6 +30,7 @@ class CustomTextField extends StatelessWidget {
   final String? Function(String? value)? validator;
   final Function(String)? onChanged;
   final bool isPass;
+  final bool isSearch;
   final bool isReadOnly;
   final bool rec;
   final TextInputType? keyboardType;
@@ -35,6 +38,7 @@ class CustomTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final TextInputAction? textInputAction;
   final VoidCallback? onPressMic;
+  final void Function()? onPressSearch;
 
   final ValueNotifier<bool> isObscureNotifier;
 

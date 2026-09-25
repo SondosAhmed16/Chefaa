@@ -3,6 +3,7 @@ import 'package:chefaa/core/resources/style.dart';
 import 'package:chefaa/core/routes/app_router.dart';
 import 'package:chefaa/core/services/share_services.dart';
 import 'package:chefaa/core/widgets/custom_bar_layout.dart';
+import 'package:chefaa/core/widgets/custom_text_feild.dart';
 import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_cubit.dart';
 import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_state.dart';
 import 'package:chefaa/features/patient/appointment/presentation/pages/reschedual_screen.dart';
@@ -15,6 +16,7 @@ import 'package:chefaa/features/patient/medication/presentation/cubit/medication
 import 'package:chefaa/features/patient/medication/presentation/widget/medicine_card.dart';
 import 'package:chefaa/features/patient/notification/presentation/cubit/notification_cubit.dart';
 import 'package:chefaa/features/patient/notification/presentation/cubit/notification_state.dart';
+import 'package:chefaa/features/patient/search/presentation/cubit/search_doctor_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +31,12 @@ class HomePatient extends StatefulWidget {
 }
 
 class _HomePatientState extends State<HomePatient> {
+  final TextEditingController _searchController = TextEditingController();
+
+  void _openSearchPage() {
+    Navigator.pushNamed(context, Routes.patientSearch);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +50,12 @@ class _HomePatientState extends State<HomePatient> {
 
     context.read<UsersCubit>().loadUserFromPrefs();
     context.read<NotificationCubit>().getNotification();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -106,6 +120,24 @@ class _HomePatientState extends State<HomePatient> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(16),
+                        onTap: _openSearchPage,
+                        child: IgnorePointer(
+                          child: CustomTextField(
+                            isSearch: true,
+                            rec: true,
+                            controller: _searchController,
+                            text: "Search Doctor or specialty ",
+                            prefixIcon: "assets/icons/search-normal.svg",
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    40.verticalSpace,
                     Row(
                       children: [
                         Expanded(

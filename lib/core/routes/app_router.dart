@@ -26,6 +26,10 @@ import 'package:chefaa/features/patient/onboarding/presentation/cubit/all_info_c
 import 'package:chefaa/features/patient/onboarding/presentation/pages/onboarding_info.dart';
 import 'package:chefaa/features/patient/profile/presentation/cubit/profile_patient_cubit.dart';
 import 'package:chefaa/features/patient/profile/presentation/pages/patient_profile_screen.dart';
+import 'package:chefaa/features/patient/search/presentation/cubit/search_doctor_cubit.dart';
+import 'package:chefaa/features/patient/search/presentation/pages/location_filter.dart';
+import 'package:chefaa/features/patient/search/presentation/pages/search_page.dart';
+import 'package:chefaa/features/patient/search/presentation/pages/speciality_page.dart';
 import 'package:chefaa/features/pharmacy/auth/presentation/cubit/pharmacy_auth_cubit.dart';
 import 'package:chefaa/features/pharmacy/auth/presentation/pages/pharmacy_register_screen.dart';
 import 'package:chefaa/features/splash/presentation/pages/splash_screen.dart';
@@ -53,6 +57,9 @@ class Routes {
   static const String homePatient = '/homePatient';
   static const String getPatientAppo = '/getPatientAppo';
   static const String getPatientnotification = '/getPatientNotification';
+  static const String specialityPage = '/specialityPage';
+  static const String locationFilter = '/locationFilter';
+  static const String patientSearch = '/patientSearch'; 
 }
 
 class AppRouter {
@@ -204,6 +211,25 @@ class AppRouter {
             child: const NotificationScreen(),
           ),
         );
+
+      case Routes.patientSearch:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<SearchDoctorCubit>(),
+            child: const SearchPage(),
+          ),
+        );
+
+      case Routes.specialityPage:
+        final searchCubit = settings.arguments as SearchDoctorCubit?;
+        return MaterialPageRoute(
+          builder: (_) => searchCubit != null 
+            ? BlocProvider.value(value: searchCubit, child: const SpecialityPage())
+            : const SpecialityPage(),
+        );
+
+      case Routes.locationFilter:
+        return MaterialPageRoute(builder: (_) => const LocationFilter());
 
       default:
         return MaterialPageRoute(
