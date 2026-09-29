@@ -10,7 +10,7 @@ class NotificationDatasourcseImp implements NotificationDatasource {
   @override
   Future<List<NotificationResponse>> getNotification() async {
     final response = await api.get(ApiEndpoints.getNotification);
-    final List<dynamic> jsonList = response; 
+    final List<dynamic> jsonList = response;
     return NotificationResponse.fromJsonList(jsonList);
   }
 }

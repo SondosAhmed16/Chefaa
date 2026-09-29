@@ -11,8 +11,9 @@ class ApiEndpoints {
   static const String updateMedInfo = "patient/profile/medical-info";
   static const String getMedication = "patient/my-medications";
   static const String addMedication = "patient/medications";
-  static const String getNotification="patient/notifications";
-    static const String searchDoctor = "doctor/search-doctors";
+  static const String getNotification = "patient/notifications";
+  static const String searchDoctor = "doctor/search-doctors";
+  static const String bookAppo = "appointments/";
 
   static String confirmMedication(String medicationId) =>
       "patient/medications/$medicationId/confirm";
@@ -30,6 +31,10 @@ class ApiEndpoints {
 
   static String cancelAppointment(String appointmentId) =>
       "appointments/$appointmentId/cancel";
+
+  static String getSlot(String clinicId) => "clinic/$clinicId/day-slots";
+
+  static String getDoctorClinic(String doctorId)=>"doctor/$doctorId/clinics";
 }
 
 class ApiKey {

@@ -4,12 +4,11 @@ import 'package:chefaa/features/patient/notification/domain/repository/notificat
 import 'package:dartz/dartz.dart';
 
 class GetNotificationUsecase {
-
   final NotificationRepo repo;
 
   GetNotificationUsecase({required this.repo});
 
-  Future<Either<ErrorModel,List<NotificationResponse>>>call()async{
+  Future<Either<ErrorModel, List<NotificationResponse>>> call() async {
     return await repo.getNotification();
   }
 }

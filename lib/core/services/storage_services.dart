@@ -9,8 +9,10 @@ class StorageServices {
   static UserEntity? user;
 
   static const _storage = FlutterSecureStorage(
-    // ignore: deprecated_member_use
-    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+    aOptions: AndroidOptions(
+      encryptedSharedPreferences: true,
+      resetOnError: true,
+    ),
   );
 
   static Future<void> saveToken(String value) async {
@@ -66,5 +68,12 @@ class StorageServices {
     await _storage.delete(key: ApiKey.accessToken);
     await _storage.delete(key: ApiKey.user);
     await _storage.delete(key: ApiKey.role);
+  }
+
+  static Future<void> clearAllData() async {
+    token = null;
+    user = null;
+    role = null;
+    await _storage.deleteAll();
   }
 }

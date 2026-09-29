@@ -10,6 +10,8 @@ class SearchDoctorCubit extends Cubit<SearchDoctorState> {
 
   static SearchDoctorCubit get(context) => BlocProvider.of(context);
 
+  List<String> searchHistory = [];
+
   Future<void> searchDoctors({
     String? searchText,
     String? specialization,
@@ -32,13 +34,17 @@ class SearchDoctorCubit extends Cubit<SearchDoctorState> {
   }
 
   Future<void> getSearchHistory() async {
-    emit(SearchHistoryLoadingState());
-
     final result = await searchDoctorRepo.getSearchHistory();
 
     result.fold(
-      (error) => emit(SearchHistoryErrorState(error)),
-      (history) => emit(SearchHistoryLoadedState(history)),
+      (error) {
+        searchHistory = [];
+        emit(SearchHistoryLoadedState(const []));
+      },
+      (historyList) {
+        searchHistory = historyList;
+        emit(SearchHistoryLoadedState(historyList));
+      },
     );
   }
 
@@ -58,5 +64,15 @@ class SearchDoctorCubit extends Cubit<SearchDoctorState> {
       (error) => emit(SearchHistoryErrorState(error)),
       (_) => getSearchHistory(),
     );
+  }
+
+  void resetSearch() {
+    emit(SearchDoctorInitialState());
+  }
+
+  Future<void> saveSearchQuery(String query) async {
+    if (query.trim().isEmpty) return;
+    await searchDoctorRepo.saveSearchQuery(query);
+    await getSearchHistory();
   }
 }

@@ -16,7 +16,9 @@ class LocationFilter extends StatefulWidget {
 
 class _LocationFilterState extends State<LocationFilter> {
   GoogleMapController? _mapController;
-  BitmapDescriptor customIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+  BitmapDescriptor customIcon = BitmapDescriptor.defaultMarkerWithHue(
+    BitmapDescriptor.hueRed,
+  );
   Set<Marker> markers = {};
   LatLng? _currentPosition;
   bool _isResolvingLocation = true;
@@ -126,12 +128,28 @@ class _LocationFilterState extends State<LocationFilter> {
     return false;
   }
 
-  void _confirmLocation() {
+  void _confirmLocation() async {
     final locationQuery = _searchController.text.trim();
     if (locationQuery.isNotEmpty) {
       Navigator.pop(context, locationQuery);
+    } else if (_currentPosition != null) {
+      try {
+        List<Placemark> placemarks = await placemarkFromCoordinates(
+          _currentPosition!.latitude,
+          _currentPosition!.longitude,
+        );
+        if (placemarks.isNotEmpty) {
+          final place = placemarks.first;
+          final cityName = place.locality?.isNotEmpty == true
+              ? place.locality
+              : place.administrativeArea ?? "Cairo";
+          Navigator.pop(context, cityName);
+          return;
+        }
+      } catch (_) {}
+      Navigator.pop(context, "Cairo"); // fallback
     } else {
-      Navigator.pop(context, "Selected Area");
+      Navigator.pop(context, null);
     }
   }
 

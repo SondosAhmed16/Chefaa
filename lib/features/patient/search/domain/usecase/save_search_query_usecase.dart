@@ -8,6 +8,4 @@ class SaveSearchQueryUseCase {
     if (query.trim().isEmpty) return;
     await repo.saveSearchQuery(query.trim());
   }
-
-  
 }

@@ -29,7 +29,12 @@ class CustomSearchBar extends StatelessWidget {
         }
       },
       onChanged: (value) {
-        cubit.searchDoctors(searchText: value.trim());
+        final query = value.trim();
+        if (query.isNotEmpty) {
+          cubit.searchDoctors(searchText: query);
+        } else {
+          cubit.resetSearch();
+        }
       },
     );
   }

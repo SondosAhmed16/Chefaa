@@ -37,6 +37,14 @@ import 'package:chefaa/features/patient/auth/data/repository/register_patient_re
 import 'package:chefaa/features/patient/auth/domain/repository/register_patient_reopsitory.dart';
 import 'package:chefaa/features/patient/auth/domain/usecases/register_patient_usecase.dart';
 import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cubit.dart';
+import 'package:chefaa/features/patient/book/data/data%20source/book_appo_datasourcde_imp.dart';
+import 'package:chefaa/features/patient/book/data/data%20source/book_appo_datasource.dart';
+import 'package:chefaa/features/patient/book/data/repository/book_appo_repo_imp.dart';
+import 'package:chefaa/features/patient/book/domain/repository/book_appo_repo.dart';
+import 'package:chefaa/features/patient/book/domain/usecase/book_appo_usecase.dart';
+import 'package:chefaa/features/patient/book/domain/usecase/get_slots_usecase.dart';
+import 'package:chefaa/features/patient/book/domain/usecase/gwt_doctor_clinic_usecase.dart';
+import 'package:chefaa/features/patient/book/presentation/cubit/book_cubit.dart';
 import 'package:chefaa/features/patient/home/domain/repository/home_patient_repo.dart';
 import 'package:chefaa/features/patient/home/domain/use%20cases/user_usecase.dart';
 import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart';
@@ -111,6 +119,7 @@ Future<void> initAppModule() async {
   _initPatientAppointmentModule();
   _initPatientNotificationModule();
   _initPatientSearchModule();
+  _initBookAppointment();
 }
 
 void _initAuthModule() {
@@ -335,6 +344,29 @@ void _initPatientHomeModule() {
   getIt.registerFactory<UsersCubit>(() => UsersCubit(getIt<UserUseCase>()));
 }
 
+void _initPatientSearchModule() {
+  // 1. Data Sources
+  getIt.registerLazySingleton<SearchDoctorLocalDs>(
+    () => SearchDoctorLocalDsImp(sharedPreferences: getIt<SharedPreferences>()),
+  );
+
+  getIt.registerLazySingleton<SearchDoctorRemoteDs>(
+    () => SearchDoctorRemoteDsImp(api: getIt<ApiConsumer>()),
+  );
+
+  // 2. Repository
+  getIt.registerLazySingleton<SearchDoctorRepo>(
+    () => SearchDoctorRepoImp(
+      remoteDs: getIt<SearchDoctorRemoteDs>(),
+      localDs: getIt<SearchDoctorLocalDs>(),
+    ),
+  );
+
+  getIt.registerFactory<SearchDoctorCubit>(
+    () => SearchDoctorCubit(searchDoctorRepo: getIt<SearchDoctorRepo>()),
+  );
+}
+
 void _initPatientAppointmentModule() {
   // 1. Data Sources
   getIt.registerLazySingleton<AppointmentDatasource>(
@@ -391,26 +423,28 @@ void _initPatientNotificationModule() {
   );
 }
 
-
-void _initPatientSearchModule() {
-  // 1. Data Sources
-  getIt.registerLazySingleton<SearchDoctorLocalDs>(
-    () => SearchDoctorLocalDsImp(sharedPreferences: getIt<SharedPreferences>()),
+void _initBookAppointment() {
+  getIt.registerLazySingleton<BookAppoDatasource>(
+    () => BookAppoDatasourcdeImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<BookAppoRepo>(
+    () => BookAppoRepoImp(datasource: getIt<BookAppoDatasource>()),
+  );
+  getIt.registerLazySingleton<BookAppoUsecase>(
+    () => BookAppoUsecase(repo: getIt<BookAppoRepo>()),
+  );
+  getIt.registerLazySingleton<GetSlotsUsecase>(
+    () => GetSlotsUsecase(repo: getIt<BookAppoRepo>()),
+  );
+  getIt.registerLazySingleton<GwtDoctorClinicUsecase>(
+    () => GwtDoctorClinicUsecase(repo: getIt<BookAppoRepo>()),
   );
 
-  getIt.registerLazySingleton<SearchDoctorRemoteDs>(
-    () => SearchDoctorRemoteDsImp(api: getIt<ApiConsumer>()),
-  );
-
-  // 2. Repository
-  getIt.registerLazySingleton<SearchDoctorRepo>(
-    () => SearchDoctorRepoImp(
-      remoteDs: getIt<SearchDoctorRemoteDs>(),
-      localDs: getIt<SearchDoctorLocalDs>(),
+  getIt.registerFactory<BookCubit>(
+    () => BookCubit(
+      getSlotsUsecase: getIt<GetSlotsUsecase>(),
+      bookAppoUsecase: getIt<BookAppoUsecase>(),
+      gwtDoctorClinicUsecase: getIt<GwtDoctorClinicUsecase>(),
     ),
-  );
-
-  getIt.registerFactory<SearchDoctorCubit>(
-    () => SearchDoctorCubit(searchDoctorRepo: getIt<SearchDoctorRepo>()),
   );
 }

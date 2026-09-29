@@ -21,8 +21,8 @@ class CustomTextField extends StatelessWidget {
     this.inputFormatters,
     this.textInputAction,
     this.onPressMic,
-    this.isSearch=false ,
-      this.onPressSearch,
+    this.isSearch = false,
+    this.onPressSearch,
   }) : isObscureNotifier = ValueNotifier<bool>(isPass);
 
   final TextEditingController controller;

@@ -1,8 +1,8 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
-import 'package:flutter/material.dart';
-
+import 'package:chefaa/features/patient/book/presentation/cubit/book_cubit.dart';
 import 'package:chefaa/features/patient/search/domain/entity/doctor_entity.dart';
+import 'package:flutter/material.dart';
 
 class SearchCard extends StatelessWidget {
   const SearchCard({super.key, required this.doctor});
@@ -34,13 +34,11 @@ class SearchCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                backgroundImage:
-                    (doctor.profilePicture != null &&
+                backgroundImage: (doctor.profilePicture != null &&
                         doctor.profilePicture!.isNotEmpty &&
                         doctor.profilePicture!.startsWith('http'))
                     ? NetworkImage(doctor.profilePicture!)
-                    :  AssetImage('assets/images/doctor.png')
-                          as ImageProvider,
+                    : const AssetImage('assets/images/doctor.png') as ImageProvider,
                 radius: 30,
               ),
               const SizedBox(width: 12),
@@ -84,23 +82,35 @@ class SearchCard extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 12),
             child: Divider(color: ColorManager.input, height: 1),
           ),
-          GestureDetector(
-            onTap: () {},
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Book Now',
-                  style: getSemiBoldStyle(
-                    color: ColorManager.primary,
-                    fontSize: 18,
+
+          InkWell(
+            onTap: () {
+              final bookCubit = BookCubit.get(context);
+              
+              bookCubit.selectDoctor(doctor); 
+              
+              bookCubit.nextStep(); 
+            },
+            borderRadius: BorderRadius.circular(8),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Select Doctor & View Clinics',
+                    style: getSemiBoldStyle(
+                      color: ColorManager.primary,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  color: ColorManager.primary,
-                ),
-              ],
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    color: ColorManager.primary,
+                    size: 16,
+                  ),
+                ],
+              ),
             ),
           ),
         ],

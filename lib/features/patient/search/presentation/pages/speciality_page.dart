@@ -122,11 +122,6 @@ class SpecialityPage extends StatelessWidget {
                   item: item,
                   onTap: () {
                     final specialityName = item["specialityName"] ?? "";
-
-                    context.read<SearchDoctorCubit>().searchDoctors(
-                      specialization: specialityName,
-                    );
-
                     Navigator.pop(context, specialityName);
                   },
                 );

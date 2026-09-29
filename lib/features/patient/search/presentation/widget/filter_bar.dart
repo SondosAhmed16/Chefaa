@@ -15,11 +15,11 @@ class FilterBar extends StatefulWidget {
 class _FilterBarState extends State<FilterBar> {
   String? selectedGender;
   String? selectedSpecialization;
+  String? selectedLocation;
 
   @override
   Widget build(BuildContext context) {
     final cubit = SearchDoctorCubit.get(context);
-
     final filters = ['Specialty', 'Gender', 'Location'];
 
     return SizedBox(
@@ -48,18 +48,32 @@ class _FilterBarState extends State<FilterBar> {
                   cubit.searchDoctors(
                     specialization: result,
                     gender: selectedGender,
+                    location: selectedLocation,
                   );
                 }
               } else if (filter == 'Gender') {
                 _showGenderMenu(context, cubit);
               } else if (filter == 'Location') {
-                Navigator.pushNamed(context, Routes.locationFilter);
+                final result =
+                    await Navigator.pushNamed(context, Routes.locationFilter)
+                        as String?;
+
+                if (result != null && result.isNotEmpty) {
+                  setState(() => selectedLocation = result);
+                  cubit.searchDoctors(
+                    location: result,
+                    gender: selectedGender,
+                    specialization: selectedSpecialization,
+                  );
+                }
               }
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                color: ColorManager.lightGray,
+                color: selectedLocation != null && filter == 'Location'
+                    ? ColorManager.primary.withOpacity(0.1)
+                    : ColorManager.lightGray,
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(color: ColorManager.input),
               ),
@@ -69,8 +83,18 @@ class _FilterBarState extends State<FilterBar> {
                       ? selectedGender!
                       : filter == 'Specialty' && selectedSpecialization != null
                       ? selectedSpecialization!
+                      : filter == 'Location' && selectedLocation != null
+                      ? selectedLocation!
                       : filter,
-                  style: const TextStyle(color: ColorManager.black),
+                  style: TextStyle(
+                    color:
+                        (filter == 'Location' && selectedLocation != null) ||
+                            (filter == 'Gender' && selectedGender != null) ||
+                            (filter == 'Specialty' &&
+                                selectedSpecialization != null)
+                        ? ColorManager.primary
+                        : ColorManager.black,
+                  ),
                 ),
               ),
             ),
@@ -93,6 +117,7 @@ class _FilterBarState extends State<FilterBar> {
         cubit.searchDoctors(
           gender: selected,
           specialization: selectedSpecialization,
+          location: selectedLocation,
         );
       }
     });

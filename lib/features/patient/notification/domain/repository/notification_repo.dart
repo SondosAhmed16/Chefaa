@@ -3,6 +3,5 @@ import 'package:chefaa/features/patient/notification/data/model/notification_res
 import 'package:dartz/dartz.dart';
 
 abstract class NotificationRepo {
-
-  Future<Either<ErrorModel,List<NotificationResponse>>> getNotification();
+  Future<Either<ErrorModel, List<NotificationResponse>>> getNotification();
 }

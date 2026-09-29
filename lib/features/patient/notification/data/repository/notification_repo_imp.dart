@@ -10,7 +10,8 @@ class NotificationRepoImp implements NotificationRepo {
 
   NotificationRepoImp({required this.datasource});
   @override
-  Future<Either<ErrorModel, List<NotificationResponse>>> getNotification() async {
+  Future<Either<ErrorModel, List<NotificationResponse>>>
+  getNotification() async {
     try {
       final result = await datasource.getNotification();
       return Right(result);

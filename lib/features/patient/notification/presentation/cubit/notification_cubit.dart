@@ -26,18 +26,18 @@ class NotificationCubit extends Cubit<NotificationState> {
     );
   }
 
-   Future<void> markAsRead(NotificationResponse notification ) async {
+  Future<void> markAsRead(NotificationResponse notification) async {
     notification.isRead = true;
 
     if (state is NotificationSuccessState) {
       if (!isClosed) {
         emit(
-        NotificationSuccessState(
-          notification: List.from(
-            (state as NotificationSuccessState).notification,
+          NotificationSuccessState(
+            notification: List.from(
+              (state as NotificationSuccessState).notification,
+            ),
           ),
-        ),
-      );
+        );
       }
     }
   }

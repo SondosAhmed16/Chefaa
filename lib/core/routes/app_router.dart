@@ -16,6 +16,8 @@ import 'package:chefaa/features/patient/appointment/presentation/cubit/appointme
 import 'package:chefaa/features/patient/appointment/presentation/pages/my_appointment_screen.dart';
 import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cubit.dart';
 import 'package:chefaa/features/patient/auth/presentation/pages/patient_register_screen.dart';
+import 'package:chefaa/features/patient/book/presentation/cubit/book_cubit.dart';
+import 'package:chefaa/features/patient/book/presentation/pages/booking_all_pages.dart';
 import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart';
 import 'package:chefaa/features/patient/home/presentation/pages/home_patient.dart';
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_cubit.dart';
@@ -26,6 +28,7 @@ import 'package:chefaa/features/patient/onboarding/presentation/cubit/all_info_c
 import 'package:chefaa/features/patient/onboarding/presentation/pages/onboarding_info.dart';
 import 'package:chefaa/features/patient/profile/presentation/cubit/profile_patient_cubit.dart';
 import 'package:chefaa/features/patient/profile/presentation/pages/patient_profile_screen.dart';
+import 'package:chefaa/features/patient/search/domain/entity/doctor_entity.dart';
 import 'package:chefaa/features/patient/search/presentation/cubit/search_doctor_cubit.dart';
 import 'package:chefaa/features/patient/search/presentation/pages/location_filter.dart';
 import 'package:chefaa/features/patient/search/presentation/pages/search_page.dart';
@@ -59,7 +62,8 @@ class Routes {
   static const String getPatientnotification = '/getPatientNotification';
   static const String specialityPage = '/specialityPage';
   static const String locationFilter = '/locationFilter';
-  static const String patientSearch = '/patientSearch'; 
+  static const String patientSearch = '/patientSearch';
+  static const String bookingAllPages = '/bookingAllPages';
 }
 
 class AppRouter {
@@ -223,13 +227,31 @@ class AppRouter {
       case Routes.specialityPage:
         final searchCubit = settings.arguments as SearchDoctorCubit?;
         return MaterialPageRoute(
-          builder: (_) => searchCubit != null 
-            ? BlocProvider.value(value: searchCubit, child: const SpecialityPage())
-            : const SpecialityPage(),
+          builder: (_) => searchCubit != null
+              ? BlocProvider.value(
+                  value: searchCubit,
+                  child: const SpecialityPage(),
+                )
+              : const SpecialityPage(),
         );
 
       case Routes.locationFilter:
         return MaterialPageRoute(builder: (_) => const LocationFilter());
+
+      case Routes.bookingAllPages:
+        final doctor = settings.arguments as DoctorEntity?;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) {
+              final cubit = getIt<BookCubit>();
+              if (doctor != null) {
+                cubit.selectDoctor(doctor);
+              }
+              return cubit;
+            },
+            child: const BookingAllPages(),
+          ),
+        );
 
       default:
         return MaterialPageRoute(

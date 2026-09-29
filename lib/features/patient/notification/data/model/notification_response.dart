@@ -44,10 +44,12 @@ class NotificationResponse {
   }
 
   static List<NotificationResponse> fromJsonList(List<dynamic> jsonList) {
-  return jsonList
-      .map((item) => NotificationResponse.fromMap(item as Map<String, dynamic>))
-      .toList();
-}
+    return jsonList
+        .map(
+          (item) => NotificationResponse.fromMap(item as Map<String, dynamic>),
+        )
+        .toList();
+  }
 
   Map<String, dynamic> toMap() => {
     '_id': id,

@@ -33,11 +33,11 @@ class SearchDoctorRepoImp implements SearchDoctorRepo {
 
       final List<DoctorEntity> entities = models
           .map(
-           (model) => DoctorEntity(
+            (model) => DoctorEntity(
               id: model.id ?? '',
               name: model.name ?? '',
               specialization: model.specialization ?? '',
-              profilePicture: model.image, 
+              profilePicture: model.image,
               gender: model.gender,
               bio: model.about,
             ),

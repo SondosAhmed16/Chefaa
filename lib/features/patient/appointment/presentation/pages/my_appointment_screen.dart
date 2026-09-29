@@ -1,5 +1,6 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
+import 'package:chefaa/core/routes/app_router.dart';
 import 'package:chefaa/features/patient/appointment/data/model/datum.dart';
 import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_cubit.dart';
 import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_state.dart';
@@ -72,6 +73,51 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen> {
             ),
           ),
 
+          const SizedBox(height: 16),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Appointments",
+                  style: getBoldStyle(color: ColorManager.black, fontSize: 18),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pushNamed(context, Routes.bookingAllPages);
+                  },
+                  icon: const Icon(
+                    Icons.add,
+                    size: 18,
+                    color: ColorManager.white,
+                  ),
+                  label: Text(
+                    "Add Appointment",
+                    style: getMediumStyle(
+                      color: ColorManager.white,
+                      fontSize: 13,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorManager.primary,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
           Expanded(
             child: BlocConsumer<AppointmentCubit, AppointmentState>(
               listener: (context, state) {

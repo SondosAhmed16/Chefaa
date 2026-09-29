@@ -5,8 +5,11 @@ class DoctorEntity {
   final String? profilePicture;
   final String? gender;
   final String? bio;
-
+  final double? rating; 
+  final int? ratingCount;
   DoctorEntity({
+    this.rating,
+    this.ratingCount,
     required this.id,
     required this.name,
     required this.specialization,

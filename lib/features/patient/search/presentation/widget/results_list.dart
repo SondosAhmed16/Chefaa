@@ -16,13 +16,57 @@ class ResultsList extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
+        if (state is SearchHistoryLoadedState ||
+            state is SearchDoctorInitialState) {
+          final history = context.read<SearchDoctorCubit>().searchHistory;
+
+          if (history.isEmpty) {
+            return const Center(
+              child: Text(
+                'No recent searches',
+                style: TextStyle(color: Colors.grey),
+              ),
+            );
+          }
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  'Recent Searches',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: history.length,
+                  itemBuilder: (context, index) {
+                    final item = history[index];
+                    return ListTile(
+                      leading: const Icon(Icons.history, color: Colors.grey),
+                      title: Text(item),
+                      trailing: const Icon(Icons.north_west, size: 16),
+                      onTap: () {
+                        context.read<SearchDoctorCubit>().searchDoctors(
+                          searchText: item,
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        }
+
         if (state is SearchDoctorErrorState) {
           return Center(child: Text(state.errorModel.message));
         }
 
         if (state is SearchDoctorSuccessState) {
           final doctors = state.doctors;
-
           if (doctors.isEmpty) {
             return const Center(child: Text('No doctors found'));
           }
@@ -37,7 +81,7 @@ class ResultsList extends StatelessWidget {
           );
         }
 
-        return const Center(child: Text('Search for doctors or specialties'));
+        return const SizedBox.shrink();
       },
     );
   }

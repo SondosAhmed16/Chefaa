@@ -6,16 +6,13 @@ class SpecialityCard extends StatelessWidget {
   final Map<String, String> item;
   final VoidCallback? onTap;
 
-  const SpecialityCard({
-    super.key,
-    required this.item,
-    this.onTap,
-  });
+  const SpecialityCard({super.key, required this.item, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap ??
+      onTap:
+          onTap ??
           () {
             Navigator.pop(context, item["specialityName"]);
           },

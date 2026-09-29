@@ -115,4 +115,67 @@ class Validators {
 
     return 'Enter a valid email or phone number';
   }
+
+  static String? required(String? value) {
+    if (value == null || value.trim().isEmpty) return 'Required';
+    return null;
+  }
+
+  static bool isValidLuhn(String number) {
+    int sum = 0;
+    bool alternate = false;
+
+    for (int i = number.length - 1; i >= 0; i--) {
+      int n = int.parse(number[i]);
+
+      if (alternate) {
+        n *= 2;
+        if (n > 9) n -= 9;
+      }
+
+      sum += n;
+      alternate = !alternate;
+    }
+
+    return sum % 10 == 0;
+  }
+
+  static String? validateCardNumber(String? value) {
+    final requiredError = required(value);
+    if (requiredError != null) return requiredError;
+
+    final digits = value!.replaceAll(RegExp(r'\s+'), '');
+
+    if (!RegExp(r'^\d{16}$').hasMatch(digits)) {
+      return 'Card number must be 16 digits';
+    }
+
+    if (!isValidLuhn(digits)) {
+      return 'Invalid card number';
+    }
+
+    return null;
+  }
+
+  static String? validateExpiry(String? value) {
+    final requiredError = required(value);
+    if (requiredError != null) return requiredError;
+
+    if (!RegExp(r'^(0[1-9]|1[0-2])/\d{2}$').hasMatch(value!.trim())) {
+      return 'Use MM/YY';
+    }
+
+    return null;
+  }
+
+  static String? validateCvv(String? value) {
+    final requiredError = required(value);
+    if (requiredError != null) return requiredError;
+
+    if (!RegExp(r'^\d{3,4}$').hasMatch(value!.trim())) {
+      return 'Enter a valid CVV';
+    }
+
+    return null;
+  }
 }
