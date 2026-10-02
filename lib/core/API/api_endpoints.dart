@@ -15,6 +15,9 @@ class ApiEndpoints {
   static const String searchDoctor = "doctor/search-doctors";
   static const String bookAppo = "appointments/";
 
+  static const String searchLab="patient/search-centers";
+
+
   static String confirmMedication(String medicationId) =>
       "patient/medications/$medicationId/confirm";
 
@@ -34,7 +37,7 @@ class ApiEndpoints {
 
   static String getSlot(String clinicId) => "clinic/$clinicId/day-slots";
 
-  static String getDoctorClinic(String doctorId)=>"doctor/$doctorId/clinics";
+  static String getDoctorClinic(String doctorId) => "doctor/$doctorId/clinics";
 }
 
 class ApiKey {

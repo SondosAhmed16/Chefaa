@@ -69,13 +69,9 @@ class BookAppoDatasourcdeImp implements BookAppoDatasource {
   }
 
   @override
-  Future<List<Clinic>> getDoctorClinic({required String doctorId})async {
+  Future<List<Clinic>> getDoctorClinic({required String doctorId}) async {
     final response = await api.get(ApiEndpoints.getDoctorClinic(doctorId));
-    final clinicModel=DoctorsClinic.fromMap(response as Map<String,dynamic>);
-    return clinicModel.clinics??[];
+    final clinicModel = DoctorsClinic.fromMap(response as Map<String, dynamic>);
+    return clinicModel.clinics ?? [];
   }
-
-
-
-  
 }

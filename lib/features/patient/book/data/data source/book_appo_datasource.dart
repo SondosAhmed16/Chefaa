@@ -18,6 +18,5 @@ abstract class BookAppoDatasource {
 
   Future<List<Slot>> getSlots({required String clinicId, required String date});
 
-
   Future<List<Clinic>> getDoctorClinic({required String doctorId});
 }

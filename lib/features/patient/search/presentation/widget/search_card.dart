@@ -34,11 +34,13 @@ class SearchCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                backgroundImage: (doctor.profilePicture != null &&
+                backgroundImage:
+                    (doctor.profilePicture != null &&
                         doctor.profilePicture!.isNotEmpty &&
                         doctor.profilePicture!.startsWith('http'))
                     ? NetworkImage(doctor.profilePicture!)
-                    : const AssetImage('assets/images/doctor.png') as ImageProvider,
+                    : const AssetImage('assets/images/doctor.png')
+                          as ImageProvider,
                 radius: 30,
               ),
               const SizedBox(width: 12),
@@ -86,10 +88,10 @@ class SearchCard extends StatelessWidget {
           InkWell(
             onTap: () {
               final bookCubit = BookCubit.get(context);
-              
-              bookCubit.selectDoctor(doctor); 
-              
-              bookCubit.nextStep(); 
+
+              bookCubit.selectDoctor(doctor);
+
+              bookCubit.nextStep();
             },
             borderRadius: BorderRadius.circular(8),
             child: Padding(

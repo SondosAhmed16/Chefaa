@@ -5,13 +5,13 @@ import 'package:chefaa/features/patient/book/domain/repository/book_appo_repo.da
 import 'package:dartz/dartz.dart';
 
 class GwtDoctorClinicUsecase {
-
-final BookAppoRepo repo;
+  final BookAppoRepo repo;
 
   GwtDoctorClinicUsecase({required this.repo});
 
-Future<Either<ErrorModel,List<Clinic>>> call({required String doctorId})async{
-return await repo.getDoctorClinic(doctorId: doctorId);
-}
-
+  Future<Either<ErrorModel, List<Clinic>>> call({
+    required String doctorId,
+  }) async {
+    return await repo.getDoctorClinic(doctorId: doctorId);
+  }
 }

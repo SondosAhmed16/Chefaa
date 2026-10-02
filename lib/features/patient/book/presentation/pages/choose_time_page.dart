@@ -46,7 +46,6 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
                   Text(
                     "Choose Time Slot",
                     style: getBoldStyle(

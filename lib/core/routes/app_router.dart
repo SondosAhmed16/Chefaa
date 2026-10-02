@@ -20,6 +20,8 @@ import 'package:chefaa/features/patient/book/presentation/cubit/book_cubit.dart'
 import 'package:chefaa/features/patient/book/presentation/pages/booking_all_pages.dart';
 import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart';
 import 'package:chefaa/features/patient/home/presentation/pages/home_patient.dart';
+import 'package:chefaa/features/patient/lab%20search/presentation/cubit/lab_search_cubit.dart';
+import 'package:chefaa/features/patient/lab%20search/presentation/pages/find_lab.dart';
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_cubit.dart';
 import 'package:chefaa/features/patient/medication/presentation/pages/my_medication_screen.dart';
 import 'package:chefaa/features/patient/notification/presentation/cubit/notification_cubit.dart';
@@ -64,6 +66,7 @@ class Routes {
   static const String locationFilter = '/locationFilter';
   static const String patientSearch = '/patientSearch';
   static const String bookingAllPages = '/bookingAllPages';
+  static const String findLab = '/findLab';
 }
 
 class AppRouter {
@@ -221,6 +224,14 @@ class AppRouter {
           builder: (_) => BlocProvider(
             create: (context) => getIt<SearchDoctorCubit>(),
             child: const SearchPage(),
+          ),
+        );
+
+      case Routes.findLab:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: ((context) => getIt<LabSearchCubit>()),
+            child: const FindLab(),
           ),
         );
 

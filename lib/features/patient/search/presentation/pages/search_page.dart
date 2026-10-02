@@ -63,7 +63,10 @@ class _SearchPageState extends State<SearchPage> {
                       const SizedBox(width: 8),
                       Text(
                         "Search Doctor",
-                        style: getBoldStyle(color: ColorManager.white, fontSize: 18),
+                        style: getBoldStyle(
+                          color: ColorManager.white,
+                          fontSize: 18,
+                        ),
                       ),
                     ],
                   ),
@@ -72,7 +75,10 @@ class _SearchPageState extends State<SearchPage> {
                 // Body Content
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
                     child: Column(
                       children: [
                         CustomSearchBar(
@@ -82,9 +88,7 @@ class _SearchPageState extends State<SearchPage> {
                         const SizedBox(height: 12),
                         const FilterBar(),
                         const SizedBox(height: 16),
-                        const Expanded(
-                          child: ResultsList(),
-                        ),
+                        const Expanded(child: ResultsList()),
                       ],
                     ),
                   ),

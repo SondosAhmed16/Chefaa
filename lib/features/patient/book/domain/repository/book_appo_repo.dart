@@ -20,8 +20,9 @@ abstract class BookAppoRepo {
     String? cardholderName,
   });
 
-
-  Future<Either<ErrorModel,List<Clinic>>> getDoctorClinic({required String doctorId});
+  Future<Either<ErrorModel, List<Clinic>>> getDoctorClinic({
+    required String doctorId,
+  });
 
   Future<Either<ErrorModel, List<Slot>>> getSlots({
     required String clinicId,

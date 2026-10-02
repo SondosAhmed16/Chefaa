@@ -112,7 +112,7 @@ class AppoCard extends StatelessWidget {
                 style: getMediumStyle(color: ColorManager.black, fontSize: 16),
               ),
               Text(
-                "${cubit.selectedClinic?.price?? " "}E",
+                "${cubit.selectedClinic?.price ?? " "}E",
                 style: getMediumStyle(color: ColorManager.black, fontSize: 16),
               ),
             ],

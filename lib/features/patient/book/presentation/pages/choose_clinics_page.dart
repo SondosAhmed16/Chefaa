@@ -31,11 +31,12 @@ class _ChooseClinicsPageState extends State<ChooseClinicsPage> {
   @override
   void initState() {
     super.initState();
-final cubit = context.read<BookCubit>();
-  
-  if (cubit.clinics.isEmpty || cubit.selectedDoctor?.id != widget.doctorId) {
-    cubit.getDoctorClinics(doctorId: widget.doctorId);
-  }  }
+    final cubit = context.read<BookCubit>();
+
+    if (cubit.clinics.isEmpty || cubit.selectedDoctor?.id != widget.doctorId) {
+      cubit.getDoctorClinics(doctorId: widget.doctorId);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -4,18 +4,18 @@ import 'package:collection/collection.dart';
 
 class Location {
   String? type;
-final List<double>? coordinates;
+  final List<double>? coordinates;
   Location({this.type, this.coordinates});
 
   @override
   String toString() => 'Location(type: $type, coordinates: $coordinates)';
 
   factory Location.fromMap(Map<String, dynamic> data) => Location(
-  type: data['type'] as String?,
-  coordinates: (data['coordinates'] as List<dynamic>?)
-      ?.map((e) => (e as num).toDouble())
-      .toList(),
-);
+    type: data['type'] as String?,
+    coordinates: (data['coordinates'] as List<dynamic>?)
+        ?.map((e) => (e as num).toDouble())
+        .toList(),
+  );
 
   Map<String, dynamic> toMap() => {'type': type, 'coordinates': coordinates};
 

@@ -39,10 +39,7 @@ class _SearchDoctorPageState extends State<SearchDoctorPage> {
               const SizedBox(height: 4),
               Text(
                 "Select your healthcare provider.",
-                style: getSemiBoldStyle(
-                  color: ColorManager.gray, 
-                  fontSize: 14,
-                ),
+                style: getSemiBoldStyle(color: ColorManager.gray, fontSize: 14),
               ),
               const SizedBox(height: 16),
               CustomSearchBar(
@@ -52,9 +49,7 @@ class _SearchDoctorPageState extends State<SearchDoctorPage> {
               const SizedBox(height: 12),
               const FilterBar(),
               const SizedBox(height: 16),
-              const Expanded(
-                child: ResultsList(),
-              ),
+              const Expanded(child: ResultsList()),
             ],
           ),
         ),

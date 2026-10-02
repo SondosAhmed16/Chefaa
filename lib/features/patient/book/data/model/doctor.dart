@@ -51,7 +51,7 @@ class Doctor {
       id: id ?? this.id,
       name: name ?? this.name,
       specialization: specialization ?? this.specialization,
-      rating: rating ?? this.rating ,
+      rating: rating ?? this.rating,
     );
   }
 

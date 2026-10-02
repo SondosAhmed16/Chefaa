@@ -5,7 +5,7 @@ class DoctorEntity {
   final String? profilePicture;
   final String? gender;
   final String? bio;
-  final double? rating; 
+  final double? rating;
   final int? ratingCount;
   DoctorEntity({
     this.rating,

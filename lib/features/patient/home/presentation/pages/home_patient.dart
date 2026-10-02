@@ -16,9 +16,7 @@ import 'package:chefaa/features/patient/medication/presentation/cubit/medication
 import 'package:chefaa/features/patient/medication/presentation/widget/medicine_card.dart';
 import 'package:chefaa/features/patient/notification/presentation/cubit/notification_cubit.dart';
 import 'package:chefaa/features/patient/notification/presentation/cubit/notification_state.dart';
-import 'package:chefaa/features/patient/search/presentation/cubit/search_doctor_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -511,7 +509,9 @@ class _HomePatientState extends State<HomePatient> {
                       child: QuickActions(
                         title: "Find Lab",
                         image: "assets/svg_images/find_lab.svg",
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.findLab);
+                        },
                       ),
                     ),
                   ],

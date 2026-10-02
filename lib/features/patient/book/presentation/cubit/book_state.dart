@@ -47,19 +47,16 @@ final class SlotsErrorState extends BookState {
 
 class ChangeStepState extends BookState {}
 
+class ClinicsLoadingState extends BookState {}
 
-class ClinicsLoadingState extends BookState{}
-
-class ClinicsSuccessState extends BookState{
+class ClinicsSuccessState extends BookState {
   final List<Clinic> clinics;
 
   ClinicsSuccessState({required this.clinics});
 }
 
-class ClinicsErrorState extends BookState{
+class ClinicsErrorState extends BookState {
   final String error;
 
   ClinicsErrorState({required this.error});
 }
-
-
