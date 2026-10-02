@@ -16,7 +16,5 @@ class LabSearchSuccessState extends LabSearchState {
 class LabSearchErrorState extends LabSearchState {
   final ErrorModel error;
 
-  LabSearchErrorState( this.error);
+  LabSearchErrorState(this.error);
 }
-
-

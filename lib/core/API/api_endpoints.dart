@@ -14,9 +14,9 @@ class ApiEndpoints {
   static const String getNotification = "patient/notifications";
   static const String searchDoctor = "doctor/search-doctors";
   static const String bookAppo = "appointments/";
+  static const String getLabResults="patient/my-lab-results";
 
-  static const String searchLab="patient/search-centers";
-
+  static const String searchLab = "patient/search-centers";
 
   static String confirmMedication(String medicationId) =>
       "patient/medications/$medicationId/confirm";

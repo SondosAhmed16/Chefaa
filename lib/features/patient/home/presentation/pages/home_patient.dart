@@ -11,6 +11,9 @@ import 'package:chefaa/features/patient/appointment/presentation/widget/appointm
 import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart';
 import 'package:chefaa/features/patient/home/presentation/cubit/user_state.dart';
 import 'package:chefaa/features/patient/home/presentation/widget/quick_actions.dart';
+import 'package:chefaa/features/patient/lab%20results/presentation/cubit/lab_result_cubit.dart';
+import 'package:chefaa/features/patient/lab%20results/presentation/cubit/lab_result_state.dart';
+import 'package:chefaa/features/patient/lab%20results/presentation/widgets/lab_result_card.dart';
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_cubit.dart';
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_state.dart';
 import 'package:chefaa/features/patient/medication/presentation/widget/medicine_card.dart';
@@ -465,7 +468,118 @@ class _HomePatientState extends State<HomePatient> {
                                   });
                                 },
                               ),
-                              const SizedBox(height: 24),
+                            ],
+                          );
+                        }
+
+                        return const SizedBox.shrink();
+                      },
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    BlocBuilder<LabResultCubit, LabResultState>(
+                      builder: (context, state) {
+                        if (state is LabResultLooadingState) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: ColorManager.primary,
+                            ),
+                          );
+                        }
+
+                        if (state is LabResultErrorState) {
+                          return Center(
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: ColorManager.error,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Text(
+                                state.error.message,
+                                style: getBoldStyle(
+                                  color: ColorManager.error,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+
+                        if (state is LabResultSuccessState) {
+                          final results = state.results;
+
+                          if (results.isEmpty) {
+                            return Center(
+                              child: Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: ColorManager.primary,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Text(
+                                  "No Lab Results yet",
+                                  style: getBoldStyle(
+                                    color: ColorManager.black,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+
+                          final latestResult = results.last;
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Lab Results",
+                                    style: getBoldStyle(
+                                      color: ColorManager.black,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.getLabResult,
+                                      );
+                                    },
+                                    child: Text(
+                                      "View All",
+                                      style:
+                                          getMediumStyle(
+                                            color: ColorManager.primary,
+                                            fontSize: 16,
+                                          ).copyWith(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            decorationColor:
+                                                ColorManager.primary,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              LabResultCard(
+                                result: latestResult,
+                                onViewPressed: () {},
+                                onNotesPressed: () {},
+                              ),
                             ],
                           );
                         }

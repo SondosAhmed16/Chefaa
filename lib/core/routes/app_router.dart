@@ -20,6 +20,8 @@ import 'package:chefaa/features/patient/book/presentation/cubit/book_cubit.dart'
 import 'package:chefaa/features/patient/book/presentation/pages/booking_all_pages.dart';
 import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart';
 import 'package:chefaa/features/patient/home/presentation/pages/home_patient.dart';
+import 'package:chefaa/features/patient/lab%20results/presentation/cubit/lab_result_cubit.dart';
+import 'package:chefaa/features/patient/lab%20results/presentation/pages/lab_result_page.dart';
 import 'package:chefaa/features/patient/lab%20search/presentation/cubit/lab_search_cubit.dart';
 import 'package:chefaa/features/patient/lab%20search/presentation/pages/find_lab.dart';
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_cubit.dart';
@@ -67,6 +69,8 @@ class Routes {
   static const String patientSearch = '/patientSearch';
   static const String bookingAllPages = '/bookingAllPages';
   static const String findLab = '/findLab';
+    static const String getLabResult = '/getLabResult';
+
 }
 
 class AppRouter {
@@ -198,6 +202,10 @@ class AppRouter {
                 create: (context) =>
                     getIt<NotificationCubit>()..getNotification(),
               ),
+              BlocProvider(
+                create: (context) =>
+                    getIt<LabResultCubit>()..getLabResult(),
+              ),
             ],
             child: const HomePatient(),
           ),
@@ -208,6 +216,14 @@ class AppRouter {
           builder: (_) => BlocProvider(
             create: (context) => getIt<AppointmentCubit>()..fetchAppointments(),
             child: const MyAppointmentScreen(),
+          ),
+        );
+
+        case Routes.getLabResult:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<LabResultCubit>()..getLabResult(),
+            child: const LabResultPage(),
           ),
         );
 

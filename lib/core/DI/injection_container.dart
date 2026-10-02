@@ -48,6 +48,12 @@ import 'package:chefaa/features/patient/book/presentation/cubit/book_cubit.dart'
 import 'package:chefaa/features/patient/home/domain/repository/home_patient_repo.dart';
 import 'package:chefaa/features/patient/home/domain/use%20cases/user_usecase.dart';
 import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart';
+import 'package:chefaa/features/patient/lab%20results/data/datasource/lab_result_datasource.dart';
+import 'package:chefaa/features/patient/lab%20results/data/datasource/lab_result_datasource_imp.dart';
+import 'package:chefaa/features/patient/lab%20results/data/repository/lab_result_repo_imp.dart';
+import 'package:chefaa/features/patient/lab%20results/domain/repository/lab_result_repo.dart';
+import 'package:chefaa/features/patient/lab%20results/domain/usecase/get_lab_results_usecase.dart';
+import 'package:chefaa/features/patient/lab%20results/presentation/cubit/lab_result_cubit.dart';
 import 'package:chefaa/features/patient/lab%20search/data/datasource/lab_search_datasource.dart';
 import 'package:chefaa/features/patient/lab%20search/data/datasource/lab_search_datasource_imp.dart';
 import 'package:chefaa/features/patient/lab%20search/data/repository/search_lab_repo_imp.dart';
@@ -127,6 +133,7 @@ Future<void> initAppModule() async {
   _initPatientSearchModule();
   _initBookAppointment();
   _initFindLabModule();
+  _initGetLabResultModule();
 }
 
 void _initAuthModule() {
@@ -475,5 +482,27 @@ void _initFindLabModule() {
   // 4. Cubit
   getIt.registerFactory<LabSearchCubit>(
     () => LabSearchCubit(usecase: getIt<LabSearchUsecase>()),
+  );
+}
+
+void _initGetLabResultModule() {
+  // 1. Data Sources
+  getIt.registerLazySingleton<LabResultDatasource>(
+    () => LabResultDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+
+  // 2. Repositories
+  getIt.registerLazySingleton<LabResultRepo>(
+    () => LabResultRepoImp(datasource: getIt<LabResultDatasource>()),
+  );
+
+  // 3. Use Cases
+  getIt.registerLazySingleton<GetLabResultsUsecase>(
+    () => GetLabResultsUsecase(repo: getIt<LabResultRepo>()),
+  );
+
+  // 4. Cubit
+  getIt.registerFactory<LabResultCubit>(
+    () => LabResultCubit(usecase: getIt<GetLabResultsUsecase>()),
   );
 }

@@ -187,7 +187,9 @@ class _FindLabState extends State<FindLab> {
                           ),
                         );
                       } else if (state is LabSearchSuccessState) {
-                        final filteredCenters = _getFilteredCenters(state.centers);
+                        final filteredCenters = _getFilteredCenters(
+                          state.centers,
+                        );
 
                         if (filteredCenters.isEmpty) {
                           return Center(
