@@ -4,15 +4,11 @@ import 'package:chefaa/features/patient/lab%20results/domain/repository/lab_resu
 import 'package:dartz/dartz.dart';
 
 class GetLabResultsUsecase {
-
-
-final LabResultRepo repo;
+  final LabResultRepo repo;
 
   GetLabResultsUsecase({required this.repo});
 
-  Future<Either<ErrorModel,List<Result>>> call()async{
+  Future<Either<ErrorModel, List<Result>>> call() async {
     return await repo.getLabResults();
   }
-
-
 }

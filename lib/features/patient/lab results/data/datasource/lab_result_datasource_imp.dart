@@ -4,7 +4,7 @@ import 'package:chefaa/features/patient/lab%20results/data/datasource/lab_result
 import 'package:chefaa/features/patient/lab%20results/data/model/lab_result_model.dart';
 import 'package:chefaa/features/patient/lab%20results/data/model/result.dart';
 
- class LabResultDatasourceImp implements LabResultDatasource {
+class LabResultDatasourceImp implements LabResultDatasource {
   final ApiConsumer api;
 
   LabResultDatasourceImp({required this.api});

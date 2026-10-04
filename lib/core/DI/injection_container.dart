@@ -22,6 +22,12 @@ import 'package:chefaa/features/facility/auth/data/repositiry/facility_auth_repo
 import 'package:chefaa/features/facility/auth/domain/repository/facility_register_repo.dart';
 import 'package:chefaa/features/facility/auth/domain/usecase/faciclity_usecase_register.dart';
 import 'package:chefaa/features/facility/auth/presentation/cubit/facility_auth_cubit.dart';
+import 'package:chefaa/features/patient/AI%20Lab%20report/data/datasource/ai_lab_report_datasource.dart';
+import 'package:chefaa/features/patient/AI%20Lab%20report/data/datasource/ai_lab_report_datasource_imp.dart';
+import 'package:chefaa/features/patient/AI%20Lab%20report/data/repository/lab_report_repo_imp.dart';
+import 'package:chefaa/features/patient/AI%20Lab%20report/domain/repository/lab_report_repo.dart';
+import 'package:chefaa/features/patient/AI%20Lab%20report/domain/usecase/analyze_report_usecase.dart';
+import 'package:chefaa/features/patient/AI%20Lab%20report/presentation/cubit/ai_report_cubit.dart';
 import 'package:chefaa/features/patient/appointment/data/data%20source/appointment_datasource.dart';
 import 'package:chefaa/features/patient/appointment/data/data%20source/appointment_datasourcse_imp.dart';
 import 'package:chefaa/features/patient/appointment/data/repository/appointment_repo_imp.dart';
@@ -134,6 +140,7 @@ Future<void> initAppModule() async {
   _initBookAppointment();
   _initFindLabModule();
   _initGetLabResultModule();
+  _initAnalzeLabResultModule();
 }
 
 void _initAuthModule() {
@@ -504,5 +511,27 @@ void _initGetLabResultModule() {
   // 4. Cubit
   getIt.registerFactory<LabResultCubit>(
     () => LabResultCubit(usecase: getIt<GetLabResultsUsecase>()),
+  );
+}
+
+void _initAnalzeLabResultModule() {
+  // 1. Data Sources
+  getIt.registerLazySingleton<AiLabReportDatasource>(
+    () => AiLabReportDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+
+  // 2. Repositories
+  getIt.registerLazySingleton<LabReportRepo>(
+    () => LabReportRepoImp(datasource: getIt<AiLabReportDatasource>()),
+  );
+
+  // 3. Use Cases
+  getIt.registerLazySingleton<AnalyzeReportUsecase>(
+    () => AnalyzeReportUsecase(repo: getIt<LabReportRepo>()),
+  );
+
+  // 4. Cubit
+  getIt.registerFactory<AiReportCubit>(
+    () => AiReportCubit(usecase: getIt<AnalyzeReportUsecase>()),
   );
 }

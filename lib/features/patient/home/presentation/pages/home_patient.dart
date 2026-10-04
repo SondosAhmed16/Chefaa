@@ -598,9 +598,11 @@ class _HomePatientState extends State<HomePatient> {
                   children: [
                     Expanded(
                       child: QuickActions(
-                        title: "Emergency",
-                        image: "assets/svg_images/phone.svg",
-                        onTap: () {},
+                        title: "Analyze Lab Report",
+                        image: "assets/svg_images/doc_brief_active.svg",
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.analyze);
+                        },
                       ),
                     ),
                     Expanded(

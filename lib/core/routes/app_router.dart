@@ -12,6 +12,8 @@ import 'package:chefaa/features/facility/auth/presentation/pages/facility_regist
 import 'package:chefaa/features/onboarding/presentation/pages/facility_selection_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/onboarding_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/role_selection_screen.dart';
+import 'package:chefaa/features/patient/AI%20Lab%20report/presentation/cubit/ai_report_cubit.dart';
+import 'package:chefaa/features/patient/AI%20Lab%20report/presentation/pages/lab_report_uplaod_screen.dart';
 import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_cubit.dart';
 import 'package:chefaa/features/patient/appointment/presentation/pages/my_appointment_screen.dart';
 import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cubit.dart';
@@ -69,7 +71,8 @@ class Routes {
   static const String patientSearch = '/patientSearch';
   static const String bookingAllPages = '/bookingAllPages';
   static const String findLab = '/findLab';
-    static const String getLabResult = '/getLabResult';
+  static const String getLabResult = '/getLabResult';
+    static const String analyze = '/analyzeLabResult';
 
 }
 
@@ -203,8 +206,7 @@ class AppRouter {
                     getIt<NotificationCubit>()..getNotification(),
               ),
               BlocProvider(
-                create: (context) =>
-                    getIt<LabResultCubit>()..getLabResult(),
+                create: (context) => getIt<LabResultCubit>()..getLabResult(),
               ),
             ],
             child: const HomePatient(),
@@ -219,11 +221,19 @@ class AppRouter {
           ),
         );
 
-        case Routes.getLabResult:
+      case Routes.getLabResult:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<LabResultCubit>()..getLabResult(),
             child: const LabResultPage(),
+          ),
+        );
+
+         case Routes.analyze:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<AiReportCubit>(),
+            child: const LabReportUplaodScreen(),
           ),
         );
 
