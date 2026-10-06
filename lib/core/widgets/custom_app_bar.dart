@@ -1,6 +1,5 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget child;

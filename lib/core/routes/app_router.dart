@@ -1,5 +1,6 @@
 // lib/core/routes/app_router.dart
 import 'package:chefaa/core/di/injection_container.dart';
+import 'package:chefaa/core/widgets/main_layout.dart';
 import 'package:chefaa/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:chefaa/features/auth/presentation/pages/forget_password_screen.dart';
 import 'package:chefaa/features/auth/presentation/pages/login_screen.dart';
@@ -20,6 +21,8 @@ import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cub
 import 'package:chefaa/features/patient/auth/presentation/pages/patient_register_screen.dart';
 import 'package:chefaa/features/patient/book/presentation/cubit/book_cubit.dart';
 import 'package:chefaa/features/patient/book/presentation/pages/booking_all_pages.dart';
+import 'package:chefaa/features/patient/chatbot/presentation/cubit/chatbot_patient_cubit.dart';
+import 'package:chefaa/features/patient/chatbot/presentation/pages/chatbot_screen.dart';
 import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart';
 import 'package:chefaa/features/patient/home/presentation/pages/home_patient.dart';
 import 'package:chefaa/features/patient/lab%20results/presentation/cubit/lab_result_cubit.dart';
@@ -72,13 +75,18 @@ class Routes {
   static const String bookingAllPages = '/bookingAllPages';
   static const String findLab = '/findLab';
   static const String getLabResult = '/getLabResult';
-    static const String analyze = '/analyzeLabResult';
+  static const String analyze = '/analyzeLabResult';
+  static const String mainLayout = "/mainLayout";
+    static const String chatbotPatient = "/chatbotPatient";
 
 }
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case Routes.mainLayout:
+        return MaterialPageRoute(builder: (_) => const MainLayoutScreen());
+
       case Routes.splash:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
 
@@ -229,11 +237,19 @@ class AppRouter {
           ),
         );
 
-         case Routes.analyze:
+      case Routes.analyze:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<AiReportCubit>(),
             child: const LabReportUplaodScreen(),
+          ),
+        );
+
+         case Routes.chatbotPatient:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<ChatbotPatientCubit>(),
+            child: const ChatbotScreen(),
           ),
         );
 

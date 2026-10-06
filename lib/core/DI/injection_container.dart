@@ -51,7 +51,12 @@ import 'package:chefaa/features/patient/book/domain/usecase/book_appo_usecase.da
 import 'package:chefaa/features/patient/book/domain/usecase/get_slots_usecase.dart';
 import 'package:chefaa/features/patient/book/domain/usecase/gwt_doctor_clinic_usecase.dart';
 import 'package:chefaa/features/patient/book/presentation/cubit/book_cubit.dart';
-import 'package:chefaa/features/patient/home/domain/repository/home_patient_repo.dart';
+import 'package:chefaa/features/patient/chatbot/data/datasource/chatbot_patient_datasource.dart';
+import 'package:chefaa/features/patient/chatbot/data/datasource/chatbot_patient_datasource_imp.dart';
+import 'package:chefaa/features/patient/chatbot/data/repository/chatbot_patient_repo_imp.dart';
+import 'package:chefaa/features/patient/chatbot/domain/repository/chatbot_patient_repo.dart';
+import 'package:chefaa/features/patient/chatbot/domain/usecase/chatbot_patient_usecase.dart';
+import 'package:chefaa/features/patient/chatbot/presentation/cubit/chatbot_patient_cubit.dart';
 import 'package:chefaa/features/patient/home/domain/use%20cases/user_usecase.dart';
 import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart';
 import 'package:chefaa/features/patient/lab%20results/data/datasource/lab_result_datasource.dart';
@@ -98,9 +103,6 @@ import 'package:chefaa/features/patient/search/data/data%20source/remote/search_
 import 'package:chefaa/features/patient/search/data/data%20source/remote/search_doctor_remote_ds_imp.dart';
 import 'package:chefaa/features/patient/search/data/repository/search_doctor_repo_imp.dart';
 import 'package:chefaa/features/patient/search/domain/repository/search_doctor_repo.dart';
-import 'package:chefaa/features/patient/search/domain/usecase/get_search_history_usecase.dart';
-import 'package:chefaa/features/patient/search/domain/usecase/save_search_query_usecase.dart';
-import 'package:chefaa/features/patient/search/domain/usecase/search_doctor_usecase.dart';
 import 'package:chefaa/features/patient/search/presentation/cubit/search_doctor_cubit.dart';
 import 'package:chefaa/features/pharmacy/auth/data/data%20source/data_source_pharmacy_auth.dart';
 import 'package:chefaa/features/pharmacy/auth/data/data%20source/data_source_pharmacy_auth_implement.dart';
@@ -141,6 +143,7 @@ Future<void> initAppModule() async {
   _initFindLabModule();
   _initGetLabResultModule();
   _initAnalzeLabResultModule();
+  _initChatbotPatientModule();
 }
 
 void _initAuthModule() {
@@ -511,6 +514,28 @@ void _initGetLabResultModule() {
   // 4. Cubit
   getIt.registerFactory<LabResultCubit>(
     () => LabResultCubit(usecase: getIt<GetLabResultsUsecase>()),
+  );
+}
+
+void _initChatbotPatientModule() {
+  // 1. Data Sources
+  getIt.registerLazySingleton<ChatbotPatientDatasource>(
+    () => ChatbotPatientDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+
+  // 2. Repositories
+  getIt.registerLazySingleton<ChatbotPatientRepo>(
+    () => ChatbotPatientRepoImp(datasource: getIt<ChatbotPatientDatasource>()),
+  );
+
+  // 3. Use Cases
+  getIt.registerLazySingleton<ChatbotPatientUsecase>(
+    () => ChatbotPatientUsecase(repo: getIt<ChatbotPatientRepo>()),
+  );
+
+  // 4. Cubit
+  getIt.registerFactory<ChatbotPatientCubit>(
+    () => ChatbotPatientCubit(usecase: getIt<ChatbotPatientUsecase>()),
   );
 }
 

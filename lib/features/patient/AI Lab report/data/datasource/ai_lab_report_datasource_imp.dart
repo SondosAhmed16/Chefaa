@@ -25,12 +25,11 @@ class AiLabReportDatasourceImp implements AiLabReportDatasource {
       },
     );
 
-
-      final report= AiLabReport.fromMap(response as Map<String, dynamic>);
-     if (report.data != null) {
-    return report.data!;
-  } else {
-    throw Exception('Failed to parse lab report data');
-  }
+    final report = AiLabReport.fromMap(response as Map<String, dynamic>);
+    if (report.data != null) {
+      return report.data!;
+    } else {
+      throw Exception('Failed to parse lab report data');
+    }
   }
 }

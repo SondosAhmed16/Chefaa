@@ -28,14 +28,46 @@ class LoginScreen extends StatelessWidget {
                   message: "Once again you login successfully into Chefaa app",
                   type: DialogType.success,
                   onPressed: () {
-                    /*  Navigator.of(context).pushNamedAndRemoveUntil(
-                      Routes.patientProfile,
-                      (route) => false,
-                    );*/
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      Routes.homePatient,
-                      (route) => false,
-                    );
+                    Navigator.of(context).pop();
+
+                    final role = state.user.role.toLowerCase();
+
+                    switch (role) {
+                      case 'patient':
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.mainLayout,
+                          (route) => false,
+                        );
+                        break;
+
+                      case 'doctor':
+                        // Navigator.of(context).pushNamedAndRemoveUntil(
+                        //   Routes.doctorHome,
+                        //   (route) => false,
+                        // );
+                        break;
+
+                      case 'pharmacy':
+                        // Navigator.of(context).pushNamedAndRemoveUntil(
+                        //   Routes.pharmacyHome,
+                        //   (route) => false,
+                        // );
+                        break;
+
+                      case 'lab':
+                      case 'facility':
+                        // Navigator.of(context).pushNamedAndRemoveUntil(
+                        //   Routes.labHome,
+                        //   (route) => false,
+                        // );
+                        break;
+
+                      default:
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.mainLayout,
+                          (route) => false,
+                        );
+                    }
                   },
                 ),
               );

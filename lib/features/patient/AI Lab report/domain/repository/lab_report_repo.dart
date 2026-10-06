@@ -5,8 +5,5 @@ import 'package:chefaa/features/patient/AI%20Lab%20report/data/model/data.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class LabReportRepo {
-
-
-Future<Either<ErrorModel,Data>> analyzeReport({required File labReport});
-
+  Future<Either<ErrorModel, Data>> analyzeReport({required File labReport});
 }

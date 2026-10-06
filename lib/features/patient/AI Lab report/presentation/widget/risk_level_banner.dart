@@ -13,11 +13,7 @@ class RiskLevelBanner extends StatelessWidget {
       decoration: BoxDecoration(
         color: ColorManager.lightGray,
         borderRadius: BorderRadius.circular(25),
-        border: Border(
-          left: BorderSide(color: ColorManager.gold, width: 10),
-          
-        
-        ),
+        border: Border(left: BorderSide(color: ColorManager.gold, width: 10)),
 
         boxShadow: [
           BoxShadow(
