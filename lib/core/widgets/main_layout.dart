@@ -1,6 +1,8 @@
 import 'package:chefaa/features/patient/AI%20Lab%20report/presentation/cubit/ai_report_cubit.dart';
 import 'package:chefaa/features/patient/chatbot/presentation/cubit/chatbot_patient_cubit.dart';
 import 'package:chefaa/features/patient/chatbot/presentation/pages/chatbot_screen.dart';
+import 'package:chefaa/features/patient/profile/presentation/cubit/profile_patient_cubit.dart';
+import 'package:chefaa/features/patient/profile/presentation/pages/patient_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chefaa/core/resources/color.dart';
@@ -14,32 +16,21 @@ import 'package:chefaa/features/patient/notification/presentation/cubit/notifica
 import 'package:chefaa/features/patient/lab%20results/presentation/cubit/lab_result_cubit.dart';
 
 import 'package:chefaa/features/patient/AI%20Lab%20report/presentation/pages/lab_report_uplaod_screen.dart';
-
-import 'package:chefaa/features/patient/profile/presentation/pages/patient_profile_screen.dart';
-import 'package:chefaa/features/patient/profile/presentation/cubit/profile_patient_cubit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
-class MainLayoutScreen extends StatelessWidget {
+class MainLayoutScreen extends StatefulWidget {
   const MainLayoutScreen({super.key});
 
-  List<PersistentTabConfig> _tabs(BuildContext context) {
+  @override
+  State<MainLayoutScreen> createState() => _MainLayoutScreenState();
+}
+
+class _MainLayoutScreenState extends State<MainLayoutScreen> {
+  List<PersistentTabConfig> _buildTabs() {
     return [
       PersistentTabConfig(
-        screen: MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (_) => getIt<UsersCubit>()),
-            BlocProvider(create: (_) => getIt<AppointmentCubit>()),
-            BlocProvider(
-              create: (_) => getIt<MedicationCubit>()..getMedicationList(),
-            ),
-            BlocProvider(create: (_) => getIt<NotificationCubit>()),
-            BlocProvider(
-              create: (_) => getIt<LabResultCubit>()..getLabResult(),
-            ),
-          ],
-          child: const HomePatient(),
-        ),
+        screen: const HomePatientWrapper(),
         item: ItemConfig(
           icon: SvgPicture.asset("assets/svg_images/Home_active.svg"),
           inactiveIcon: SvgPicture.asset("assets/svg_images/Home.svg"),
@@ -48,7 +39,6 @@ class MainLayoutScreen extends StatelessWidget {
           inactiveForegroundColor: ColorManager.gray,
         ),
       ),
-
       PersistentTabConfig(
         screen: BlocProvider(
           create: (_) => getIt<AiReportCubit>(),
@@ -70,11 +60,11 @@ class MainLayoutScreen extends StatelessWidget {
           inactiveForegroundColor: ColorManager.gray,
         ),
       ),
-
       PersistentTabConfig(
-        screen: BlocProvider(create: (_)=>getIt<ChatbotPatientCubit>(),
-        child: const ChatbotScreen(),),
-        
+        screen: BlocProvider(
+          create: (_) => getIt<ChatbotPatientCubit>(),
+          child: const ChatbotScreen(),
+        ),
         item: ItemConfig(
           icon: SvgPicture.asset("assets/svg_images/chat_active.svg"),
           inactiveIcon: SvgPicture.asset("assets/svg_images/chat.svg"),
@@ -83,7 +73,6 @@ class MainLayoutScreen extends StatelessWidget {
           inactiveForegroundColor: ColorManager.gray,
         ),
       ),
-
       PersistentTabConfig(
         screen: BlocProvider(
           create: (_) => getIt<PatientProfileCubit>()..getProfileData(),
@@ -103,9 +92,29 @@ class MainLayoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PersistentTabView(
-      tabs: _tabs(context),
+      tabs: _buildTabs(),
       navBarBuilder: (navBarConfig) =>
           Style1BottomNavBar(navBarConfig: navBarConfig),
+    );
+  }
+}
+
+class HomePatientWrapper extends StatelessWidget {
+  const HomePatientWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => getIt<UsersCubit>()),
+        BlocProvider(create: (_) => getIt<AppointmentCubit>()),
+        BlocProvider(
+          create: (_) => getIt<MedicationCubit>()..getMedicationList(),
+        ),
+        BlocProvider(create: (_) => getIt<NotificationCubit>()),
+        BlocProvider(create: (_) => getIt<LabResultCubit>()..getLabResult()),
+      ],
+      child: const HomePatient(),
     );
   }
 }

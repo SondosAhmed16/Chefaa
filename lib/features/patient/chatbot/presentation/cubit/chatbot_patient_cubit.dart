@@ -9,15 +9,15 @@ class ChatbotPatientCubit extends Cubit<ChatbotPatientState> {
   final ChatbotPatientUsecase usecase;
 
   ChatbotPatientCubit({required this.usecase})
-      : super(
-          ChatbotPatientInitial([
-            ConversationHistory(
-              role: 'assistant',
-              content:
-                  'Welcome! How can I help you today with your medications or health condition?',
-            ),
-          ]),
-        );
+    : super(
+        ChatbotPatientInitial([
+          ConversationHistory(
+            role: 'assistant',
+            content:
+                'Welcome! How can I help you today with your medications or health condition?',
+          ),
+        ]),
+      );
 
   static ChatbotPatientCubit get(BuildContext context) =>
       BlocProvider.of<ChatbotPatientCubit>(context);

@@ -89,6 +89,14 @@ import 'package:chefaa/features/patient/onboarding/data/repository/patient_all_i
 import 'package:chefaa/features/patient/onboarding/domain/repository/patient_all_info_repo.dart';
 import 'package:chefaa/features/patient/onboarding/domain/usecase/patient_all_info_usacse.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/cubit/all_info_cubit.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/data/datasource/pharmacy_search_datasource.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/data/datasource/pharmacy_search_datasource_imp.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/data/repository/pharmacy_search_repo_imp.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/domain/repository/pharmacy_search_repo.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/domain/usecase/get_pharmacy_medicines_usecase.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/domain/usecase/get_pharmacy_profile.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/domain/usecase/pharmacy_search_usecase.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_cubit.dart';
 import 'package:chefaa/features/patient/profile/data/data%20source/patient_profile_data_source.dart';
 import 'package:chefaa/features/patient/profile/data/data%20source/patient_profile_data_source_imp.dart';
 import 'package:chefaa/features/patient/profile/data/repository/patient_profile_repo_imp.dart';
@@ -144,6 +152,7 @@ Future<void> initAppModule() async {
   _initGetLabResultModule();
   _initAnalzeLabResultModule();
   _initChatbotPatientModule();
+  _initSearchPharmacyModule();
 }
 
 void _initAuthModule() {
@@ -536,6 +545,38 @@ void _initChatbotPatientModule() {
   // 4. Cubit
   getIt.registerFactory<ChatbotPatientCubit>(
     () => ChatbotPatientCubit(usecase: getIt<ChatbotPatientUsecase>()),
+  );
+}
+
+void _initSearchPharmacyModule() {
+  // 1. Data Sources
+  getIt.registerLazySingleton<PharmacySearchDatasource>(
+    () => PharmacySearchDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+
+  // 2. Repositories
+  getIt.registerLazySingleton<PharmacySearchRepo>(
+    () => PharmacySearchRepoImp(datasource: getIt<PharmacySearchDatasource>()),
+  );
+
+  // 3. Use Cases
+  getIt.registerLazySingleton<PharmacySearchUsecase>(
+    () => PharmacySearchUsecase(repo: getIt<PharmacySearchRepo>()),
+  );
+  getIt.registerLazySingleton<GetPharmacyProfileUsecase>(
+    () => GetPharmacyProfileUsecase(repo: getIt<PharmacySearchRepo>()),
+  );
+  getIt.registerLazySingleton<GetPharmacyMedicinesUsecase>(
+    () => GetPharmacyMedicinesUsecase(repo: getIt<PharmacySearchRepo>()),
+  );
+
+  // 4. Cubit
+  getIt.registerFactory<PharmacySearchCubit>(
+    () => PharmacySearchCubit(
+      usecase: getIt<PharmacySearchUsecase>(),
+      getPharmacyProfileUsecase: getIt<GetPharmacyProfileUsecase>(),
+      getPharmacyMedicinesUsecase: getIt<GetPharmacyMedicinesUsecase>(),
+    ),
   );
 }
 

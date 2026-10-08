@@ -32,10 +32,7 @@ class BotHeaderWidget extends StatelessWidget {
             Text(
               "Welcome, I'm Chefaa\nAssistant",
               textAlign: TextAlign.center,
-              style: getBoldStyle(
-                color: ColorManager.black,
-                fontSize: 20,
-              ),
+              style: getBoldStyle(color: ColorManager.black, fontSize: 20),
             ),
           ],
         ),
@@ -45,10 +42,7 @@ class BotHeaderWidget extends StatelessWidget {
           child: Text(
             "I'm here to help you get your medications\nand medical consultations easily.",
             textAlign: TextAlign.center,
-            style: getRegularStyle(
-              color: ColorManager.gray,
-              fontSize: 13,
-            ),
+            style: getRegularStyle(color: ColorManager.gray, fontSize: 13),
           ),
         ),
         const SizedBox(height: 20),
@@ -89,10 +83,7 @@ class BotHeaderWidget extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: getBoldStyle(
-              color: ColorManager.primary,
-              fontSize: 13,
-            ),
+            style: getBoldStyle(color: ColorManager.primary, fontSize: 13),
           ),
         ],
       ),

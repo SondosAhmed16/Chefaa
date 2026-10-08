@@ -4,26 +4,23 @@ import 'package:chefaa/features/patient/chatbot/data/model/conversation_history.
 sealed class ChatbotPatientState {
   final List<ConversationHistory> conversationHistory;
 
-  ChatbotPatientState( this.conversationHistory);
+  ChatbotPatientState(this.conversationHistory);
 }
 
 class ChatbotPatientInitial extends ChatbotPatientState {
-  ChatbotPatientInitial( super.conversationHistory);
+  ChatbotPatientInitial(super.conversationHistory);
 }
 
 class ChatbotPatientLoading extends ChatbotPatientState {
-  ChatbotPatientLoading( super.conversationHistory);
+  ChatbotPatientLoading(super.conversationHistory);
 }
 
 class ChatbotPatientSuccess extends ChatbotPatientState {
-  ChatbotPatientSuccess( super.conversationHistory);
+  ChatbotPatientSuccess(super.conversationHistory);
 }
 
 class ChatbotPatientError extends ChatbotPatientState {
   final ErrorModel error;
 
-  ChatbotPatientError(
-     super.conversationHistory,
-     this.error,
-  );
+  ChatbotPatientError(super.conversationHistory, this.error);
 }

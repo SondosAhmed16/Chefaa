@@ -18,6 +18,13 @@ class ApiEndpoints {
   static const String analyzeLabReport = "labReport/analyze";
   static const String searchLab = "patient/search-centers";
   static const String chatbotPatient = "chatboot/chat";
+  static const String searchPharmacy = "patient/pharmacies/search";
+
+  static String getPharmacyProfile(String pharmacyId) =>
+      "patient/pharmacies/$pharmacyId/profile";
+
+  static String getPharmacyMediciens(String pharmacyId) =>
+      "patient/pharmacies/$pharmacyId/medicines";
 
   static String confirmMedication(String medicationId) =>
       "patient/medications/$medicationId/confirm";

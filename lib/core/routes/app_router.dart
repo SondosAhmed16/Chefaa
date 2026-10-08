@@ -35,6 +35,8 @@ import 'package:chefaa/features/patient/notification/presentation/cubit/notifica
 import 'package:chefaa/features/patient/notification/presentation/pages/notification_screen.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/cubit/all_info_cubit.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/pages/onboarding_info.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_cubit.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/presentation/pages/pharmacy_search_page.dart';
 import 'package:chefaa/features/patient/profile/presentation/cubit/profile_patient_cubit.dart';
 import 'package:chefaa/features/patient/profile/presentation/pages/patient_profile_screen.dart';
 import 'package:chefaa/features/patient/search/domain/entity/doctor_entity.dart';
@@ -77,7 +79,9 @@ class Routes {
   static const String getLabResult = '/getLabResult';
   static const String analyze = '/analyzeLabResult';
   static const String mainLayout = "/mainLayout";
-    static const String chatbotPatient = "/chatbotPatient";
+  static const String chatbotPatient = "/chatbotPatient";
+  static const String searchPharmacy = "/searchPharmacy";
+
 
 }
 
@@ -194,6 +198,14 @@ class AppRouter {
           ),
         );
 
+         case Routes.searchPharmacy:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<PharmacySearchCubit>()..searchPharmacy(),
+            child: const PharmacySearchPage(),
+          ),
+        );
+
       case Routes.homePatient:
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
@@ -245,7 +257,7 @@ class AppRouter {
           ),
         );
 
-         case Routes.chatbotPatient:
+      case Routes.chatbotPatient:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<ChatbotPatientCubit>(),

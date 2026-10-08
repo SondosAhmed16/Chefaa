@@ -618,7 +618,9 @@ class _HomePatientState extends State<HomePatient> {
                       child: QuickActions(
                         title: "Order Pharmacy",
                         image: "assets/svg_images/order_pharmacy.svg",
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.searchPharmacy);
+                        },
                       ),
                     ),
                     Expanded(

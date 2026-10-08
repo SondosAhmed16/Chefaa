@@ -38,10 +38,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         backgroundColor: ColorManager.white,
         elevation: 0,
         titleSpacing: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: ColorManager.black),
-          onPressed: () => Navigator.pop(context),
-        ),
+
         title: Row(
           children: [
             Stack(

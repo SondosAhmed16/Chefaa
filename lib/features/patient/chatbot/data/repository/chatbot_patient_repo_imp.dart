@@ -21,14 +21,12 @@ class ChatbotPatientRepoImp implements ChatbotPatientRepo {
         conversationHistory: conversationHistory,
       );
 
-      final chatbotModel = ChatbotModel.fromMap(response as Map<String, dynamic>);
+      final chatbotModel = ChatbotModel.fromMap(
+        response as Map<String, dynamic>,
+      );
       return Right(chatbotModel);
     } catch (e) {
-      return Left(
-        ErrorModel(
-          message: e.toString(),
-        ),
-      );
+      return Left(ErrorModel(message: e.toString()));
     }
   }
 }
