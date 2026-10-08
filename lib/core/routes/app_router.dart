@@ -36,6 +36,8 @@ import 'package:chefaa/features/patient/notification/presentation/pages/notifica
 import 'package:chefaa/features/patient/onboarding/presentation/cubit/all_info_cubit.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/pages/onboarding_info.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_cubit.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/presentation/pages/pharmacy_medicine_screen.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/presentation/pages/pharmacy_profile_details.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/pages/pharmacy_search_page.dart';
 import 'package:chefaa/features/patient/profile/presentation/cubit/profile_patient_cubit.dart';
 import 'package:chefaa/features/patient/profile/presentation/pages/patient_profile_screen.dart';
@@ -81,8 +83,8 @@ class Routes {
   static const String mainLayout = "/mainLayout";
   static const String chatbotPatient = "/chatbotPatient";
   static const String searchPharmacy = "/searchPharmacy";
-
-
+  static const String pharmacyDetails = "/pharmacyDetails";
+  static const String pharmacyMedicines = "/pharmacyMedicines";
 }
 
 class AppRouter {
@@ -198,11 +200,26 @@ class AppRouter {
           ),
         );
 
-         case Routes.searchPharmacy:
+      case Routes.searchPharmacy:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<PharmacySearchCubit>()..searchPharmacy(),
             child: const PharmacySearchPage(),
+          ),
+        );
+
+      case Routes.pharmacyDetails:
+        final pharmacyId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => PharmacyProfileDetails(pharmacyId: pharmacyId),
+        );
+
+      case Routes.pharmacyMedicines:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (_) => PharmacyMedicineScreen(
+            pharmacyId: args['pharmacyId'] as String,
+            pharmacyName: args['pharmacyName'] as String,
           ),
         );
 

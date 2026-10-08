@@ -41,9 +41,13 @@ class _MedicineCardState extends State<MedicineCard> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: ColorManager.lightGray,
-          borderRadius: BorderRadius.circular(25.r),
+          borderRadius: BorderRadius.circular(25),
           boxShadow: [
-            BoxShadow(color: ColorManager.black.withAlpha(80), blurRadius: 10),
+            BoxShadow(
+              color: ColorManager.black.withAlpha(10),
+              blurRadius: 4,
+              offset: Offset(2, 10),
+            ),
           ],
         ),
         child: RawScrollbar(

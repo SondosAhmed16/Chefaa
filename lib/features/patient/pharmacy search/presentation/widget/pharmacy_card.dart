@@ -1,6 +1,7 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/datum.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/presentation/pages/pharmacy_profile_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -15,7 +16,15 @@ class PharmacyCard extends StatelessWidget {
         : "--";
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                PharmacyProfileDetails(pharmacyId: pharmacy.id ?? ''),
+          ),
+        );
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         padding: const EdgeInsets.all(16),

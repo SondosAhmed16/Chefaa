@@ -7,15 +7,18 @@ import 'package:flutter/widgets.dart';
 class MedicineCard extends StatelessWidget {
   final Medicine medicine;
   final VoidCallback onAddToCart;
+  final VoidCallback onTap;
   const MedicineCard({
     super.key,
     required this.medicine,
-    required this.onAddToCart,
+    required this.onAddToCart, required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -23,9 +26,9 @@ class MedicineCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: ColorManager.black.withOpacity(0.05),
+            color: ColorManager.black.withAlpha(60),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: const Offset(4, 10),
           ),
         ],
       ),
@@ -99,6 +102,7 @@ class MedicineCard extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 }
