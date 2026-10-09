@@ -1,4 +1,5 @@
 import 'package:chefaa/core/error%20handle/error_model.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/data/model/medicine_details_model/medicine_details_model.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_medicienes_model.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_profile_model.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_search_model.dart';
@@ -19,20 +20,17 @@ class PharmacySearchFailure extends PharmacySearchState {
   PharmacySearchFailure(this.message);
 }
 
-
-
 /***************************************************** */
 
+class PharmacyProfileLoading extends PharmacySearchState {}
 
- class PharmacyProfileLoading extends PharmacySearchState {}
-
- class PharmacyProfileSuccess extends PharmacySearchState {
+class PharmacyProfileSuccess extends PharmacySearchState {
   final PharmacyProfileModel pharmacyProfile;
 
   PharmacyProfileSuccess(this.pharmacyProfile);
 }
 
- class PharmacyProfileFailure extends PharmacySearchState {
+class PharmacyProfileFailure extends PharmacySearchState {
   final ErrorModel message;
 
   PharmacyProfileFailure(this.message);
@@ -52,4 +50,20 @@ class PharmacyMedicinesFailure extends PharmacySearchState {
   final ErrorModel message;
 
   PharmacyMedicinesFailure(this.message);
+}
+
+/***************************************************** */
+
+class MedicinesDetailsLoading extends PharmacySearchState {}
+
+class MedicinesDetailsSuccess extends PharmacySearchState {
+  final MedicineDetailsModel response;
+
+  MedicinesDetailsSuccess(this.response);
+}
+
+class MedicinesDetailsFailure extends PharmacySearchState {
+  final ErrorModel message;
+
+  MedicinesDetailsFailure(this.message);
 }

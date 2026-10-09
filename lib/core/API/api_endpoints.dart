@@ -26,6 +26,9 @@ class ApiEndpoints {
   static String getPharmacyMediciens(String pharmacyId) =>
       "patient/pharmacies/$pharmacyId/medicines";
 
+  static String getMediciensDetails(String medicineId) =>
+      "patient/medicines/$medicineId";
+
   static String confirmMedication(String medicationId) =>
       "patient/medications/$medicationId/confirm";
 

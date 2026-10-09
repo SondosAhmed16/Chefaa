@@ -93,6 +93,7 @@ import 'package:chefaa/features/patient/pharmacy%20search/data/datasource/pharma
 import 'package:chefaa/features/patient/pharmacy%20search/data/datasource/pharmacy_search_datasource_imp.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/repository/pharmacy_search_repo_imp.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/domain/repository/pharmacy_search_repo.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/domain/usecase/get_medicine_details_usecase.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/domain/usecase/get_pharmacy_medicines_usecase.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/domain/usecase/get_pharmacy_profile.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/domain/usecase/pharmacy_search_usecase.dart';
@@ -569,13 +570,16 @@ void _initSearchPharmacyModule() {
   getIt.registerLazySingleton<GetPharmacyMedicinesUsecase>(
     () => GetPharmacyMedicinesUsecase(repo: getIt<PharmacySearchRepo>()),
   );
-
+  getIt.registerLazySingleton<GetMedicineDetailsUsecase>(
+    () => GetMedicineDetailsUsecase(repo: getIt<PharmacySearchRepo>()),
+  );
   // 4. Cubit
   getIt.registerFactory<PharmacySearchCubit>(
     () => PharmacySearchCubit(
       usecase: getIt<PharmacySearchUsecase>(),
       getPharmacyProfileUsecase: getIt<GetPharmacyProfileUsecase>(),
       getPharmacyMedicinesUsecase: getIt<GetPharmacyMedicinesUsecase>(),
+      getMedicineDetailsUsecase: getIt<GetMedicineDetailsUsecase>(),
     ),
   );
 }

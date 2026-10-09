@@ -1,3 +1,4 @@
+import 'package:chefaa/features/patient/pharmacy%20search/domain/usecase/get_medicine_details_usecase.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/domain/usecase/get_pharmacy_medicines_usecase.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/domain/usecase/get_pharmacy_profile.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/domain/usecase/pharmacy_search_usecase.dart';
@@ -8,11 +9,13 @@ class PharmacySearchCubit extends Cubit<PharmacySearchState> {
   final PharmacySearchUsecase usecase;
   final GetPharmacyProfileUsecase getPharmacyProfileUsecase;
   final GetPharmacyMedicinesUsecase getPharmacyMedicinesUsecase;
+  final GetMedicineDetailsUsecase getMedicineDetailsUsecase;
 
   PharmacySearchCubit({
     required this.usecase,
     required this.getPharmacyProfileUsecase,
     required this.getPharmacyMedicinesUsecase,
+    required this.getMedicineDetailsUsecase,
   }) : super(PharmacySearchInitial());
 
   Future<void> searchPharmacy({String? query}) async {
@@ -41,6 +44,15 @@ class PharmacySearchCubit extends Cubit<PharmacySearchState> {
     result.fold(
       (error) => emit(PharmacyMedicinesFailure(error)),
       (medicine) => emit(PharmacyMedicinesSuccess(medicine)),
+    );
+  }
+
+  Future<void> getMedicinesDetails({required String medicineId}) async {
+    if (!isClosed) emit(MedicinesDetailsLoading());
+    final result = await getMedicineDetailsUsecase.call(medicineId: medicineId);
+    result.fold(
+      (error) => emit(MedicinesDetailsFailure(error)),
+      (details) => emit(MedicinesDetailsSuccess(details)),
     );
   }
 }

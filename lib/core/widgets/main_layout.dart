@@ -27,6 +27,20 @@ class MainLayoutScreen extends StatefulWidget {
 }
 
 class _MainLayoutScreenState extends State<MainLayoutScreen> {
+  late PersistentTabController _controller;
+
+@override
+  void initState() {
+    super.initState();
+    _controller = PersistentTabController(initialIndex: 0);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   List<PersistentTabConfig> _buildTabs() {
     return [
       PersistentTabConfig(

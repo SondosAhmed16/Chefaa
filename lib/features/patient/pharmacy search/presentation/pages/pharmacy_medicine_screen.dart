@@ -1,6 +1,7 @@
 import 'package:chefaa/core/DI/injection_container.dart';
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
+import 'package:chefaa/core/routes/app_router.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/medicine.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_cubit.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_state.dart';
@@ -139,7 +140,13 @@ class PharmacyMedicineScreen extends StatelessWidget {
                                 onAddToCart: () {
                                   // Add to cart logic
                                 },
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    Routes.MedicineDetails,
+                                    arguments: medicine.id,
+                                  );
+                                },
                               );
                             },
                           ),

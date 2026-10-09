@@ -1,6 +1,7 @@
 import 'package:chefaa/core/error%20handle/error_model.dart';
 import 'package:chefaa/core/error%20handle/exceptions.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/datasource/pharmacy_search_datasource.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/data/model/medicine_details_model/medicine_details_model.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_medicienes_model.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_profile_model.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_search_model.dart';
@@ -59,6 +60,25 @@ class PharmacySearchRepoImp implements PharmacySearchRepo {
         pharmacyId: pharmacyId,
       );
       final model = PharmacyMedicienesModel.fromMap(
+        response as Map<String, dynamic>,
+      );
+      return Right(model);
+    } on Exceptions catch (e) {
+      return Left(e.errorModel);
+    } catch (e) {
+      return Left(ErrorModel(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorModel, MedicineDetailsModel>> getMedicineDetails({
+    required String medicineId,
+  }) async {
+    try {
+      final response = await datasource.getMedicineDetails(
+        medicineId: medicineId,
+      );
+      final model = MedicineDetailsModel.fromMap(
         response as Map<String, dynamic>,
       );
       return Right(model);

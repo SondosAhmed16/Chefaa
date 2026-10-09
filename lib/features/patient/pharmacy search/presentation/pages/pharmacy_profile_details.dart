@@ -20,7 +20,7 @@ class PharmacyProfileDetails extends StatelessWidget {
           getIt<PharmacySearchCubit>()
             ..getPharmacyProfile(pharmacyId: pharmacyId),
       child: Scaffold(
-        backgroundColor: const Color(0xFFF8F9FA),
+        backgroundColor: ColorManager.white,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(140),
           child: Container(
@@ -162,7 +162,7 @@ class PharmacyProfileDetails extends StatelessWidget {
                                   fontSize: 18,
                                 ),
                               ),
-                              // Rating Chip
+                              
                               if (pharmacy.rating != null)
                                 Container(
                                   padding: const EdgeInsets.symmetric(
@@ -272,7 +272,7 @@ class PharmacyProfileDetails extends StatelessWidget {
                 context,
                 Routes.pharmacyMedicines,
                 arguments: {
-                  'pharmacyId': pharmacyId ,
+                  'pharmacyId': pharmacyId,
                   'pharmacyName': pharmacy.pharmacyName ?? 'Pharmacy Medicines',
                 },
               );

@@ -148,8 +148,7 @@ class _PharmacySearchPageState extends State<PharmacySearchPage> {
                         ),
                       );
                     } else if (state is PharmacySearchSuccess) {
-                      final List<Datum> pharmacies =
-                          state.response.data ?? [];
+                      final List<Datum> pharmacies = state.response.data ?? [];
 
                       if (pharmacies.isEmpty) {
                         return Center(
@@ -170,7 +169,9 @@ class _PharmacySearchPageState extends State<PharmacySearchPage> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: pharmacies.length,
                         itemBuilder: (context, index) {
-                          print("Rendering Pharmacy: ${pharmacies[index].pharmacyName}");
+                          print(
+                            "Rendering Pharmacy: ${pharmacies[index].pharmacyName}",
+                          );
                           return PharmacyCard(pharmacy: pharmacies[index]);
                         },
                       );

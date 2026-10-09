@@ -36,6 +36,7 @@ import 'package:chefaa/features/patient/notification/presentation/pages/notifica
 import 'package:chefaa/features/patient/onboarding/presentation/cubit/all_info_cubit.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/pages/onboarding_info.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_cubit.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/presentation/pages/medicine_details_screen.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/pages/pharmacy_medicine_screen.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/pages/pharmacy_profile_details.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/pages/pharmacy_search_page.dart';
@@ -85,6 +86,7 @@ class Routes {
   static const String searchPharmacy = "/searchPharmacy";
   static const String pharmacyDetails = "/pharmacyDetails";
   static const String pharmacyMedicines = "/pharmacyMedicines";
+  static const String MedicineDetails = "/MedicineDetails";
 }
 
 class AppRouter {
@@ -221,6 +223,12 @@ class AppRouter {
             pharmacyId: args['pharmacyId'] as String,
             pharmacyName: args['pharmacyName'] as String,
           ),
+        );
+
+      case Routes.MedicineDetails:
+        final medicineId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => MedicineDetailsScreen(medicineId: medicineId),
         );
 
       case Routes.homePatient:
