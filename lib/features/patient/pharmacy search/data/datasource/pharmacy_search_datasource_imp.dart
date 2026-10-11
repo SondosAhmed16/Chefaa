@@ -29,7 +29,7 @@ class PharmacySearchDatasourceImp implements PharmacySearchDatasource {
   }
 
   @override
-  Future<dynamic> getMedicineDetails({required String medicineId})async {
+  Future<dynamic> getMedicineDetails({required String medicineId}) async {
     return await api.get(ApiEndpoints.getMediciensDetails(medicineId));
   }
 }

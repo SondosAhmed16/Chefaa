@@ -51,6 +51,7 @@ import 'package:chefaa/features/patient/book/domain/usecase/book_appo_usecase.da
 import 'package:chefaa/features/patient/book/domain/usecase/get_slots_usecase.dart';
 import 'package:chefaa/features/patient/book/domain/usecase/gwt_doctor_clinic_usecase.dart';
 import 'package:chefaa/features/patient/book/presentation/cubit/book_cubit.dart';
+import 'package:chefaa/features/patient/cart/presentation/cubit/cart_cubit.dart';
 import 'package:chefaa/features/patient/chatbot/data/datasource/chatbot_patient_datasource.dart';
 import 'package:chefaa/features/patient/chatbot/data/datasource/chatbot_patient_datasource_imp.dart';
 import 'package:chefaa/features/patient/chatbot/data/repository/chatbot_patient_repo_imp.dart';
@@ -89,6 +90,27 @@ import 'package:chefaa/features/patient/onboarding/data/repository/patient_all_i
 import 'package:chefaa/features/patient/onboarding/domain/repository/patient_all_info_repo.dart';
 import 'package:chefaa/features/patient/onboarding/domain/usecase/patient_all_info_usacse.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/cubit/all_info_cubit.dart';
+import 'package:chefaa/features/patient/order%20track/data/datasource/order_track_datasource.dart';
+import 'package:chefaa/features/patient/order%20track/data/datasource/order_track_datasource_imp.dart';
+import 'package:chefaa/features/patient/order%20track/data/repository/order_track_repo_imp.dart';
+import 'package:chefaa/features/patient/order%20track/domain/repository/order_track_repo.dart';
+import 'package:chefaa/features/patient/order%20track/domain/usecase/confirm_order_usecase.dart';
+import 'package:chefaa/features/patient/order%20track/domain/usecase/order_track_usecase.dart';
+import 'package:chefaa/features/patient/order%20track/presentation/cubit/order_track_cubit.dart';
+import 'package:chefaa/features/patient/order/data/datasource/checkout_datasource.dart';
+import 'package:chefaa/features/patient/order/data/datasource/checkout_datasource_imp.dart';
+import 'package:chefaa/features/patient/order/data/repository/checkout_repo_imp.dart';
+import 'package:chefaa/features/patient/order/domain/repository/checkout_repo.dart';
+import 'package:chefaa/features/patient/order/domain/usecase/checkout_usecase.dart';
+import 'package:chefaa/features/patient/order/domain/usecase/get_orders_usecase.dart';
+import 'package:chefaa/features/patient/order/presentation/cubit/checkout_cubit.dart';
+import 'package:chefaa/features/patient/order/presentation/cubit/get_orders_cubit.dart';
+import 'package:chefaa/features/patient/payment/data/datasource/payment_datasource.dart';
+import 'package:chefaa/features/patient/payment/data/datasource/payment_online_imp.dart';
+import 'package:chefaa/features/patient/payment/data/repository/payment_repo_imp.dart';
+import 'package:chefaa/features/patient/payment/domain/repository/payment_repo.dart';
+import 'package:chefaa/features/patient/payment/domain/usecase/payment_online_usecase.dart';
+import 'package:chefaa/features/patient/payment/presentation/cubit/payment_cubit.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/datasource/pharmacy_search_datasource.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/datasource/pharmacy_search_datasource_imp.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/repository/pharmacy_search_repo_imp.dart';
@@ -135,7 +157,7 @@ Future<void> initAppModule() async {
     () => DioConsumer(dio: getIt<Dio>()),
   );
 
-  // Features - Auth
+  
   _initAuthModule();
   _initAuthModulePatient();
   _initAuthModuleDoctor();
@@ -154,6 +176,11 @@ Future<void> initAppModule() async {
   _initAnalzeLabResultModule();
   _initChatbotPatientModule();
   _initSearchPharmacyModule();
+  _initCartModule();
+  _initCheckoutModule();
+  _initPaymentModule();
+  _initOrderTrackModule();
+  _initGetOrdersModule();
 }
 
 void _initAuthModule() {
@@ -603,5 +630,84 @@ void _initAnalzeLabResultModule() {
   // 4. Cubit
   getIt.registerFactory<AiReportCubit>(
     () => AiReportCubit(usecase: getIt<AnalyzeReportUsecase>()),
+  );
+}
+
+void _initCartModule() {
+  getIt.registerLazySingleton<CartCubit>(() => CartCubit());
+}
+
+void _initCheckoutModule() {
+  // Data Source
+  getIt.registerLazySingleton<CheckoutDatasource>(
+    () => CheckoutDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+
+  // Repository
+  getIt.registerLazySingleton<CheckoutRepo>(
+    () => CheckoutRepoImp(datasource: getIt<CheckoutDatasource>()),
+  );
+
+  // Use Case
+  getIt.registerLazySingleton<CheckoutUsecase>(
+    () => CheckoutUsecase(repo: getIt<CheckoutRepo>()),
+  );
+
+  // Cubit
+  getIt.registerFactory<CheckoutCubit>(
+    () => CheckoutCubit(checkoutUsecase: getIt<CheckoutUsecase>()),
+  );
+}
+
+void _initPaymentModule() {
+  // 1. Data Source
+  getIt.registerLazySingleton<PaymentDatasource>(
+    () => PaymentOnlineImp(api: getIt<ApiConsumer>()),
+  );
+
+  // 2. Repository
+  getIt.registerLazySingleton<PaymentRepo>(
+    () => PaymentRepoImp(datasource: getIt<PaymentDatasource>()),
+  );
+
+  // 3. Use Case
+  getIt.registerLazySingleton<PaymentOnlineUsecase>(
+    () => PaymentOnlineUsecase(repo: getIt<PaymentRepo>()),
+  );
+
+  // 4. Cubit
+  getIt.registerFactory<PaymentCubit>(
+    () => PaymentCubit(usecase: getIt<PaymentOnlineUsecase>()),
+  );
+}
+
+void _initOrderTrackModule() {
+  getIt.registerLazySingleton<OrderTrackDatasource>(
+    () => OrderTrackDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<OrderTrackRepo>(
+    () => OrderTrackRepoImp(datasource: getIt<OrderTrackDatasource>()),
+  );
+  getIt.registerLazySingleton<OrderTrackUsecase>(
+    () => OrderTrackUsecase(repo: getIt<OrderTrackRepo>()),
+  );
+
+  getIt.registerLazySingleton<ConfirmOrderUsecase>(
+    () => ConfirmOrderUsecase(repo: getIt<OrderTrackRepo>()),
+  );
+  getIt.registerFactory<OrderTrackCubit>(
+    () => OrderTrackCubit(
+      usecase: getIt<OrderTrackUsecase>(),
+      confirmOrderUsecase: getIt<ConfirmOrderUsecase>(),
+    ),
+  );
+}
+
+void _initGetOrdersModule() {
+ getIt.registerLazySingleton<GetOrdersUsecase>(
+    () => GetOrdersUsecase(repo: getIt<CheckoutRepo>()),
+  );
+  getIt.registerFactory<GetOrdersCubit>(
+    () => GetOrdersCubit(usecase: getIt<GetOrdersUsecase>()),
   );
 }

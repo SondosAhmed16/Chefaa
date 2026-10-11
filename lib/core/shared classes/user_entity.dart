@@ -10,9 +10,9 @@ class UserEntity {
 
   factory UserEntity.fromLoginResponseModel(LoginResponseModel authResponse) {
     return UserEntity(
-      id: authResponse.user?.id?.trim() ?? '',
-      name: authResponse.user?.name?.trim() ?? '',
-      role: authResponse.user?.role?.trim() ?? '',
+      id: authResponse.user.id.trim(),
+      name: authResponse.user.name.trim(),
+      role: authResponse.user.role.trim(),
     );
   }
 

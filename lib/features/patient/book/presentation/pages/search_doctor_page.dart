@@ -1,6 +1,5 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
-import 'package:chefaa/features/patient/search/presentation/cubit/search_doctor_cubit.dart';
 import 'package:chefaa/features/patient/search/presentation/widget/custom_search_bar.dart';
 import 'package:chefaa/features/patient/search/presentation/widget/filter_bar.dart';
 import 'package:chefaa/features/patient/search/presentation/widget/results_list.dart';

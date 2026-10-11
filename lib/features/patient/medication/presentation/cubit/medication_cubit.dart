@@ -98,9 +98,7 @@ class MedicationCubit extends Cubit<MedicationState> {
       }
     } catch (e) {
       if (!isClosed) {
-        String errorMsg = e is ErrorModel
-            ? (e.message ?? 'Unknown Error')
-            : e.toString();
+        String errorMsg = e is ErrorModel ? (e.message) : e.toString();
         emit(MedicationListErrorState(errorMessage: errorMsg));
       }
     } finally {
@@ -142,9 +140,7 @@ class MedicationCubit extends Cubit<MedicationState> {
       }
     } catch (e) {
       if (!isClosed) {
-        String errorMsg = e is ErrorModel
-            ? (e.message ?? 'Unknown Error')
-            : e.toString();
+        String errorMsg = e is ErrorModel ? (e.message) : e.toString();
         emit(MedicationConfirmErrorState(errorMessage: errorMsg));
       }
     }

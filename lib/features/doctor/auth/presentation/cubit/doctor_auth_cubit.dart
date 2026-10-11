@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:chefaa/core/services/storage_services.dart';
 import 'package:chefaa/features/doctor/auth/domain/usecases/register_doctor_usecase.dart';
 import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_state.dart';
-import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

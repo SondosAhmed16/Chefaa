@@ -6,7 +6,6 @@ import 'package:chefaa/features/patient/medication/data/model/medication_list.da
 import 'package:chefaa/features/patient/medication/data/model/medication_response.dart';
 import 'package:chefaa/features/patient/medication/data/model/medications.dart';
 import 'package:chefaa/features/patient/medication/domain/repository/medication_repo.dart';
-import 'package:dio/dio.dart';
 
 class MedicationRepoImp implements MedicationRepo {
   final MedicationDataSource dataSource;

@@ -21,6 +21,8 @@ import 'package:chefaa/features/patient/auth/presentation/cubit/patient_auth_cub
 import 'package:chefaa/features/patient/auth/presentation/pages/patient_register_screen.dart';
 import 'package:chefaa/features/patient/book/presentation/cubit/book_cubit.dart';
 import 'package:chefaa/features/patient/book/presentation/pages/booking_all_pages.dart';
+import 'package:chefaa/features/patient/cart/presentation/cubit/cart_cubit.dart';
+import 'package:chefaa/features/patient/cart/presentation/pages/cart_screen.dart';
 import 'package:chefaa/features/patient/chatbot/presentation/cubit/chatbot_patient_cubit.dart';
 import 'package:chefaa/features/patient/chatbot/presentation/pages/chatbot_screen.dart';
 import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart';
@@ -35,6 +37,15 @@ import 'package:chefaa/features/patient/notification/presentation/cubit/notifica
 import 'package:chefaa/features/patient/notification/presentation/pages/notification_screen.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/cubit/all_info_cubit.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/pages/onboarding_info.dart';
+import 'package:chefaa/features/patient/order%20track/presentation/pages/order_track_screen.dart';
+import 'package:chefaa/features/patient/order/presentation/cubit/checkout_cubit.dart';
+import 'package:chefaa/features/patient/order/presentation/cubit/get_orders_cubit.dart';
+import 'package:chefaa/features/patient/order/presentation/pages/checkout_screen.dart';
+import 'package:chefaa/features/patient/order/presentation/pages/orders_history_screen.dart';
+import 'package:chefaa/features/patient/payment/presentation/cubit/payment_cubit.dart';
+import 'package:chefaa/features/patient/payment/presentation/pages/payment_page.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_profile_model/data..dart';
+
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_cubit.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/pages/medicine_details_screen.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/pages/pharmacy_medicine_screen.dart';
@@ -50,6 +61,7 @@ import 'package:chefaa/features/patient/search/presentation/pages/speciality_pag
 import 'package:chefaa/features/pharmacy/auth/presentation/cubit/pharmacy_auth_cubit.dart';
 import 'package:chefaa/features/pharmacy/auth/presentation/pages/pharmacy_register_screen.dart';
 import 'package:chefaa/features/splash/presentation/pages/splash_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -87,6 +99,11 @@ class Routes {
   static const String pharmacyDetails = "/pharmacyDetails";
   static const String pharmacyMedicines = "/pharmacyMedicines";
   static const String MedicineDetails = "/MedicineDetails";
+  static const String cart = "/cart";
+  static const String checkOut = "/checkOut";
+  static const String paymentProceed = "/paymentProceed";
+  static const String orderTrack = "/orderTrack";
+  static const String ordersHistory = '/ordersHistory';
 }
 
 class AppRouter {
@@ -218,17 +235,102 @@ class AppRouter {
 
       case Routes.pharmacyMedicines:
         final args = settings.arguments as Map<String, dynamic>;
+        final pharmacyId = args['pharmacyId'] as String;
+        final pharmacyName = args['pharmacyName'] as String;
+        final pharmacyData = args['pharmacyData'] as Data?;
+
         return MaterialPageRoute(
-          builder: (_) => PharmacyMedicineScreen(
-            pharmacyId: args['pharmacyId'] as String,
-            pharmacyName: args['pharmacyName'] as String,
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) =>
+                    getIt<PharmacySearchCubit>()
+                      ..getPharmacyMedicines(pharmacyId: pharmacyId),
+              ),
+              BlocProvider.value(value: getIt<CartCubit>()),
+            ],
+            child: PharmacyMedicineScreen(
+              pharmacyId: pharmacyId,
+              pharmacyName: pharmacyName,
+              pharmacyData: pharmacyData,
+            ),
           ),
         );
 
-      case Routes.MedicineDetails:
-        final medicineId = settings.arguments as String;
+      case Routes.orderTrack:
+        final orderId = settings.arguments as String? ?? '';
         return MaterialPageRoute(
-          builder: (_) => MedicineDetailsScreen(medicineId: medicineId),
+          builder: (_) => OrderTrackScreen(orderId: orderId),
+        );
+
+      case Routes.MedicineDetails:
+        final medicineId = settings.arguments as String? ?? '';
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) =>
+                    getIt<PharmacySearchCubit>()
+                      ..getMedicinesDetails(medicineId: medicineId),
+              ),
+              BlocProvider.value(value: getIt<CartCubit>()),
+            ],
+            child: MedicineDetailsScreen(medicineId: medicineId),
+          ),
+        );
+
+      case Routes.cart:
+        final pharmacyData = settings.arguments as Data?;
+        return MaterialPageRoute(
+          builder: (_) {
+            final cartCubit = getIt<CartCubit>();
+            if (pharmacyData != null) {
+              cartCubit.updatePharmacy(pharmacyData);
+            }
+            return BlocProvider.value(
+              value: cartCubit,
+              child: const CartScreen(),
+            );
+          },
+        );
+
+      case Routes.checkOut:
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => getIt<CheckoutCubit>()),
+
+              BlocProvider.value(value: getIt<CartCubit>()),
+            ],
+            child: const CheckoutScreen(),
+          ),
+        );
+
+      case Routes.paymentProceed:
+        final args = settings.arguments as Map<String, dynamic>? ?? {};
+        final orderId = args['orderId'] as String? ?? '';
+        final subtotal = args['subtotal'] as double? ?? 0.0;
+        final deliveryFee = args['deliveryFee'] as int? ?? 0;
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => getIt<PaymentCubit>()),
+              BlocProvider.value(value: getIt<CartCubit>()),
+            ],
+            child: PaymentPage(
+              orderId: orderId,
+              subtotal: subtotal,
+              deliveryFee: deliveryFee,
+            ),
+          ),
+        );
+
+      case Routes.ordersHistory:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<GetOrdersCubit>()..getOrders(),
+            child: const OrdersHistoryScreen(),
+          ),
         );
 
       case Routes.homePatient:

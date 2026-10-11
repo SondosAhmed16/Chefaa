@@ -1,7 +1,6 @@
 import 'package:chefaa/core/error%20handle/error_model.dart';
 import 'package:chefaa/features/patient/book/data/model/book_model.dart';
 import 'package:chefaa/features/patient/book/data/model/clinic.dart';
-import 'package:chefaa/features/patient/book/data/model/doctors_clinic.dart';
 import 'package:chefaa/features/patient/book/data/model/slot.dart';
 import 'package:dartz/dartz.dart';
 

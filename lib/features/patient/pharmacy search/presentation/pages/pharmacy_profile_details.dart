@@ -2,7 +2,7 @@ import 'package:chefaa/core/DI/injection_container.dart';
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
 import 'package:chefaa/core/routes/app_router.dart';
-import 'package:chefaa/features/patient/pharmacy%20search/data/model/profile_data.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_profile_model/data..dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_cubit.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_state.dart';
 import 'package:flutter/material.dart';
@@ -162,7 +162,7 @@ class PharmacyProfileDetails extends StatelessWidget {
                                   fontSize: 18,
                                 ),
                               ),
-                              
+
                               if (pharmacy.rating != null)
                                 Container(
                                   padding: const EdgeInsets.symmetric(
@@ -274,6 +274,7 @@ class PharmacyProfileDetails extends StatelessWidget {
                 arguments: {
                   'pharmacyId': pharmacyId,
                   'pharmacyName': pharmacy.pharmacyName ?? 'Pharmacy Medicines',
+                  'pharmacyData': pharmacy,
                 },
               );
             },

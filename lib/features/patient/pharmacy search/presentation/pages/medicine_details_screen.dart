@@ -1,10 +1,13 @@
 import 'package:chefaa/core/di/injection_container.dart';
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
+import 'package:chefaa/features/patient/cart/data/model/cart_model.dart';
+import 'package:chefaa/features/patient/cart/presentation/cubit/cart_cubit.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/medicine_details_model/data.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_cubit.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_state.dart';
-import 'package:chefaa/features/patient/pharmacy%20search/presentation/widget/cart_quantity_control.dart'; 
+import 'package:chefaa/features/patient/pharmacy%20search/presentation/widget/cart_icon_button.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/presentation/widget/cart_quantity_control.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,6 +17,8 @@ class MedicineDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double topPadding = MediaQuery.of(context).padding.top;
+
     return BlocProvider(
       create: (_) =>
           getIt<PharmacySearchCubit>()
@@ -21,14 +26,14 @@ class MedicineDetailsScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: ColorManager.white,
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(140),
+          preferredSize: Size.fromHeight(120 + topPadding),
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 8,
+              top: topPadding + 8,
               left: 16,
               right: 16,
-              bottom: 20,
+              bottom: 16,
             ),
             decoration: const BoxDecoration(
               color: ColorManager.primary,
@@ -39,7 +44,7 @@ class MedicineDetailsScreen extends StatelessWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
@@ -52,18 +57,20 @@ class MedicineDetailsScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      "Medicine Details",
-                      style: getBoldStyle(
-                        color: ColorManager.white,
-                        fontSize: 20,
+                    Expanded(
+                      child: Text(
+                        "Medicine Details",
+                        style: getBoldStyle(
+                          color: ColorManager.white,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
+                    const CartIconButton(),
                   ],
                 ),
-                const SizedBox(height: 4),
                 Padding(
-                  padding: const EdgeInsets.only(left: 12.0),
+                  padding: const EdgeInsets.only(left: 12.0, bottom: 4.0),
                   child: Text(
                     "Explore the Medicine's Details",
                     style: getMediumStyle(
@@ -184,11 +191,14 @@ class MedicineDetailsScreen extends StatelessWidget {
                                 color: ColorManager.primary,
                               ),
                               const SizedBox(width: 4),
-                              Text(
-                                medicine.pharmacyName ?? "Unknown Pharmacy",
-                                style: getMediumStyle(
-                                  color: ColorManager.primary,
-                                  fontSize: 13,
+                              Expanded(
+                                child: Text(
+                                  medicine.pharmacyName ?? "Unknown Pharmacy",
+                                  style: getMediumStyle(
+                                    color: ColorManager.primary,
+                                    fontSize: 13,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ],
@@ -208,7 +218,7 @@ class MedicineDetailsScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "PRICE  UNIT",
+                          "PRICE UNIT",
                           style: getMediumStyle(
                             color: Colors.grey.shade500,
                             fontSize: 11,
@@ -245,7 +255,14 @@ class MedicineDetailsScreen extends StatelessWidget {
                         minQuantity: 1,
                         maxQuantity: medicine.availableQuantity ?? 10,
                         onQuantityChanged: (newQuantity) {
-                          print("Selected quantity: $newQuantity");
+                          final cartItem = CartItemModel(
+                            id: medicine.id ?? "",
+                            name: medicine.medicineName ?? "N/A",
+                            price: (medicine.price ?? 0).toDouble(),
+                            quantity: newQuantity,
+                            maxQuantity: medicine.availableQuantity ?? 10,
+                          );
+                          context.read<CartCubit>().addToCart(cartItem);
                         },
                       )
                     else
@@ -255,7 +272,7 @@ class MedicineDetailsScreen extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.red.withOpacity(0.1),
+                          color: Colors.red.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -329,21 +346,21 @@ class MedicineDetailsScreen extends StatelessWidget {
                     title: "Indications",
                     content: usage.indications,
                     icon: Icons.info_outline,
-                    color: ColorManager.primary
+                    color: ColorManager.primary,
                   ),
                   const SizedBox(height: 12),
                   _buildInstructionBlock(
                     title: "Dosage Instructions",
                     content: usage.dosageInstructions,
                     icon: Icons.medical_services_outlined,
-                    color: ColorManager.amber600
+                    color: ColorManager.amber600,
                   ),
                   const SizedBox(height: 12),
                   _buildInstructionBlock(
                     title: "Side Effects",
                     content: usage.sideEffects,
                     icon: Icons.warning_amber_rounded,
-                    color: ColorManager.red600
+                    color: ColorManager.red600,
                   ),
                 ],
               ),
@@ -369,9 +386,13 @@ class MedicineDetailsScreen extends StatelessWidget {
                   fontSize: 14,
                 ),
               ),
-              Text(
-                value ?? "N/A",
-                style: getBoldStyle(color: ColorManager.black, fontSize: 14),
+              Expanded(
+                child: Text(
+                  value ?? "N/A",
+                  style: getBoldStyle(color: ColorManager.black, fontSize: 14),
+                  textAlign: TextAlign.end,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),
@@ -394,10 +415,7 @@ class MedicineDetailsScreen extends StatelessWidget {
           children: [
             Icon(icon, size: 18, color: color),
             const SizedBox(width: 6),
-            Text(
-              title,
-              style: getBoldStyle(color: color, fontSize: 14),
-            ),
+            Text(title, style: getBoldStyle(color: color, fontSize: 14)),
           ],
         ),
         const SizedBox(height: 4),

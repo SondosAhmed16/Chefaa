@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 
-import 'profile_data.dart';
+import 'data..dart';
 
 class PharmacyProfileModel {
   bool? success;

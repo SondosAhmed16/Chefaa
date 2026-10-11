@@ -1,7 +1,7 @@
 import 'package:chefaa/core/error%20handle/error_model.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/medicine_details_model/medicine_details_model.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_medicienes_model.dart';
-import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_profile_model.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_profile_model/pharmacy_profile_model..dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_search_model.dart';
 import 'package:dartz/dartz.dart';
 
@@ -18,5 +18,7 @@ abstract class PharmacySearchRepo {
     required String pharmacyId,
   });
 
-  Future<Either<ErrorModel,MedicineDetailsModel>> getMedicineDetails({required String medicineId});
+  Future<Either<ErrorModel, MedicineDetailsModel>> getMedicineDetails({
+    required String medicineId,
+  });
 }

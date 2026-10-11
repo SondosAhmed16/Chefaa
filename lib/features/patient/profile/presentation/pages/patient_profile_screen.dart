@@ -1,6 +1,7 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
 import 'package:chefaa/core/widgets/profile_option_tile.dart';
+import 'package:chefaa/features/patient/order/presentation/pages/orders_history_screen.dart';
 import 'package:chefaa/features/patient/profile/presentation/cubit/profile_patient_cubit.dart';
 import 'package:chefaa/features/patient/profile/presentation/cubit/profile_patient_state.dart';
 import 'package:chefaa/features/patient/profile/presentation/widgets/bottomSheet_basic_info.dart';
@@ -136,6 +137,23 @@ class PatientProfileScreen extends StatelessWidget {
                           subtitle: 'Blood type, Allergies, chronic conditions',
                           onTap: () => showMedicalInfoBottomSheet(context),
                           iconPath: "assets/svg_images/love.svg",
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        ProfileOptionTile(
+                          title: 'Order History',
+                          subtitle: 'View your past orders and tracking',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const OrdersHistoryScreen(),
+                              ),
+                            );
+                          },
+                          iconPath: "assets/svg_images/order_pharmacy.svg",
                         ),
 
                         const SizedBox(height: 12),

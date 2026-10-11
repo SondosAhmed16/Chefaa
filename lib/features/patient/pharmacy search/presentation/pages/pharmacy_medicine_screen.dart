@@ -2,9 +2,13 @@ import 'package:chefaa/core/DI/injection_container.dart';
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
 import 'package:chefaa/core/routes/app_router.dart';
+import 'package:chefaa/features/patient/cart/data/model/cart_model.dart';
+import 'package:chefaa/features/patient/cart/presentation/cubit/cart_cubit.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/medicine.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_profile_model/data..dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_cubit.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_state.dart';
+import 'package:chefaa/features/patient/pharmacy%20search/presentation/widget/cart_icon_button.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/widget/medicine_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,15 +16,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class PharmacyMedicineScreen extends StatelessWidget {
   final String pharmacyId;
   final String pharmacyName;
+  final Data? pharmacyData;
 
   const PharmacyMedicineScreen({
     super.key,
     required this.pharmacyId,
     required this.pharmacyName,
+    this.pharmacyData,
   });
 
   @override
   Widget build(BuildContext context) {
+    final double topPadding = MediaQuery.of(context).padding.top;
+
     return BlocProvider<PharmacySearchCubit>(
       create: (_) =>
           getIt<PharmacySearchCubit>()
@@ -28,14 +36,14 @@ class PharmacyMedicineScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: ColorManager.white,
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(140),
+          preferredSize: Size.fromHeight(120 + topPadding),
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 8,
+              top: topPadding + 8,
               left: 16,
               right: 16,
-              bottom: 20,
+              bottom: 16,
             ),
             decoration: const BoxDecoration(
               color: ColorManager.primary,
@@ -70,6 +78,7 @@ class PharmacyMedicineScreen extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
+                    CartIconButton(),
                   ],
                 ),
               ],
@@ -138,7 +147,30 @@ class PharmacyMedicineScreen extends StatelessWidget {
                               return MedicineCard(
                                 medicine: medicine,
                                 onAddToCart: () {
-                                  // Add to cart logic
+                                  final cartItem = CartItemModel(
+                                    id: medicine.id ?? "",
+                                    name: medicine.medicineName ?? "N/A",
+                                    dosage: medicine.dosageForm,
+                                    price: (medicine.price ?? 0).toDouble(),
+                                    quantity: 1,
+                                    maxQuantity: 10,
+                                  );
+                                  if (pharmacyData != null) {
+                                    context.read<CartCubit>().updatePharmacy(
+                                      pharmacyData,
+                                    );
+                                  }
+                                  context.read<CartCubit>().addToCart(cartItem);
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        "${medicine.medicineName} added to cart!",
+                                      ),
+                                      duration: const Duration(seconds: 2),
+                                      backgroundColor: ColorManager.primary,
+                                    ),
+                                  );
                                 },
                                 onTap: () {
                                   Navigator.pushNamed(

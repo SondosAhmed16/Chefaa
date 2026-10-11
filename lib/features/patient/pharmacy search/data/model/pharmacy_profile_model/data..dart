@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 
-import 'location.dart';
-import 'working_hour.dart';
+import 'city_delivery_price..dart';
+import 'location..dart';
+import 'working_hour..dart';
 
 class Data {
   String? id;
@@ -14,6 +15,7 @@ class Data {
   int? totalReviews;
   String? deliveryTime;
   int? deliveryFee;
+  List<CityDeliveryPrice>? cityDeliveryPrices;
   int? minimumOrder;
   String? phone;
   String? about;
@@ -32,6 +34,7 @@ class Data {
     this.totalReviews,
     this.deliveryTime,
     this.deliveryFee,
+    this.cityDeliveryPrices,
     this.minimumOrder,
     this.phone,
     this.about,
@@ -44,7 +47,7 @@ class Data {
 
   @override
   String toString() {
-    return 'Data(id: $id, pharmacyName: $pharmacyName, openNow: $openNow, alwaysOpen: $alwaysOpen, rating: $rating, totalReviews: $totalReviews, deliveryTime: $deliveryTime, deliveryFee: $deliveryFee, minimumOrder: $minimumOrder, phone: $phone, about: $about, services: $services, workingHours: $workingHours, addressText: $addressText, location: $location, availableMedicinesCount: $availableMedicinesCount)';
+    return 'Data(id: $id, pharmacyName: $pharmacyName, openNow: $openNow, alwaysOpen: $alwaysOpen, rating: $rating, totalReviews: $totalReviews, deliveryTime: $deliveryTime, deliveryFee: $deliveryFee, cityDeliveryPrices: $cityDeliveryPrices, minimumOrder: $minimumOrder, phone: $phone, about: $about, services: $services, workingHours: $workingHours, addressText: $addressText, location: $location, availableMedicinesCount: $availableMedicinesCount)';
   }
 
   factory Data.fromMap(Map<String, dynamic> data) => Data(
@@ -56,6 +59,9 @@ class Data {
     totalReviews: data['totalReviews'] as int?,
     deliveryTime: data['deliveryTime'] as String?,
     deliveryFee: data['deliveryFee'] as int?,
+    cityDeliveryPrices: (data['cityDeliveryPrices'] as List<dynamic>?)
+        ?.map((e) => CityDeliveryPrice.fromMap(e as Map<String, dynamic>))
+        .toList(),
     minimumOrder: data['minimumOrder'] as int?,
     phone: data['phone'] as String?,
     about: data['about'] as String?,
@@ -79,6 +85,7 @@ class Data {
     'totalReviews': totalReviews,
     'deliveryTime': deliveryTime,
     'deliveryFee': deliveryFee,
+    'cityDeliveryPrices': cityDeliveryPrices?.map((e) => e.toMap()).toList(),
     'minimumOrder': minimumOrder,
     'phone': phone,
     'about': about,
@@ -110,6 +117,7 @@ class Data {
     int? totalReviews,
     String? deliveryTime,
     int? deliveryFee,
+    List<CityDeliveryPrice>? cityDeliveryPrices,
     int? minimumOrder,
     String? phone,
     String? about,
@@ -128,6 +136,7 @@ class Data {
       totalReviews: totalReviews ?? this.totalReviews,
       deliveryTime: deliveryTime ?? this.deliveryTime,
       deliveryFee: deliveryFee ?? this.deliveryFee,
+      cityDeliveryPrices: cityDeliveryPrices ?? this.cityDeliveryPrices,
       minimumOrder: minimumOrder ?? this.minimumOrder,
       phone: phone ?? this.phone,
       about: about ?? this.about,
@@ -158,6 +167,7 @@ class Data {
       totalReviews.hashCode ^
       deliveryTime.hashCode ^
       deliveryFee.hashCode ^
+      cityDeliveryPrices.hashCode ^
       minimumOrder.hashCode ^
       phone.hashCode ^
       about.hashCode ^
