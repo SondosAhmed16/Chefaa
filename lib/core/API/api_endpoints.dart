@@ -56,6 +56,11 @@ class ApiEndpoints {
   static String getSlot(String clinicId) => "clinic/$clinicId/day-slots";
 
   static String getDoctorClinic(String doctorId) => "doctor/$doctorId/clinics";
+  /****************************************************************************** */
+
+  static const String getLabProfile = "lab/profile";
+  static const String updateLabProfile = "lab/update-profile";
+  static const String getCenterServices = "lab/my-services";
 }
 
 class ApiKey {

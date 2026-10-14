@@ -10,6 +10,11 @@ import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_cubit
 import 'package:chefaa/features/doctor/auth/presentation/pages/doctor_register_screen.dart';
 import 'package:chefaa/features/facility/auth/presentation/cubit/facility_auth_cubit.dart';
 import 'package:chefaa/features/facility/auth/presentation/pages/facility_register_screen.dart';
+import 'package:chefaa/features/facility/layout/presentation/lab_layout.dart';
+import 'package:chefaa/features/facility/profile/presentation/cubit/lab_profile_cubit.dart';
+import 'package:chefaa/features/facility/profile/presentation/pages/lab_profile_screen.dart';
+import 'package:chefaa/features/facility/services/presentation/cubit/lab_services_cubit.dart';
+import 'package:chefaa/features/facility/services/presentation/pages/center_services_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/facility_selection_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/onboarding_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/role_selection_screen.dart';
@@ -104,6 +109,11 @@ class Routes {
   static const String paymentProceed = "/paymentProceed";
   static const String orderTrack = "/orderTrack";
   static const String ordersHistory = '/ordersHistory';
+  /************************************************************** */
+  static const String labProfile = '/labProfile';
+  static const String labLayout = "/labLayout";
+    static const String labServices = "/labServices";
+
 }
 
 class AppRouter {
@@ -444,6 +454,25 @@ class AppRouter {
             child: const BookingAllPages(),
           ),
         );
+      /******************************************************************************** */
+      case Routes.labProfile:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<LabProfileCubit>()..getLabProfile(),
+            child: const LabProfileScreen(),
+          ),
+        );
+
+        case Routes.labServices:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<LabServicesCubit>()..getCenterServices(),
+            child: const LabServicesScreen(),
+          ),
+        );
+
+      case Routes.labLayout:
+        return MaterialPageRoute(builder: (_) => const LabLayout());
 
       default:
         return MaterialPageRoute(

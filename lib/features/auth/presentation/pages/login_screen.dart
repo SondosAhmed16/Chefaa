@@ -55,11 +55,11 @@ class LoginScreen extends StatelessWidget {
                         break;
 
                       case 'lab':
-                      case 'facility':
-                        // Navigator.of(context).pushNamedAndRemoveUntil(
-                        //   Routes.labHome,
-                        //   (route) => false,
-                        // );
+                        // case 'facility':
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.labLayout,
+                          (route) => false,
+                        );
                         break;
 
                       default:

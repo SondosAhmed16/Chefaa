@@ -47,9 +47,9 @@ class _BasicDetailsBottomSheetState extends State<BasicDetailsBottomSheet> {
             const SnackBar(content: Text('Updated basic info successfully!')),
           );
         } else if (state is UpdateBasicInfoErrorState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.error.message ?? 'Update failed')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.error.message)));
         }
       },
       builder: (context, state) {

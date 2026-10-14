@@ -22,6 +22,19 @@ import 'package:chefaa/features/facility/auth/data/repositiry/facility_auth_repo
 import 'package:chefaa/features/facility/auth/domain/repository/facility_register_repo.dart';
 import 'package:chefaa/features/facility/auth/domain/usecase/faciclity_usecase_register.dart';
 import 'package:chefaa/features/facility/auth/presentation/cubit/facility_auth_cubit.dart';
+import 'package:chefaa/features/facility/profile/data/datasource/lab_profile_datasource.dart';
+import 'package:chefaa/features/facility/profile/data/datasource/lab_profile_datasource_imp.dart';
+import 'package:chefaa/features/facility/profile/data/repository/lab_profile_repo_imp.dart';
+import 'package:chefaa/features/facility/profile/domain/repository/lab_profile_repo.dart';
+import 'package:chefaa/features/facility/profile/domain/usecase/get_lab_profile_usecase.dart';
+import 'package:chefaa/features/facility/profile/domain/usecase/update_lab_profile_usecase.dart';
+import 'package:chefaa/features/facility/profile/presentation/cubit/lab_profile_cubit.dart';
+import 'package:chefaa/features/facility/services/data/datasource/lab_services_datasource.dart';
+import 'package:chefaa/features/facility/services/data/datasource/lab_services_datasource_imp.dart';
+import 'package:chefaa/features/facility/services/data/repository/lab_services_repo_imp.dart';
+import 'package:chefaa/features/facility/services/domain/repository/lab_services_repo.dart';
+import 'package:chefaa/features/facility/services/domain/usecase/get_center_services_usecase.dart';
+import 'package:chefaa/features/facility/services/presentation/cubit/lab_services_cubit.dart';
 import 'package:chefaa/features/patient/AI%20Lab%20report/data/datasource/ai_lab_report_datasource.dart';
 import 'package:chefaa/features/patient/AI%20Lab%20report/data/datasource/ai_lab_report_datasource_imp.dart';
 import 'package:chefaa/features/patient/AI%20Lab%20report/data/repository/lab_report_repo_imp.dart';
@@ -157,7 +170,6 @@ Future<void> initAppModule() async {
     () => DioConsumer(dio: getIt<Dio>()),
   );
 
-  
   _initAuthModule();
   _initAuthModulePatient();
   _initAuthModuleDoctor();
@@ -181,6 +193,8 @@ Future<void> initAppModule() async {
   _initPaymentModule();
   _initOrderTrackModule();
   _initGetOrdersModule();
+  _initLabProfileModule();
+  _initLabServicesModule();
 }
 
 void _initAuthModule() {
@@ -704,10 +718,51 @@ void _initOrderTrackModule() {
 }
 
 void _initGetOrdersModule() {
- getIt.registerLazySingleton<GetOrdersUsecase>(
+  getIt.registerLazySingleton<GetOrdersUsecase>(
     () => GetOrdersUsecase(repo: getIt<CheckoutRepo>()),
   );
   getIt.registerFactory<GetOrdersCubit>(
     () => GetOrdersCubit(usecase: getIt<GetOrdersUsecase>()),
   );
 }
+
+/***************************************** */
+
+void _initLabProfileModule() {
+  getIt.registerLazySingleton<LabProfileDatasource>(
+    () => LabProfileDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<LabProfileRepo>(
+    () => LabProfileRepoImp(datasource: getIt<LabProfileDatasource>()),
+  );
+  getIt.registerLazySingleton<GetLabProfileUsecase>(
+    () => GetLabProfileUsecase(repo: getIt<LabProfileRepo>()),
+  );
+  getIt.registerLazySingleton<UpdateLabProfileUsecase>(
+    () => UpdateLabProfileUsecase(repo: getIt<LabProfileRepo>()),
+  );
+  getIt.registerFactory<LabProfileCubit>(
+    () => LabProfileCubit(
+      getLabProfileUsecase: getIt<GetLabProfileUsecase>(),
+      updateLabProfileUsecase: getIt<UpdateLabProfileUsecase>(),
+    ),
+  );
+}
+
+
+void _initLabServicesModule() {
+  getIt.registerLazySingleton<LabServicesDatasource>(
+    () => LabServicesDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<LabServicesRepo>(
+    () => LabServicesRepoImp(datasource: getIt<LabServicesDatasource>()),
+  );
+  getIt.registerLazySingleton<GetCenterServicesUsecase>(
+    () => GetCenterServicesUsecase(repo: getIt<LabServicesRepo>()),
+  );
+
+  getIt.registerFactory<LabServicesCubit>(
+    () => LabServicesCubit(
+      getCenterServicesUsecase: getIt<GetCenterServicesUsecase>(),
+    ),
+  );}

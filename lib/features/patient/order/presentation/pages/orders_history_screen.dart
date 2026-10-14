@@ -61,8 +61,11 @@ class OrdersHistoryScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    state.error.message ,
-                    style: getBoldStyle(color: ColorManager.error, fontSize: 16),
+                    state.error.message,
+                    style: getBoldStyle(
+                      color: ColorManager.error,
+                      fontSize: 16,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -74,7 +77,10 @@ class OrdersHistoryScreen extends StatelessWidget {
                 return Center(
                   child: Text(
                     "No orders found yet.",
-                    style: getMediumStyle(color: Colors.grey.shade600, fontSize: 16),
+                    style: getMediumStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 16,
+                    ),
                   ),
                 );
               }
@@ -110,20 +116,30 @@ class OrdersHistoryScreen extends StatelessWidget {
                             children: [
                               Text(
                                 order.orderNumber ?? "",
-                                style: getBoldStyle(color: ColorManager.black, fontSize: 16),
+                                style: getBoldStyle(
+                                  color: ColorManager.black,
+                                  fontSize: 16,
+                                ),
                               ),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: isConfirmed 
-                                      ? Colors.green.withOpacity(0.1) 
+                                  color: isConfirmed
+                                      ? Colors.green.withOpacity(0.1)
                                       : Colors.orange.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
-                                  isConfirmed ? "Completed" : "Active / In Progress",
+                                  isConfirmed
+                                      ? "Completed"
+                                      : "Active / In Progress",
                                   style: getBoldStyle(
-                                    color: isConfirmed ? Colors.green : Colors.orange,
+                                    color: isConfirmed
+                                        ? Colors.green
+                                        : Colors.orange,
                                     fontSize: 12,
                                   ),
                                 ),
@@ -136,17 +152,27 @@ class OrdersHistoryScreen extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  const Icon(Icons.local_pharmacy_outlined, size: 18, color: ColorManager.primary),
+                                  const Icon(
+                                    Icons.local_pharmacy_outlined,
+                                    size: 18,
+                                    color: ColorManager.primary,
+                                  ),
                                   const SizedBox(width: 8),
                                   Text(
                                     order.pharmacyName ?? "",
-                                    style: getMediumStyle(color: Colors.grey.shade800, fontSize: 14),
+                                    style: getMediumStyle(
+                                      color: Colors.grey.shade800,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ],
                               ),
                               Text(
                                 order.orderType ?? "",
-                                style: getMediumStyle(color: Colors.grey.shade600, fontSize: 13),
+                                style: getMediumStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 13,
+                                ),
                               ),
                             ],
                           ),
@@ -156,13 +182,19 @@ class OrdersHistoryScreen extends StatelessWidget {
                             children: [
                               Text(
                                 "EGP ${order.totalPrice ?? 0}",
-                                style: getBoldStyle(color: ColorManager.primary, fontSize: 15),
+                                style: getBoldStyle(
+                                  color: ColorManager.primary,
+                                  fontSize: 15,
+                                ),
                               ),
                               Text(
-                                order.createdAt != null 
-                                    ? "${order.createdAt!.toLocal().toString().split(' ')[0]}" 
+                                order.createdAt != null
+                                    ? "${order.createdAt!.toLocal().toString().split(' ')[0]}"
                                     : "",
-                                style: getRegularStyle(color: Colors.grey.shade500, fontSize: 12),
+                                style: getRegularStyle(
+                                  color: Colors.grey.shade500,
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ),
@@ -171,7 +203,9 @@ class OrdersHistoryScreen extends StatelessWidget {
                             width: double.infinity,
                             child: OutlinedButton(
                               style: OutlinedButton.styleFrom(
-                                side: const BorderSide(color: ColorManager.primary),
+                                side: const BorderSide(
+                                  color: ColorManager.primary,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -181,14 +215,19 @@ class OrdersHistoryScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => OrderTrackScreen(orderId: order.orderId!),
+                                      builder: (context) => OrderTrackScreen(
+                                        orderId: order.orderId!,
+                                      ),
                                     ),
                                   );
                                 }
                               },
                               child: Text(
                                 "Track Order / Details",
-                                style: getBoldStyle(color: ColorManager.primary, fontSize: 14),
+                                style: getBoldStyle(
+                                  color: ColorManager.primary,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ),

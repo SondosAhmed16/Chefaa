@@ -43,9 +43,9 @@ class _MedicalInfoBottomSheetState extends State<MedicalInfoBottomSheet> {
             const SnackBar(content: Text('Updated medical info successfully!')),
           );
         } else if (state is UpdateMedInfoErrorState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.error.message ?? 'Update failed')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.error.message)));
         }
       },
       builder: (context, state) {

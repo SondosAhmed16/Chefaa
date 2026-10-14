@@ -3,9 +3,6 @@ import 'package:chefaa/core/resources/style.dart';
 import 'package:chefaa/features/patient/search/presentation/widget/speciality_card.dart';
 import 'package:flutter/material.dart';
 
-import 'package:chefaa/features/patient/search/presentation/cubit/search_doctor_cubit.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 class SpecialityPage extends StatelessWidget {
   const SpecialityPage({super.key});
 

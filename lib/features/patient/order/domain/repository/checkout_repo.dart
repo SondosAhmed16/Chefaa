@@ -8,6 +8,5 @@ abstract class CheckoutRepo {
   Future<Either<ErrorModel, OrderModel>> createOrder({
     required OrderRequestModel orderRequest,
   });
-   Future<Either<ErrorModel, GetOrders>> getOrder();
-
+  Future<Either<ErrorModel, GetOrders>> getOrder();
 }

@@ -14,7 +14,7 @@ class CheckoutDatasourceImp implements CheckoutDatasource {
   }
 
   @override
-  Future<dynamic> getOrders()async {
+  Future<dynamic> getOrders() async {
     return await api.get(ApiEndpoints.getOrders);
   }
 }
