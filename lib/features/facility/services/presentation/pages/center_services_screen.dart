@@ -72,7 +72,20 @@ class LabServicesScreen extends StatelessWidget {
           ),
 
           Expanded(
-            child: BlocBuilder<LabServicesCubit, LabServicesState>(
+            child: BlocConsumer<LabServicesCubit, LabServicesState>(
+              listener: (context, state) {
+                if (state is LabServicesToggleSuccess) {
+                  // تحديث القائمة تلقائياً عند نجاح تغيير حالة الخدمة
+                  context.read<LabServicesCubit>().getCenterServices();
+                } else if (state is LabServicesToggleError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.error.message),
+                      backgroundColor: ColorManager.error,
+                    ),
+                  );
+                }
+              },
               builder: (context, state) {
                 if (state is LabServicesLoading) {
                   return const Center(child: CircularProgressIndicator());
@@ -90,9 +103,19 @@ class LabServicesScreen extends StatelessWidget {
                       ),
                     ),
                   );
-                } else if (state is LabServicesSuccess) {
-                  final labTests = state.services.data?.labTests ?? [];
-                  final radiology = state.services.data?.radiology ?? [];
+                } else if (state is LabServicesSuccess || state is LabServicesToggleLoading || state is LabServicesToggleSuccess) {
+                  // استخراج البيانات بناءً على الحالة الحالية
+                  final labTests = state is LabServicesSuccess 
+                      ? (state.services.data?.labTests ?? []) 
+                      : (context.read<LabServicesCubit>().state is LabServicesSuccess 
+                          ? ((context.read<LabServicesCubit>().state as LabServicesSuccess).services.data?.labTests ?? []) 
+                          : []);
+                          
+                  final radiology = state is LabServicesSuccess 
+                      ? (state.services.data?.radiology ?? []) 
+                      : (context.read<LabServicesCubit>().state is LabServicesSuccess 
+                          ? ((context.read<LabServicesCubit>().state as LabServicesSuccess).services.data?.radiology ?? []) 
+                          : []);
 
                   if (labTests.isEmpty && radiology.isEmpty) {
                     return Center(
@@ -152,6 +175,8 @@ class LabServicesScreen extends StatelessWidget {
                             ),
                             itemBuilder: (context, index) {
                               final test = labTests[index];
+                              final isActive = test.isActive ?? false;
+
                               return ListTile(
                                 contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16,
@@ -213,12 +238,28 @@ class LabServicesScreen extends StatelessWidget {
                                     ],
                                   ],
                                 ),
-                                trailing: Text(
-                                  '${test.price ?? 0} EGP',
-                                  style: getBoldStyle(
-                                    fontSize: 15,
-                                    color: ColorManager.lightGreen,
-                                  ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      '${test.price ?? 0} EGP',
+                                      style: getBoldStyle(
+                                        fontSize: 15,
+                                        color: ColorManager.lightGreen,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Switch(
+                                      value: isActive,
+                                      activeColor: ColorManager.primary,
+                                      inactiveThumbColor: ColorManager.darkGray,
+                                      onChanged: (bool value) {
+                                        context.read<LabServicesCubit>().toggleService(
+                                              serviceId: test.id ?? '',
+                                            );
+                                      },
+                                    ),
+                                  ],
                                 ),
                               );
                             },
@@ -237,7 +278,7 @@ class LabServicesScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'Radiology Tests ',
+                              'Radiology Tests',
                               style: getBoldStyle(
                                 fontSize: 18,
                                 color: ColorManager.darkGray,
@@ -270,6 +311,7 @@ class LabServicesScreen extends StatelessWidget {
                             ),
                             itemBuilder: (context, index) {
                               final item = radiology[index];
+                              // ملاحظة: إذا كان عنصر الأشعة يحتوي على خاصية مشابهة لـ isActive و id، يمكنك ربطها بنفس الطريقة
                               return ListTile(
                                 contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16,

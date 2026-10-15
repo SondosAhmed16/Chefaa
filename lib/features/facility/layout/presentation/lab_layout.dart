@@ -47,7 +47,7 @@ class _LabLayoutState extends State<LabLayout> {
         ),
       ),
 
-       PersistentTabConfig(
+      PersistentTabConfig(
         screen: BlocProvider(
           create: (_) => getIt<LabServicesCubit>()..getCenterServices(),
           child: LabServicesScreen(),
@@ -69,7 +69,6 @@ class _LabLayoutState extends State<LabLayout> {
           inactiveForegroundColor: ColorManager.gray,
         ),
       ),
-     
     ];
   }
 

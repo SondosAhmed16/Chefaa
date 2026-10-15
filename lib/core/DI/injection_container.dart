@@ -1,6 +1,5 @@
 import 'package:chefaa/core/API/api_consumer.dart';
 import 'package:chefaa/core/API/dio_consumer.dart';
-
 import 'package:chefaa/features/auth/data/dataSource/data_source.dart';
 import 'package:chefaa/features/auth/data/dataSource/data_source_implement.dart';
 import 'package:chefaa/features/auth/data/repository/auth_repository_implement.dart';
@@ -34,6 +33,7 @@ import 'package:chefaa/features/facility/services/data/datasource/lab_services_d
 import 'package:chefaa/features/facility/services/data/repository/lab_services_repo_imp.dart';
 import 'package:chefaa/features/facility/services/domain/repository/lab_services_repo.dart';
 import 'package:chefaa/features/facility/services/domain/usecase/get_center_services_usecase.dart';
+import 'package:chefaa/features/facility/services/domain/usecase/toggle_service_usecase.dart';
 import 'package:chefaa/features/facility/services/presentation/cubit/lab_services_cubit.dart';
 import 'package:chefaa/features/patient/AI%20Lab%20report/data/datasource/ai_lab_report_datasource.dart';
 import 'package:chefaa/features/patient/AI%20Lab%20report/data/datasource/ai_lab_report_datasource_imp.dart';
@@ -49,7 +49,6 @@ import 'package:chefaa/features/patient/appointment/domain/use%20cases/cancel_ap
 import 'package:chefaa/features/patient/appointment/domain/use%20cases/get_patient_appo.dart';
 import 'package:chefaa/features/patient/appointment/domain/use%20cases/reschedual_appo_usecase.dart';
 import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_cubit.dart';
-
 import 'package:chefaa/features/patient/auth/data/data%20source/data_source_patient_auth.dart';
 import 'package:chefaa/features/patient/auth/data/data%20source/data_source_patient_auth_implement.dart';
 import 'package:chefaa/features/patient/auth/data/repository/register_patient_repository_implement.dart';
@@ -96,7 +95,6 @@ import 'package:chefaa/features/patient/notification/data/repository/notificatio
 import 'package:chefaa/features/patient/notification/domain/repository/notification_repo.dart';
 import 'package:chefaa/features/patient/notification/domain/usecase/get_notification_usecase.dart';
 import 'package:chefaa/features/patient/notification/presentation/cubit/notification_cubit.dart';
-
 import 'package:chefaa/features/patient/onboarding/data/data%20source/patient_all_info_datasource.dart';
 import 'package:chefaa/features/patient/onboarding/data/data%20source/patient_all_info_datasource_imp.dart';
 import 'package:chefaa/features/patient/onboarding/data/repository/patient_all_info_repo_imp.dart';
@@ -154,7 +152,6 @@ import 'package:chefaa/features/pharmacy/auth/data/repository/register_pharmacy_
 import 'package:chefaa/features/pharmacy/auth/domain/repository/register_pharmacy_reopsitory.dart';
 import 'package:chefaa/features/pharmacy/auth/domain/usecases/register_pharmacy_usecase.dart';
 import 'package:chefaa/features/pharmacy/auth/presentation/cubit/pharmacy_auth_cubit.dart';
-
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -198,33 +195,24 @@ Future<void> initAppModule() async {
 }
 
 void _initAuthModule() {
-  // Data Sources
   getIt.registerLazySingleton<DataSource>(
     () => DataSourceImplement(apiConsumer: getIt<ApiConsumer>()),
   );
-
-  // Repositories
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImplement(dataSource: getIt<DataSource>()),
   );
-
-  // Use Cases
   getIt.registerLazySingleton<LoginUsecase>(
     () => LoginUsecase(authRepository: getIt<AuthRepository>()),
   );
-
   getIt.registerLazySingleton<ForgetPasswordUsecase>(
     () => ForgetPasswordUsecase(authRepository: getIt<AuthRepository>()),
   );
-
   getIt.registerLazySingleton<VerifyCodeUsecase>(
     () => VerifyCodeUsecase(authRepository: getIt<AuthRepository>()),
   );
-
   getIt.registerLazySingleton<ResetPasswordUsecase>(
     () => ResetPasswordUsecase(authRepository: getIt<AuthRepository>()),
   );
-
   getIt.registerFactory<AuthCubit>(
     () => AuthCubit(
       loginUsecase: getIt<LoginUsecase>(),
@@ -236,25 +224,19 @@ void _initAuthModule() {
 }
 
 void _initAuthModulePatient() {
-  // Data Sources
   getIt.registerLazySingleton<DataSourcePatientAuth>(
     () => DataSourcePatientAuthImplement(apiConsumer: getIt<ApiConsumer>()),
   );
-
-  // Repositories
   getIt.registerLazySingleton<RegisterPatientReopsitory>(
     () => RegisterPatientRepositoryImplement(
       dataSource: getIt<DataSourcePatientAuth>(),
     ),
   );
-
-  // Use Cases
   getIt.registerLazySingleton<RegisterPatientUsecase>(
     () => RegisterPatientUsecase(
       registerPatientReopsitory: getIt<RegisterPatientReopsitory>(),
     ),
   );
-
   getIt.registerFactory<PatientAuthCubit>(
     () => PatientAuthCubit(
       registerPatientUsecase: getIt<RegisterPatientUsecase>(),
@@ -289,25 +271,19 @@ void _initAuthModuleDoctor() {
 }
 
 void _initAuthModulePharmacy() {
-  // Data Sources
   getIt.registerLazySingleton<DataSourcePharmacyAuth>(
     () => DataSourcePharmacyAuthImplement(apiConsumer: getIt<ApiConsumer>()),
   );
-
-  // Repositories
   getIt.registerLazySingleton<RegisterPharmacyReopsitory>(
     () => RegisterPharmacyRepositoryImplement(
       dataSource: getIt<DataSourcePharmacyAuth>(),
     ),
   );
-
-  // Use Cases
   getIt.registerLazySingleton<RegisterPharmacyUsecase>(
     () => RegisterPharmacyUsecase(
       registerPharmacyReopsitory: getIt<RegisterPharmacyReopsitory>(),
     ),
   );
-
   getIt.registerFactory<PharmacyAuthCubit>(
     () => PharmacyAuthCubit(
       registerPharmacyUsecase: getIt<RegisterPharmacyUsecase>(),
@@ -316,77 +292,55 @@ void _initAuthModulePharmacy() {
 }
 
 void _initAuthModuleFacility() {
-  // Data Sources
   getIt.registerLazySingleton<FacilityAuthDatasource>(
     () => FacilituAuthDatasourceImp(apiConsumer: getIt<ApiConsumer>()),
   );
-
-  // Repositories
   getIt.registerLazySingleton<FacilityRegisterRepo>(
     () => FacilityAuthRepoImp(
       facilityAuthDatasource: getIt<FacilityAuthDatasource>(),
     ),
   );
-
-  // Use Cases
   getIt.registerLazySingleton<FaciclityUsecaseRegister>(
     () => FaciclityUsecaseRegister(
       facilityRegisterRepo: getIt<FacilityRegisterRepo>(),
     ),
   );
-
   getIt.registerFactory<FacilityAuthCubit>(
     () => FacilityAuthCubit(useCase: getIt<FaciclityUsecaseRegister>()),
   );
 }
 
 void _initPatientOnboardingInfoModule() {
-  // Data Source
   getIt.registerLazySingleton<PatientAllInfoDatasource>(
     () => PatientAllInfoDatasourceImp(apiConsumer: getIt<ApiConsumer>()),
   );
-
-  // Repository
   getIt.registerLazySingleton<PatientAllInfoRepo>(
     () => PatientAllInfoRepoImp(datasource: getIt<PatientAllInfoDatasource>()),
   );
-
-  // Use Case
   getIt.registerLazySingleton<PatientAllInfoUsacse>(
     () => PatientAllInfoUsacse(repo: getIt<PatientAllInfoRepo>()),
   );
-
-  // Cubit
   getIt.registerFactory<AllInfoCubit>(
     () => AllInfoCubit(updateAllInfoUseCase: getIt<PatientAllInfoUsacse>()),
   );
 }
 
 void _initPatientProfileModule() {
-  // Data Source
   getIt.registerLazySingleton<PatientProfileDataSource>(
     () => PatientProfileDataSourceImp(api: getIt<ApiConsumer>()),
   );
-
-  // Repository
   getIt.registerLazySingleton<PatientProfileRepo>(
     () => PatientProfileRepoImp(dataSource: getIt<PatientProfileDataSource>()),
   );
-
-  // Use Cases
   getIt.registerLazySingleton<GetProfileUsecase>(
     () => GetProfileUsecase(repo: getIt<PatientProfileRepo>()),
   );
-
   getIt.registerLazySingleton<UpdateBasicInfoUsecase>(
     () => UpdateBasicInfoUsecase(repo: getIt<PatientProfileRepo>()),
   );
-
   getIt.registerLazySingleton<UpdateMedInfoUsecase>(
     () => UpdateMedInfoUsecase(repo: getIt<PatientProfileRepo>()),
   );
-
-  // Cubit
   getIt.registerFactory<PatientProfileCubit>(
     () => PatientProfileCubit(
       getProfileUsecase: getIt<GetProfileUsecase>(),
@@ -397,17 +351,12 @@ void _initPatientProfileModule() {
 }
 
 void _initPatientMedicationModule() {
-  // 1. Data Source
   getIt.registerLazySingleton<MedicationDataSource>(
     () => MedicationDatasourceImp(api: getIt<ApiConsumer>()),
   );
-
-  // 2. Repository
   getIt.registerLazySingleton<MedicationRepo>(
     () => MedicationRepoImp(dataSource: getIt<MedicationDataSource>()),
   );
-
-  // 3. Cubit
   getIt.registerFactory<MedicationCubit>(
     () => MedicationCubit(repo: getIt<MedicationRepo>()),
   );
@@ -415,58 +364,43 @@ void _initPatientMedicationModule() {
 
 void _initPatientHomeModule() {
   getIt.registerLazySingleton<UserUseCase>(() => UserUseCase());
-
   getIt.registerFactory<UsersCubit>(() => UsersCubit(getIt<UserUseCase>()));
 }
 
 void _initPatientSearchModule() {
-  // 1. Data Sources
   getIt.registerLazySingleton<SearchDoctorLocalDs>(
     () => SearchDoctorLocalDsImp(sharedPreferences: getIt<SharedPreferences>()),
   );
-
   getIt.registerLazySingleton<SearchDoctorRemoteDs>(
     () => SearchDoctorRemoteDsImp(api: getIt<ApiConsumer>()),
   );
-
-  // 2. Repository
   getIt.registerLazySingleton<SearchDoctorRepo>(
     () => SearchDoctorRepoImp(
       remoteDs: getIt<SearchDoctorRemoteDs>(),
       localDs: getIt<SearchDoctorLocalDs>(),
     ),
   );
-
   getIt.registerFactory<SearchDoctorCubit>(
     () => SearchDoctorCubit(searchDoctorRepo: getIt<SearchDoctorRepo>()),
   );
 }
 
 void _initPatientAppointmentModule() {
-  // 1. Data Sources
   getIt.registerLazySingleton<AppointmentDatasource>(
     () => AppointmentDatasourcseImp(api: getIt<ApiConsumer>()),
   );
-
-  // 2. Repositories
   getIt.registerLazySingleton<AppointmentRepo>(
     () => AppointmentRepoImp(datasource: getIt<AppointmentDatasource>()),
   );
-
-  // 3. Use Cases
   getIt.registerLazySingleton<GetPatientAppo>(
     () => GetPatientAppo(repo: getIt<AppointmentRepo>()),
   );
-
   getIt.registerLazySingleton<ReschedualAppoUsecase>(
     () => ReschedualAppoUsecase(repo: getIt<AppointmentRepo>()),
   );
-
   getIt.registerLazySingleton<CancelAppointmentUsecase>(
     () => CancelAppointmentUsecase(repo: getIt<AppointmentRepo>()),
   );
-
-  // 4. Cubit
   getIt.registerFactory<AppointmentCubit>(
     () => AppointmentCubit(
       usecase: getIt<GetPatientAppo>(),
@@ -477,22 +411,15 @@ void _initPatientAppointmentModule() {
 }
 
 void _initPatientNotificationModule() {
-  // 1. Data Sources
   getIt.registerLazySingleton<NotificationDatasource>(
     () => NotificationDatasourcseImp(api: getIt<ApiConsumer>()),
   );
-
-  // 2. Repositories
   getIt.registerLazySingleton<NotificationRepo>(
     () => NotificationRepoImp(datasource: getIt<NotificationDatasource>()),
   );
-
-  // 3. Use Cases
   getIt.registerLazySingleton<GetNotificationUsecase>(
     () => GetNotificationUsecase(repo: getIt<NotificationRepo>()),
   );
-
-  // 4. Cubit
   getIt.registerFactory<NotificationCubit>(
     () => NotificationCubit(usecase: getIt<GetNotificationUsecase>()),
   );
@@ -514,7 +441,6 @@ void _initBookAppointment() {
   getIt.registerLazySingleton<GwtDoctorClinicUsecase>(
     () => GwtDoctorClinicUsecase(repo: getIt<BookAppoRepo>()),
   );
-
   getIt.registerFactory<BookCubit>(
     () => BookCubit(
       getSlotsUsecase: getIt<GetSlotsUsecase>(),
@@ -525,83 +451,58 @@ void _initBookAppointment() {
 }
 
 void _initFindLabModule() {
-  // 1. Data Sources
   getIt.registerLazySingleton<LabSearchDatasource>(
     () => LabSearchDatasourceImp(api: getIt<ApiConsumer>()),
   );
-
-  // 2. Repositories
   getIt.registerLazySingleton<SearchLabRepo>(
     () => SearchLabRepoImp(datasource: getIt<LabSearchDatasource>()),
   );
-
-  // 3. Use Cases
   getIt.registerLazySingleton<LabSearchUsecase>(
     () => LabSearchUsecase(repo: getIt<SearchLabRepo>()),
   );
 
-  // 4. Cubit
   getIt.registerFactory<LabSearchCubit>(
     () => LabSearchCubit(usecase: getIt<LabSearchUsecase>()),
   );
 }
 
 void _initGetLabResultModule() {
-  // 1. Data Sources
   getIt.registerLazySingleton<LabResultDatasource>(
     () => LabResultDatasourceImp(api: getIt<ApiConsumer>()),
   );
-
-  // 2. Repositories
   getIt.registerLazySingleton<LabResultRepo>(
     () => LabResultRepoImp(datasource: getIt<LabResultDatasource>()),
   );
-
-  // 3. Use Cases
   getIt.registerLazySingleton<GetLabResultsUsecase>(
     () => GetLabResultsUsecase(repo: getIt<LabResultRepo>()),
   );
-
-  // 4. Cubit
   getIt.registerFactory<LabResultCubit>(
     () => LabResultCubit(usecase: getIt<GetLabResultsUsecase>()),
   );
 }
 
 void _initChatbotPatientModule() {
-  // 1. Data Sources
   getIt.registerLazySingleton<ChatbotPatientDatasource>(
     () => ChatbotPatientDatasourceImp(api: getIt<ApiConsumer>()),
   );
-
-  // 2. Repositories
   getIt.registerLazySingleton<ChatbotPatientRepo>(
     () => ChatbotPatientRepoImp(datasource: getIt<ChatbotPatientDatasource>()),
   );
-
-  // 3. Use Cases
   getIt.registerLazySingleton<ChatbotPatientUsecase>(
     () => ChatbotPatientUsecase(repo: getIt<ChatbotPatientRepo>()),
   );
-
-  // 4. Cubit
   getIt.registerFactory<ChatbotPatientCubit>(
     () => ChatbotPatientCubit(usecase: getIt<ChatbotPatientUsecase>()),
   );
 }
 
 void _initSearchPharmacyModule() {
-  // 1. Data Sources
   getIt.registerLazySingleton<PharmacySearchDatasource>(
     () => PharmacySearchDatasourceImp(api: getIt<ApiConsumer>()),
   );
-
-  // 2. Repositories
   getIt.registerLazySingleton<PharmacySearchRepo>(
     () => PharmacySearchRepoImp(datasource: getIt<PharmacySearchDatasource>()),
   );
-
-  // 3. Use Cases
   getIt.registerLazySingleton<PharmacySearchUsecase>(
     () => PharmacySearchUsecase(repo: getIt<PharmacySearchRepo>()),
   );
@@ -614,7 +515,6 @@ void _initSearchPharmacyModule() {
   getIt.registerLazySingleton<GetMedicineDetailsUsecase>(
     () => GetMedicineDetailsUsecase(repo: getIt<PharmacySearchRepo>()),
   );
-  // 4. Cubit
   getIt.registerFactory<PharmacySearchCubit>(
     () => PharmacySearchCubit(
       usecase: getIt<PharmacySearchUsecase>(),
@@ -626,22 +526,15 @@ void _initSearchPharmacyModule() {
 }
 
 void _initAnalzeLabResultModule() {
-  // 1. Data Sources
   getIt.registerLazySingleton<AiLabReportDatasource>(
     () => AiLabReportDatasourceImp(api: getIt<ApiConsumer>()),
   );
-
-  // 2. Repositories
   getIt.registerLazySingleton<LabReportRepo>(
     () => LabReportRepoImp(datasource: getIt<AiLabReportDatasource>()),
   );
-
-  // 3. Use Cases
   getIt.registerLazySingleton<AnalyzeReportUsecase>(
     () => AnalyzeReportUsecase(repo: getIt<LabReportRepo>()),
   );
-
-  // 4. Cubit
   getIt.registerFactory<AiReportCubit>(
     () => AiReportCubit(usecase: getIt<AnalyzeReportUsecase>()),
   );
@@ -652,44 +545,33 @@ void _initCartModule() {
 }
 
 void _initCheckoutModule() {
-  // Data Source
   getIt.registerLazySingleton<CheckoutDatasource>(
     () => CheckoutDatasourceImp(api: getIt<ApiConsumer>()),
   );
-
-  // Repository
   getIt.registerLazySingleton<CheckoutRepo>(
     () => CheckoutRepoImp(datasource: getIt<CheckoutDatasource>()),
   );
-
-  // Use Case
   getIt.registerLazySingleton<CheckoutUsecase>(
     () => CheckoutUsecase(repo: getIt<CheckoutRepo>()),
   );
-
-  // Cubit
   getIt.registerFactory<CheckoutCubit>(
     () => CheckoutCubit(checkoutUsecase: getIt<CheckoutUsecase>()),
   );
 }
 
 void _initPaymentModule() {
-  // 1. Data Source
   getIt.registerLazySingleton<PaymentDatasource>(
     () => PaymentOnlineImp(api: getIt<ApiConsumer>()),
   );
 
-  // 2. Repository
   getIt.registerLazySingleton<PaymentRepo>(
     () => PaymentRepoImp(datasource: getIt<PaymentDatasource>()),
   );
 
-  // 3. Use Case
   getIt.registerLazySingleton<PaymentOnlineUsecase>(
     () => PaymentOnlineUsecase(repo: getIt<PaymentRepo>()),
   );
 
-  // 4. Cubit
   getIt.registerFactory<PaymentCubit>(
     () => PaymentCubit(usecase: getIt<PaymentOnlineUsecase>()),
   );
@@ -749,7 +631,6 @@ void _initLabProfileModule() {
   );
 }
 
-
 void _initLabServicesModule() {
   getIt.registerLazySingleton<LabServicesDatasource>(
     () => LabServicesDatasourceImp(api: getIt<ApiConsumer>()),
@@ -760,9 +641,14 @@ void _initLabServicesModule() {
   getIt.registerLazySingleton<GetCenterServicesUsecase>(
     () => GetCenterServicesUsecase(repo: getIt<LabServicesRepo>()),
   );
+  getIt.registerLazySingleton<ToggleServiceUsecase>(
+    () => ToggleServiceUsecase(repo: getIt<LabServicesRepo>()),
+  );
 
   getIt.registerFactory<LabServicesCubit>(
     () => LabServicesCubit(
       getCenterServicesUsecase: getIt<GetCenterServicesUsecase>(),
+      toggleServiceUsecase: getIt<ToggleServiceUsecase>(),
     ),
-  );}
+  );
+}

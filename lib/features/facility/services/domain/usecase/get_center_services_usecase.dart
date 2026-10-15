@@ -4,14 +4,11 @@ import 'package:chefaa/features/facility/services/domain/repository/lab_services
 import 'package:dartz/dartz.dart';
 
 class GetCenterServicesUsecase {
-
-
-final LabServicesRepo repo;
+  final LabServicesRepo repo;
 
   GetCenterServicesUsecase({required this.repo});
 
-  Future<Either<ErrorModel,LabServicesModel>> call()async{
+  Future<Either<ErrorModel, LabServicesModel>> call() async {
     return await repo.getCenterServices();
   }
-
 }

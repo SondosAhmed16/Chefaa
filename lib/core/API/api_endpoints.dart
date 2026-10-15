@@ -61,6 +61,8 @@ class ApiEndpoints {
   static const String getLabProfile = "lab/profile";
   static const String updateLabProfile = "lab/update-profile";
   static const String getCenterServices = "lab/my-services";
+  static String toggleService(String serviceId) =>
+      "lab/toggle-service/$serviceId";
 }
 
 class ApiKey {

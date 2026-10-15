@@ -112,8 +112,7 @@ class Routes {
   /************************************************************** */
   static const String labProfile = '/labProfile';
   static const String labLayout = "/labLayout";
-    static const String labServices = "/labServices";
-
+  static const String labServices = "/labServices";
 }
 
 class AppRouter {
@@ -463,7 +462,7 @@ class AppRouter {
           ),
         );
 
-        case Routes.labServices:
+      case Routes.labServices:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<LabServicesCubit>()..getCenterServices(),
