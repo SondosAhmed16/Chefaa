@@ -27,6 +27,12 @@ import 'package:chefaa/features/facility/dashboard/data/repository/lab_dashboard
 import 'package:chefaa/features/facility/dashboard/domain/repository/lab_dashboard_repo.dart';
 import 'package:chefaa/features/facility/dashboard/domain/usecase/get_lab_dashboard_usecase.dart';
 import 'package:chefaa/features/facility/dashboard/presentation/cubit/lab_dashboard_cubit.dart';
+import 'package:chefaa/features/facility/notification/data/datasource/lab_notification_datasource.dart';
+import 'package:chefaa/features/facility/notification/data/datasource/lab_notification_datasource_imp.dart';
+import 'package:chefaa/features/facility/notification/data/repository/lab_notification_repo_imp.dart';
+import 'package:chefaa/features/facility/notification/domain/repository/lab_notification_repo.dart';
+import 'package:chefaa/features/facility/notification/domain/usecase/get_lab_notification_usecase.dart';
+import 'package:chefaa/features/facility/notification/presentation/cubit/lab_notification_cubit.dart';
 import 'package:chefaa/features/facility/profile/data/datasource/lab_profile_datasource.dart';
 import 'package:chefaa/features/facility/profile/data/datasource/lab_profile_datasource_imp.dart';
 import 'package:chefaa/features/facility/profile/data/repository/lab_profile_repo_imp.dart';
@@ -199,6 +205,7 @@ Future<void> initAppModule() async {
   _initLabProfileModule();
   _initLabServicesModule();
   _initLabDashboardModule();
+  _initLabNotificationModule();
 }
 
 void _initAuthModule() {
@@ -677,3 +684,23 @@ void _initLabDashboardModule() {
     ),
   );
 }
+
+void _initLabNotificationModule() {
+  getIt.registerLazySingleton<LabNotificationDatasource>(
+    () => LabNotificationDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<LabNotificationRepo>(
+    () =>
+        LabNotificationRepoImp(datasource: getIt<LabNotificationDatasource>()),
+  );
+  getIt.registerLazySingleton<GetLabNotificationUsecase>(
+    () => GetLabNotificationUsecase(repo: getIt<LabNotificationRepo>()),
+  );
+
+  getIt.registerFactory<LabNotificationCubit>(
+    () => LabNotificationCubit(
+      getLabNotificationUsecase: getIt<GetLabNotificationUsecase>(),
+    ),
+  );
+}
+

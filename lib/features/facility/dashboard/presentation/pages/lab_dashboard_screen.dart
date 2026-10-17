@@ -1,4 +1,5 @@
 import 'package:chefaa/core/resources/style.dart';
+import 'package:chefaa/core/routes/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -88,7 +89,9 @@ class LabDashboardScreen extends StatelessWidget {
                               Row(
                                 children: [
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.pushNamed(context, Routes.labNotification);
+                                    },
                                     child: Container(
                                       padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(

@@ -1,5 +1,3 @@
 abstract class LabDashboardDatasource {
-
-Future<dynamic> getLabDashboard();
-
+  Future<dynamic> getLabDashboard();
 }

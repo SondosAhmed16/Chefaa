@@ -4,12 +4,11 @@ import 'package:chefaa/features/facility/dashboard/domain/repository/lab_dashboa
 import 'package:dartz/dartz.dart';
 
 class GetLabDashboardUsecase {
-
-final LabDashboardRepo repo;
+  final LabDashboardRepo repo;
 
   GetLabDashboardUsecase({required this.repo});
 
-Future<Either<ErrorModel,LabDashboard>> call()async{
-  return await repo.getLabDashboard();
-}
+  Future<Either<ErrorModel, LabDashboard>> call() async {
+    return await repo.getLabDashboard();
+  }
 }

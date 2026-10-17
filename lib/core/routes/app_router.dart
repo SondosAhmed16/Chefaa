@@ -13,6 +13,8 @@ import 'package:chefaa/features/facility/auth/presentation/pages/facility_regist
 import 'package:chefaa/features/facility/dashboard/presentation/cubit/lab_dashboard_cubit.dart';
 import 'package:chefaa/features/facility/dashboard/presentation/pages/lab_dashboard_screen.dart';
 import 'package:chefaa/features/facility/layout/presentation/lab_layout.dart';
+import 'package:chefaa/features/facility/notification/presentation/cubit/lab_notification_cubit.dart';
+import 'package:chefaa/features/facility/notification/presentation/pages/lab_notification_screen.dart';
 import 'package:chefaa/features/facility/profile/presentation/cubit/lab_profile_cubit.dart';
 import 'package:chefaa/features/facility/profile/presentation/pages/lab_profile_screen.dart';
 import 'package:chefaa/features/facility/services/presentation/cubit/lab_services_cubit.dart';
@@ -116,6 +118,8 @@ class Routes {
   static const String labLayout = "/labLayout";
   static const String labServices = "/labServices";
   static const String labDashboard = "/labDashboard";
+  static const String labNotification = "/labNotification";
+
 }
 
 class AppRouter {
@@ -477,6 +481,14 @@ class AppRouter {
           builder: (_) => BlocProvider(
             create: (context) => getIt<LabDashboardCubit>()..getLabDashboard(),
             child: const LabDashboardScreen(),
+          ),
+        );
+
+         case Routes.labNotification:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<LabNotificationCubit>()..getLabNotification(),
+            child: const LabNotificationScreen(),
           ),
         );
 

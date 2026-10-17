@@ -33,20 +33,8 @@ class LabProfileHeaderWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  CircleAvatar(
-                    backgroundColor: ColorManager.white.withOpacity(0.2),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: ColorManager.white,
-                        size: 18,
-                      ),
-                      onPressed:
-                          onBackPressed ?? () => Navigator.maybePop(context),
-                    ),
-                  ),
                   InkWell(
                     onTap: onEditPressed,
                     borderRadius: BorderRadius.circular(20),
