@@ -1,5 +1,7 @@
 import 'package:chefaa/core/DI/injection_container.dart';
 import 'package:chefaa/core/resources/color.dart';
+import 'package:chefaa/features/facility/dashboard/presentation/cubit/lab_dashboard_cubit.dart';
+import 'package:chefaa/features/facility/dashboard/presentation/pages/lab_dashboard_screen.dart';
 import 'package:chefaa/features/facility/profile/presentation/cubit/lab_profile_cubit.dart';
 import 'package:chefaa/features/facility/profile/presentation/pages/lab_profile_screen.dart';
 import 'package:chefaa/features/facility/services/presentation/cubit/lab_services_cubit.dart';
@@ -61,9 +63,12 @@ class _LabLayoutState extends State<LabLayout> {
       ),
 
       PersistentTabConfig(
-        screen: const Scaffold(body: Center(child: Text("Orders Screen"))),
+        screen: BlocProvider(
+          create: (_) => getIt<LabDashboardCubit>()..getLabDashboard(),
+          child: LabDashboardScreen(),
+        ),
         item: ItemConfig(
-          icon: const Icon(Icons.list_alt_rounded),
+          icon: const Icon(Icons.space_dashboard_rounded),
           title: "Dashboard",
           activeForegroundColor: ColorManager.primary,
           inactiveForegroundColor: ColorManager.gray,

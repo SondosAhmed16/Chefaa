@@ -5,5 +5,7 @@ import 'package:dartz/dartz.dart';
 
 abstract class LabServicesRepo {
   Future<Either<ErrorModel, LabServicesModel>> getCenterServices();
-  Future<Either<ErrorModel,ToggleServiceModel>> toggleService({required String serviceId});
+  Future<Either<ErrorModel, ToggleServiceModel>> toggleService({
+    required String serviceId,
+  });
 }

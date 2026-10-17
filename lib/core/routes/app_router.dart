@@ -10,6 +10,8 @@ import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_cubit
 import 'package:chefaa/features/doctor/auth/presentation/pages/doctor_register_screen.dart';
 import 'package:chefaa/features/facility/auth/presentation/cubit/facility_auth_cubit.dart';
 import 'package:chefaa/features/facility/auth/presentation/pages/facility_register_screen.dart';
+import 'package:chefaa/features/facility/dashboard/presentation/cubit/lab_dashboard_cubit.dart';
+import 'package:chefaa/features/facility/dashboard/presentation/pages/lab_dashboard_screen.dart';
 import 'package:chefaa/features/facility/layout/presentation/lab_layout.dart';
 import 'package:chefaa/features/facility/profile/presentation/cubit/lab_profile_cubit.dart';
 import 'package:chefaa/features/facility/profile/presentation/pages/lab_profile_screen.dart';
@@ -113,6 +115,7 @@ class Routes {
   static const String labProfile = '/labProfile';
   static const String labLayout = "/labLayout";
   static const String labServices = "/labServices";
+  static const String labDashboard = "/labDashboard";
 }
 
 class AppRouter {
@@ -467,6 +470,13 @@ class AppRouter {
           builder: (_) => BlocProvider(
             create: (context) => getIt<LabServicesCubit>()..getCenterServices(),
             child: const LabServicesScreen(),
+          ),
+        );
+      case Routes.labDashboard:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<LabDashboardCubit>()..getLabDashboard(),
+            child: const LabDashboardScreen(),
           ),
         );
 

@@ -21,8 +21,6 @@ class OrderTrackScreen extends StatelessWidget {
       child: BlocConsumer<OrderTrackCubit, OrderTrackState>(
         listener: (context, state) {},
         builder: (context, state) {
-          final isLoadingAction = state is OrderTrackLoading;
-
           return Scaffold(
             backgroundColor: ColorManager.white,
             appBar: PreferredSize(

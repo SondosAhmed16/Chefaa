@@ -21,6 +21,12 @@ import 'package:chefaa/features/facility/auth/data/repositiry/facility_auth_repo
 import 'package:chefaa/features/facility/auth/domain/repository/facility_register_repo.dart';
 import 'package:chefaa/features/facility/auth/domain/usecase/faciclity_usecase_register.dart';
 import 'package:chefaa/features/facility/auth/presentation/cubit/facility_auth_cubit.dart';
+import 'package:chefaa/features/facility/dashboard/data/datasource/lab_dashboard_datasource.dart';
+import 'package:chefaa/features/facility/dashboard/data/datasource/lab_dashboard_datasource_imp.dart';
+import 'package:chefaa/features/facility/dashboard/data/repository/lab_dashboard_repo_imp.dart';
+import 'package:chefaa/features/facility/dashboard/domain/repository/lab_dashboard_repo.dart';
+import 'package:chefaa/features/facility/dashboard/domain/usecase/get_lab_dashboard_usecase.dart';
+import 'package:chefaa/features/facility/dashboard/presentation/cubit/lab_dashboard_cubit.dart';
 import 'package:chefaa/features/facility/profile/data/datasource/lab_profile_datasource.dart';
 import 'package:chefaa/features/facility/profile/data/datasource/lab_profile_datasource_imp.dart';
 import 'package:chefaa/features/facility/profile/data/repository/lab_profile_repo_imp.dart';
@@ -192,6 +198,7 @@ Future<void> initAppModule() async {
   _initGetOrdersModule();
   _initLabProfileModule();
   _initLabServicesModule();
+  _initLabDashboardModule();
 }
 
 void _initAuthModule() {
@@ -649,6 +656,24 @@ void _initLabServicesModule() {
     () => LabServicesCubit(
       getCenterServicesUsecase: getIt<GetCenterServicesUsecase>(),
       toggleServiceUsecase: getIt<ToggleServiceUsecase>(),
+    ),
+  );
+}
+
+void _initLabDashboardModule() {
+  getIt.registerLazySingleton<LabDashboardDatasource>(
+    () => LabDashboardDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<LabDashboardRepo>(
+    () => LabDashboardRepoImp(datasource: getIt<LabDashboardDatasource>()),
+  );
+  getIt.registerLazySingleton<GetLabDashboardUsecase>(
+    () => GetLabDashboardUsecase(repo: getIt<LabDashboardRepo>()),
+  );
+
+  getIt.registerFactory<LabDashboardCubit>(
+    () => LabDashboardCubit(
+      getLabDashboardUsecase: getIt<GetLabDashboardUsecase>(),
     ),
   );
 }

@@ -11,7 +11,6 @@ import 'package:chefaa/features/pharmacy/auth/presentation/cubit/pharmacy_auth_c
 import 'package:chefaa/features/pharmacy/auth/presentation/cubit/pharmacy_auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class PharmacyRegisterScreen extends StatelessWidget {
   final String role;

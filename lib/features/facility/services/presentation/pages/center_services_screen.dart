@@ -75,7 +75,6 @@ class LabServicesScreen extends StatelessWidget {
             child: BlocConsumer<LabServicesCubit, LabServicesState>(
               listener: (context, state) {
                 if (state is LabServicesToggleSuccess) {
-                  // تحديث القائمة تلقائياً عند نجاح تغيير حالة الخدمة
                   context.read<LabServicesCubit>().getCenterServices();
                 } else if (state is LabServicesToggleError) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -103,19 +102,32 @@ class LabServicesScreen extends StatelessWidget {
                       ),
                     ),
                   );
-                } else if (state is LabServicesSuccess || state is LabServicesToggleLoading || state is LabServicesToggleSuccess) {
-                  // استخراج البيانات بناءً على الحالة الحالية
-                  final labTests = state is LabServicesSuccess 
-                      ? (state.services.data?.labTests ?? []) 
-                      : (context.read<LabServicesCubit>().state is LabServicesSuccess 
-                          ? ((context.read<LabServicesCubit>().state as LabServicesSuccess).services.data?.labTests ?? []) 
-                          : []);
-                          
-                  final radiology = state is LabServicesSuccess 
-                      ? (state.services.data?.radiology ?? []) 
-                      : (context.read<LabServicesCubit>().state is LabServicesSuccess 
-                          ? ((context.read<LabServicesCubit>().state as LabServicesSuccess).services.data?.radiology ?? []) 
-                          : []);
+                } else if (state is LabServicesSuccess ||
+                    state is LabServicesToggleLoading ||
+                    state is LabServicesToggleSuccess) {
+                  final labTests = state is LabServicesSuccess
+                      ? (state.services.data?.labTests ?? [])
+                      : (context.read<LabServicesCubit>().state
+                                is LabServicesSuccess
+                            ? ((context.read<LabServicesCubit>().state
+                                          as LabServicesSuccess)
+                                      .services
+                                      .data
+                                      ?.labTests ??
+                                  [])
+                            : []);
+
+                  final radiology = state is LabServicesSuccess
+                      ? (state.services.data?.radiology ?? [])
+                      : (context.read<LabServicesCubit>().state
+                                is LabServicesSuccess
+                            ? ((context.read<LabServicesCubit>().state
+                                          as LabServicesSuccess)
+                                      .services
+                                      .data
+                                      ?.radiology ??
+                                  [])
+                            : []);
 
                   if (labTests.isEmpty && radiology.isEmpty) {
                     return Center(
@@ -227,7 +239,7 @@ class LabServicesScreen extends StatelessWidget {
                                           ),
                                           const SizedBox(width: 4),
                                           Text(
-                                            test.estimatedTime!,
+                                            "${test.estimatedTime!} Hour",
                                             style: getRegularStyle(
                                               fontSize: 12,
                                               color: ColorManager.gray,
@@ -254,7 +266,9 @@ class LabServicesScreen extends StatelessWidget {
                                       activeColor: ColorManager.primary,
                                       inactiveThumbColor: ColorManager.darkGray,
                                       onChanged: (bool value) {
-                                        context.read<LabServicesCubit>().toggleService(
+                                        context
+                                            .read<LabServicesCubit>()
+                                            .toggleService(
                                               serviceId: test.id ?? '',
                                             );
                                       },
@@ -311,25 +325,117 @@ class LabServicesScreen extends StatelessWidget {
                             ),
                             itemBuilder: (context, index) {
                               final item = radiology[index];
-                              // ملاحظة: إذا كان عنصر الأشعة يحتوي على خاصية مشابهة لـ isActive و id، يمكنك ربطها بنفس الطريقة
+                              final name = item['name'] ?? '';
+                              final price = item['price'] ?? 0;
+                              final id = item['_id'] ?? item['id'] ?? '';
+                              final isActive = item['isActive'] ?? false;
+                              final instructions = item['instructions'];
+                              final estimatedTime = item['estimatedTime'];
+                              final sessionDuration = item['sessionDuration'];
                               return ListTile(
                                 contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16,
                                   vertical: 8,
                                 ),
                                 title: Text(
-                                  item['name'],
+                                  name,
                                   style: getSemiBoldStyle(
                                     fontSize: 15,
                                     color: ColorManager.black,
                                   ),
                                 ),
-                                trailing: Text(
-                                  '${item['price'] ?? 0} EGP',
-                                  style: getBoldStyle(
-                                    fontSize: 15,
-                                    color: ColorManager.lightGreen,
-                                  ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (instructions != null &&
+                                        instructions!.isNotEmpty) ...[
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.info_outline,
+                                            size: 13,
+                                            color: ColorManager.gray,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Expanded(
+                                            child: Text(
+                                              instructions!,
+                                              style: getRegularStyle(
+                                                fontSize: 12,
+                                                color: ColorManager.gray,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                    if (estimatedTime != null &&
+                                        estimatedTime!.isNotEmpty) ...[
+                                      const SizedBox(height: 2),
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.access_time,
+                                            size: 13,
+                                            color: ColorManager.gray,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            "${estimatedTime!} Hour",
+                                            style: getRegularStyle(
+                                              fontSize: 12,
+                                              color: ColorManager.gray,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                    if (sessionDuration != null &&
+                                        sessionDuration!.isNotEmpty) ...[
+                                      const SizedBox(height: 2),
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.access_time,
+                                            size: 13,
+                                            color: ColorManager.gray,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            "${sessionDuration!} Hour",
+                                            style: getRegularStyle(
+                                              fontSize: 12,
+                                              color: ColorManager.gray,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      '${price ?? 0} EGP',
+                                      style: getBoldStyle(
+                                        fontSize: 15,
+                                        color: ColorManager.lightGreen,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Switch(
+                                      value: isActive,
+                                      activeColor: ColorManager.primary,
+                                      inactiveThumbColor: ColorManager.darkGray,
+                                      onChanged: (bool value) {
+                                        context
+                                            .read<LabServicesCubit>()
+                                            .toggleService(serviceId: id ?? '');
+                                      },
+                                    ),
+                                  ],
                                 ),
                               );
                             },

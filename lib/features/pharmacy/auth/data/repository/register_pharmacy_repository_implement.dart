@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:chefaa/features/doctor/auth/data/data%20source/data_source_doctor_auth.dart';
 import 'package:chefaa/features/pharmacy/auth/data/data%20source/data_source_pharmacy_auth.dart';
 import 'package:chefaa/features/pharmacy/auth/domain/entities/register_pharmacy_response_entity.dart';
 import 'package:chefaa/features/pharmacy/auth/domain/repository/register_pharmacy_reopsitory.dart';
