@@ -15,6 +15,13 @@ import 'package:chefaa/features/doctor/auth/data/repository/register_doctor_repo
 import 'package:chefaa/features/doctor/auth/domain/repository/register_doctor_reopsitory.dart';
 import 'package:chefaa/features/doctor/auth/domain/usecases/register_doctor_usecase.dart';
 import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_cubit.dart';
+import 'package:chefaa/features/doctor/profile/data/datasource/doctor_profile_datasource.dart';
+import 'package:chefaa/features/doctor/profile/data/datasource/doctor_profile_datasource_imp.dart';
+import 'package:chefaa/features/doctor/profile/data/repository/doctor_profile_repo_imp.dart';
+import 'package:chefaa/features/doctor/profile/domain/repository/doctor_profile_repo.dart';
+import 'package:chefaa/features/doctor/profile/domain/usecase/get_doctor_profile_usecase.dart';
+import 'package:chefaa/features/doctor/profile/domain/usecase/update_doctor_profile_usecase.dart';
+import 'package:chefaa/features/doctor/profile/presentation/cubit/doctor_profile_cubit.dart';
 import 'package:chefaa/features/facility/auth/data/data%20source/facilitu_auth_datasource_imp.dart';
 import 'package:chefaa/features/facility/auth/data/data%20source/facility_auth_datasource.dart';
 import 'package:chefaa/features/facility/auth/data/repositiry/facility_auth_repo_imp.dart';
@@ -206,6 +213,7 @@ Future<void> initAppModule() async {
   _initLabServicesModule();
   _initLabDashboardModule();
   _initLabNotificationModule();
+  _initDoctorProfileModule();
 }
 
 void _initAuthModule() {
@@ -704,3 +712,25 @@ void _initLabNotificationModule() {
   );
 }
 
+void _initDoctorProfileModule() {
+  getIt.registerLazySingleton<DoctorProfileDatasource>(
+    () => DoctorProfileDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<DoctorProfileRepo>(
+    () => DoctorProfileRepoImp(datasource: getIt<DoctorProfileDatasource>()),
+  );
+  getIt.registerLazySingleton<GetDoctorProfileUsecase>(
+    () => GetDoctorProfileUsecase(repo: getIt<DoctorProfileRepo>()),
+  );
+
+  getIt.registerLazySingleton<UpdateDoctorProfileUsecase>(
+    () => UpdateDoctorProfileUsecase(repo: getIt<DoctorProfileRepo>()),
+  );
+
+  getIt.registerFactory<DoctorProfileCubit>(
+    () => DoctorProfileCubit(
+      getDoctorProfileUsecase: getIt<GetDoctorProfileUsecase>(),
+      updateDoctorProfileUsecase: getIt<UpdateDoctorProfileUsecase>(),
+    ),
+  );
+}

@@ -64,8 +64,12 @@ class ApiEndpoints {
   static String toggleService(String serviceId) =>
       "lab/toggle-service/$serviceId";
   static const String getCenterDashboard = "lab/dashboard";
-    static const String getCenterNotification = "lab/lab-notifications";
+  static const String getCenterNotification = "lab/lab-notifications";
 
+  /************************************************* */
+
+  static const String getDoctorProfile = "doctor/profile";
+  static const String updateDoctorProfile = "doctor/profile";
 }
 
 class ApiKey {

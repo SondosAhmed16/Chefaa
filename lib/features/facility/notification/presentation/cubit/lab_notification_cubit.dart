@@ -9,8 +9,7 @@ class LabNotificationCubit extends Cubit<LabNotificationState> {
     : super(LabNotificationInitial());
 
   Future<void> getLabNotification() async {
-
-if(!isClosed) emit(LabNotificationLoading());
+    if (!isClosed) emit(LabNotificationLoading());
 
     final result = await getLabNotificationUsecase.call();
 

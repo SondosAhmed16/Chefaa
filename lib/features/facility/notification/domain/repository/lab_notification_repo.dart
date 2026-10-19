@@ -3,7 +3,5 @@ import 'package:chefaa/features/facility/notification/data/model/lab_notificatio
 import 'package:dartz/dartz.dart';
 
 abstract class LabNotificationRepo {
-
-Future<Either<ErrorModel,LabNotificationModel>> getLabNotification();
-
+  Future<Either<ErrorModel, LabNotificationModel>> getLabNotification();
 }

@@ -1,6 +1,7 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
 import 'package:chefaa/core/routes/app_router.dart';
+import 'package:chefaa/core/services/share_services.dart';
 import 'package:chefaa/core/utils/validator.dart';
 import 'package:chefaa/core/widgets/custom_dialog.dart';
 import 'package:chefaa/core/widgets/custom_text_feild.dart';
@@ -27,7 +28,7 @@ class LoginScreen extends StatelessWidget {
                   title: "Yeay! Welcome Back",
                   message: "Once again you login successfully into Chefaa app",
                   type: DialogType.success,
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.of(context).pop();
 
                     final role = state.user.role.toLowerCase();
@@ -41,10 +42,20 @@ class LoginScreen extends StatelessWidget {
                         break;
 
                       case 'doctor':
-                        // Navigator.of(context).pushNamedAndRemoveUntil(
-                        //   Routes.doctorHome,
-                        //   (route) => false,
-                        // );
+                        bool isCompleted =
+                            await ShareServices.getBool('isProfileCompleted') ??
+                            false;
+                        if (!isCompleted) {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            Routes.completeDoctorProfile,
+                            (route) => false,
+                          );
+                        } else {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            Routes.getDoctorProfile,
+                            (route) => false,
+                          );
+                        }
                         break;
 
                       case 'pharmacy':

@@ -8,6 +8,9 @@ import 'package:chefaa/features/auth/presentation/pages/reset_password_screen.da
 import 'package:chefaa/features/auth/presentation/pages/verify_code_screen.dart';
 import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_cubit.dart';
 import 'package:chefaa/features/doctor/auth/presentation/pages/doctor_register_screen.dart';
+import 'package:chefaa/features/doctor/profile/presentation/cubit/doctor_profile_cubit.dart';
+import 'package:chefaa/features/doctor/profile/presentation/pages/complete_doctor_profile.dart';
+import 'package:chefaa/features/doctor/profile/presentation/pages/doctor_profile_screen.dart';
 import 'package:chefaa/features/facility/auth/presentation/cubit/facility_auth_cubit.dart';
 import 'package:chefaa/features/facility/auth/presentation/pages/facility_register_screen.dart';
 import 'package:chefaa/features/facility/dashboard/presentation/cubit/lab_dashboard_cubit.dart';
@@ -119,7 +122,9 @@ class Routes {
   static const String labServices = "/labServices";
   static const String labDashboard = "/labDashboard";
   static const String labNotification = "/labNotification";
-
+  /********************************************************** */
+  static const String completeDoctorProfile = "/completeDoctorProfile";
+  static const String getDoctorProfile = "/getDoctorProfile";
 }
 
 class AppRouter {
@@ -484,16 +489,33 @@ class AppRouter {
           ),
         );
 
-         case Routes.labNotification:
+      case Routes.labNotification:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => getIt<LabNotificationCubit>()..getLabNotification(),
+            create: (context) =>
+                getIt<LabNotificationCubit>()..getLabNotification(),
             child: const LabNotificationScreen(),
           ),
         );
 
       case Routes.labLayout:
         return MaterialPageRoute(builder: (_) => const LabLayout());
+
+      /*************************************************************** */
+      case Routes.completeDoctorProfile:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<DoctorProfileCubit>(),
+            child: const CompleteDoctorProfile(),
+          ),
+        );
+      case Routes.getDoctorProfile:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<DoctorProfileCubit>(),
+            child: const DoctorProfileScreen(),
+          ),
+        );
 
       default:
         return MaterialPageRoute(

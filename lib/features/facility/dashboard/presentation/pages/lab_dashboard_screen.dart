@@ -90,7 +90,10 @@ class LabDashboardScreen extends StatelessWidget {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.pushNamed(context, Routes.labNotification);
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.labNotification,
+                                      );
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.all(10),
