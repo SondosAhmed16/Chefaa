@@ -59,14 +59,14 @@ class DoctorProfileModel {
       image: data['image'] as String?,
       about: data['about'] as String?,
       degrees: (data['degrees'] as List<dynamic>?)
-        ?.map((e) => e.toString())
-        .toList(),
+          ?.map((e) => e.toString())
+          .toList(),
       gender: data['gender'] as String?,
       rating: (data['rating'] as num?)?.toDouble(),
       paymentOption: data['paymentOption'] as String?,
       prePaymentNumbers: (data['prePaymentNumbers'] as List<dynamic>?)
-        ?.map((e) => e.toString())
-        .toList(),
+          ?.map((e) => e.toString())
+          .toList(),
       clinicConsultationPrice: data['clinicConsultationPrice'] as int?,
       clinics: (data['clinics'] as List<dynamic>?)
           ?.map((e) => Clinic.fromMap(e as Map<String, dynamic>))

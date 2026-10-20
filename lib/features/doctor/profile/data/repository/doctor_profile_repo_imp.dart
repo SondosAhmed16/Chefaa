@@ -12,7 +12,7 @@ class DoctorProfileRepoImp implements DoctorProfileRepo {
   DoctorProfileRepoImp({required this.datasource});
 
   @override
-  Future<Either<ErrorModel,DoctorProfileModel>> getDoctorProfile() async {
+  Future<Either<ErrorModel, DoctorProfileModel>> getDoctorProfile() async {
     try {
       final response = await datasource.getDoctorProfile();
       final model = DoctorProfileModel.fromMap(

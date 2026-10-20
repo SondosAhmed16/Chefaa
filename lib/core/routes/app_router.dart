@@ -8,6 +8,9 @@ import 'package:chefaa/features/auth/presentation/pages/reset_password_screen.da
 import 'package:chefaa/features/auth/presentation/pages/verify_code_screen.dart';
 import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_cubit.dart';
 import 'package:chefaa/features/doctor/auth/presentation/pages/doctor_register_screen.dart';
+import 'package:chefaa/features/doctor/chatbot/presentation/cubit/doctor_chatbot_cubit.dart';
+import 'package:chefaa/features/doctor/chatbot/presentation/pages/doctor_chatbot_screen.dart';
+import 'package:chefaa/features/doctor/layout/presentation/doctor_layout.dart';
 import 'package:chefaa/features/doctor/profile/presentation/cubit/doctor_profile_cubit.dart';
 import 'package:chefaa/features/doctor/profile/presentation/pages/complete_doctor_profile.dart';
 import 'package:chefaa/features/doctor/profile/presentation/pages/doctor_profile_screen.dart';
@@ -125,6 +128,9 @@ class Routes {
   /********************************************************** */
   static const String completeDoctorProfile = "/completeDoctorProfile";
   static const String getDoctorProfile = "/getDoctorProfile";
+  static const String DoctorLayout = "/DoctorLayout";
+    static const String doctorChatbot = "/DoctorChatbot";
+
 }
 
 class AppRouter {
@@ -502,6 +508,10 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const LabLayout());
 
       /*************************************************************** */
+
+      case Routes.DoctorLayout:
+        return MaterialPageRoute(builder: (_) => const DoctorLayout());
+
       case Routes.completeDoctorProfile:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -514,6 +524,14 @@ class AppRouter {
           builder: (_) => BlocProvider(
             create: (context) => getIt<DoctorProfileCubit>(),
             child: const DoctorProfileScreen(),
+          ),
+        );
+
+        case Routes.doctorChatbot:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<DoctorChatbotCubit>(),
+            child: const DoctorChatbotScreen(),
           ),
         );
 

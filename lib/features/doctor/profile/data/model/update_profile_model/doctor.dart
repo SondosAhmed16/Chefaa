@@ -59,32 +59,42 @@ class Doctor {
   }
 
   factory Doctor.fromMap(Map<String, dynamic> data) => Doctor(
-  id: data['_id'] as String?,
-  userId: data['userId'] as String?,
-  specialization: data['specialization'] as String?,
-  contactNumber: data['contactNumber'] as String?,
-  image: data['image'] as String?,
-  about: data['about'] as String?,
-  membershipPdf: data['membershipPdf'] as String?,
-  
-  degrees: (data['degrees'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
-  clinics: (data['clinics'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
-  prePaymentNumbers: (data['prePaymentNumbers'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
-  
-  paymentOption: data['paymentOption'] as String?,
-  rating: (data['rating'] as num?)?.toDouble(),
-  clinicConsultationPrice: data['clinicConsultationPrice'] as int?,
-  reviews: data['reviews'] as List<dynamic>?,
-  visibilityStatus: data['visibilityStatus'] as String?,
-  hiddenAt: data['hiddenAt'] as dynamic,
-  hiddenReason: data['hiddenReason'] as dynamic,
-  createdAt: data['createdAt'] == null ? null : DateTime.parse(data['createdAt'] as String),
-  updatedAt: data['updatedAt'] == null ? null : DateTime.parse(data['updatedAt'] as String),
-  v: data['__v'] as int?,
-  age: data['age'] as int?,
-  gender: data['gender'] as String?,
-  yearsOfExperience: data['yearsOfExperience'] as int?,
-);
+    id: data['_id'] as String?,
+    userId: data['userId'] as String?,
+    specialization: data['specialization'] as String?,
+    contactNumber: data['contactNumber'] as String?,
+    image: data['image'] as String?,
+    about: data['about'] as String?,
+    membershipPdf: data['membershipPdf'] as String?,
+
+    degrees: (data['degrees'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList(),
+    clinics: (data['clinics'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList(),
+    prePaymentNumbers: (data['prePaymentNumbers'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList(),
+
+    paymentOption: data['paymentOption'] as String?,
+    rating: (data['rating'] as num?)?.toDouble(),
+    clinicConsultationPrice: data['clinicConsultationPrice'] as int?,
+    reviews: data['reviews'] as List<dynamic>?,
+    visibilityStatus: data['visibilityStatus'] as String?,
+    hiddenAt: data['hiddenAt'] as dynamic,
+    hiddenReason: data['hiddenReason'] as dynamic,
+    createdAt: data['createdAt'] == null
+        ? null
+        : DateTime.parse(data['createdAt'] as String),
+    updatedAt: data['updatedAt'] == null
+        ? null
+        : DateTime.parse(data['updatedAt'] as String),
+    v: data['__v'] as int?,
+    age: data['age'] as int?,
+    gender: data['gender'] as String?,
+    yearsOfExperience: data['yearsOfExperience'] as int?,
+  );
 
   Map<String, dynamic> toMap() => {
     '_id': id,

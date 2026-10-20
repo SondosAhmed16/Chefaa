@@ -9,7 +9,6 @@ class UpdateDoctorProfileUsecase {
   UpdateDoctorProfileUsecase({required this.repo});
 
   Future<Either<ErrorModel, UpdateProfileModel>> call(
-  
     String? specialization,
     String? location,
     String? imageUrl,

@@ -70,6 +70,7 @@ class ApiEndpoints {
 
   static const String getDoctorProfile = "doctor/profile";
   static const String updateDoctorProfile = "doctor/profile";
+  static const String DoctorChatbot = "/doctor/ai/chat";
 }
 
 class ApiKey {

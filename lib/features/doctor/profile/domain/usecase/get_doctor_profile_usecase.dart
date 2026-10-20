@@ -4,13 +4,11 @@ import 'package:chefaa/features/doctor/profile/domain/repository/doctor_profile_
 import 'package:dartz/dartz.dart';
 
 class GetDoctorProfileUsecase {
-
-final DoctorProfileRepo repo;
+  final DoctorProfileRepo repo;
 
   GetDoctorProfileUsecase({required this.repo});
 
-Future<Either<ErrorModel, DoctorProfileModel>> call()async{
-  return await repo.getDoctorProfile();
-}
-
+  Future<Either<ErrorModel, DoctorProfileModel>> call() async {
+    return await repo.getDoctorProfile();
+  }
 }

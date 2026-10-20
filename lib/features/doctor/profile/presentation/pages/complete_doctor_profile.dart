@@ -287,8 +287,6 @@ class _CompleteDoctorProfileState extends State<CompleteDoctorProfile> {
                           about: _aboutController.text,
                         );
                       }
-
-                   
                     },
                   ),
                 ],

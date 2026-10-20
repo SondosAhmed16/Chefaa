@@ -15,6 +15,12 @@ import 'package:chefaa/features/doctor/auth/data/repository/register_doctor_repo
 import 'package:chefaa/features/doctor/auth/domain/repository/register_doctor_reopsitory.dart';
 import 'package:chefaa/features/doctor/auth/domain/usecases/register_doctor_usecase.dart';
 import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_cubit.dart';
+import 'package:chefaa/features/doctor/chatbot/data/datasource/doctor_chatbot_datasource.dart';
+import 'package:chefaa/features/doctor/chatbot/data/datasource/doctor_chatbot_datasource_imp.dart';
+import 'package:chefaa/features/doctor/chatbot/data/repository/doctor_chatbot_repo_imp.dart';
+import 'package:chefaa/features/doctor/chatbot/domain/repository/doctor_chatbot_repo.dart';
+import 'package:chefaa/features/doctor/chatbot/domain/usecase/doctor_chatbot_usecase.dart';
+import 'package:chefaa/features/doctor/chatbot/presentation/cubit/doctor_chatbot_cubit.dart';
 import 'package:chefaa/features/doctor/profile/data/datasource/doctor_profile_datasource.dart';
 import 'package:chefaa/features/doctor/profile/data/datasource/doctor_profile_datasource_imp.dart';
 import 'package:chefaa/features/doctor/profile/data/repository/doctor_profile_repo_imp.dart';
@@ -214,6 +220,7 @@ Future<void> initAppModule() async {
   _initLabDashboardModule();
   _initLabNotificationModule();
   _initDoctorProfileModule();
+  _initDoctorChatbotModule();
 }
 
 void _initAuthModule() {
@@ -732,5 +739,22 @@ void _initDoctorProfileModule() {
       getDoctorProfileUsecase: getIt<GetDoctorProfileUsecase>(),
       updateDoctorProfileUsecase: getIt<UpdateDoctorProfileUsecase>(),
     ),
+  );
+}
+
+void _initDoctorChatbotModule() {
+  getIt.registerLazySingleton<DoctorChatbotDatasource>(
+    () => DoctorChatbotDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<DoctorChatbotRepo>(
+    () => DoctorChatbotRepoImp(datasource: getIt<DoctorChatbotDatasource>()),
+  );
+  getIt.registerLazySingleton<DoctorChatbotUsecase>(
+    () => DoctorChatbotUsecase(repo: getIt<DoctorChatbotRepo>()),
+  );
+
+  getIt.registerFactory<DoctorChatbotCubit>(
+    () =>
+        DoctorChatbotCubit(doctorChatbotUsecase: getIt<DoctorChatbotUsecase>()),
   );
 }

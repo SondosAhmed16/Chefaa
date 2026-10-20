@@ -52,7 +52,7 @@ class LoginScreen extends StatelessWidget {
                           );
                         } else {
                           Navigator.of(context).pushNamedAndRemoveUntil(
-                            Routes.getDoctorProfile,
+                            Routes.DoctorLayout,
                             (route) => false,
                           );
                         }

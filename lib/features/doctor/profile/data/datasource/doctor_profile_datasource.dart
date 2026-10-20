@@ -1,4 +1,3 @@
-
 abstract class DoctorProfileDatasource {
   Future<dynamic> getDoctorProfile();
   Future<dynamic> updateDoctorProfile(
