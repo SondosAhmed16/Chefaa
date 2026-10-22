@@ -21,6 +21,16 @@ import 'package:chefaa/features/doctor/chatbot/data/repository/doctor_chatbot_re
 import 'package:chefaa/features/doctor/chatbot/domain/repository/doctor_chatbot_repo.dart';
 import 'package:chefaa/features/doctor/chatbot/domain/usecase/doctor_chatbot_usecase.dart';
 import 'package:chefaa/features/doctor/chatbot/presentation/cubit/doctor_chatbot_cubit.dart';
+import 'package:chefaa/features/doctor/home/data/datasource/doctor_home_datasource.dart';
+import 'package:chefaa/features/doctor/home/data/datasource/doctor_home_datasource_imp.dart';
+import 'package:chefaa/features/doctor/home/data/repository/doctor_home_repo_imp.dart';
+import 'package:chefaa/features/doctor/home/domain/repository/doctor_home_repo.dart';
+import 'package:chefaa/features/doctor/home/domain/usecase/add_clinic_usecase.dart';
+import 'package:chefaa/features/doctor/home/domain/usecase/delete_my_clinic.dart';
+import 'package:chefaa/features/doctor/home/domain/usecase/get_clinics_usecase.dart';
+import 'package:chefaa/features/doctor/home/domain/usecase/get_my_clinic_usecase.dart';
+import 'package:chefaa/features/doctor/home/domain/usecase/update_clinic_usecase.dart';
+import 'package:chefaa/features/doctor/home/presentation/cubit/doctor_home_cubit.dart';
 import 'package:chefaa/features/doctor/profile/data/datasource/doctor_profile_datasource.dart';
 import 'package:chefaa/features/doctor/profile/data/datasource/doctor_profile_datasource_imp.dart';
 import 'package:chefaa/features/doctor/profile/data/repository/doctor_profile_repo_imp.dart';
@@ -221,6 +231,7 @@ Future<void> initAppModule() async {
   _initLabNotificationModule();
   _initDoctorProfileModule();
   _initDoctorChatbotModule();
+  _initDoctorHomeModule();
 }
 
 void _initAuthModule() {
@@ -756,5 +767,39 @@ void _initDoctorChatbotModule() {
   getIt.registerFactory<DoctorChatbotCubit>(
     () =>
         DoctorChatbotCubit(doctorChatbotUsecase: getIt<DoctorChatbotUsecase>()),
+  );
+}
+
+void _initDoctorHomeModule() {
+  getIt.registerLazySingleton<DoctorHomeDatasource>(
+    () => DoctorHomeDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<DoctorHomeRepo>(
+    () => DoctorHomeRepoImp(datasource: getIt<DoctorHomeDatasource>()),
+  );
+  getIt.registerLazySingleton<GetClinicsUsecase>(
+    () => GetClinicsUsecase(repo: getIt<DoctorHomeRepo>()),
+  );
+  getIt.registerLazySingleton<GetMyClinicUsecase>(
+    () => GetMyClinicUsecase(repo: getIt<DoctorHomeRepo>()),
+  );
+  getIt.registerLazySingleton<DeleteMyClinic>(
+    () => DeleteMyClinic(repo: getIt<DoctorHomeRepo>()),
+  );
+  getIt.registerLazySingleton<UpdateClinicUsecase>(
+    () => UpdateClinicUsecase(repo: getIt<DoctorHomeRepo>()),
+  );
+  getIt.registerLazySingleton<AddClinicUsecase>(
+    () => AddClinicUsecase(repo: getIt<DoctorHomeRepo>()),
+  );
+
+  getIt.registerFactory<DoctorHomeCubit>(
+    () => DoctorHomeCubit(
+      getClinicsUsecase: getIt<GetClinicsUsecase>(),
+      getMyClinicUsecase: getIt<GetMyClinicUsecase>(),
+      deleteMyClinicUsecase: getIt<DeleteMyClinic>(),
+      updateClinicUsecase: getIt<UpdateClinicUsecase>(),
+      addClinicUsecase: getIt<AddClinicUsecase>(),
+    ),
   );
 }

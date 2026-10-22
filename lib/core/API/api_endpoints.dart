@@ -71,6 +71,11 @@ class ApiEndpoints {
   static const String getDoctorProfile = "doctor/profile";
   static const String updateDoctorProfile = "doctor/profile";
   static const String DoctorChatbot = "/doctor/ai/chat";
+  static String getDoctorClinics(String doctorId) => "doctor/$doctorId/clinics";
+  static String getMyClinic(String clinicId) => "clinic/$clinicId";
+  static String deleteMyClinic(String clinicId) => "clinic/$clinicId";
+  static String updateMyClinic(String clinicId) => "clinic/$clinicId";
+  static const String addClinic = "clinic/";
 }
 
 class ApiKey {

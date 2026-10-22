@@ -2,8 +2,11 @@ import 'package:chefaa/core/DI/injection_container.dart';
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/features/doctor/chatbot/presentation/cubit/doctor_chatbot_cubit.dart';
 import 'package:chefaa/features/doctor/chatbot/presentation/pages/doctor_chatbot_screen.dart';
+import 'package:chefaa/features/doctor/home/presentation/cubit/doctor_home_cubit.dart';
+import 'package:chefaa/features/doctor/home/presentation/pages/doctor_clinics_screen.dart';
 import 'package:chefaa/features/doctor/profile/presentation/cubit/doctor_profile_cubit.dart';
 import 'package:chefaa/features/doctor/profile/presentation/pages/doctor_profile_screen.dart';
+import 'package:chefaa/features/patient/home/presentation/cubit/user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -56,6 +59,25 @@ class _DoctorLayoutState extends State<DoctorLayout> {
           icon: SvgPicture.asset("assets/svg_images/chat_active.svg"),
           inactiveIcon: SvgPicture.asset("assets/svg_images/chat.svg"),
           title: "Chatbot",
+          activeForegroundColor: ColorManager.primary,
+          inactiveForegroundColor: ColorManager.gray,
+        ),
+      ),
+
+      PersistentTabConfig(
+        screen: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => getIt<DoctorHomeCubit>()),
+            BlocProvider(
+              create: (_) => getIt<UsersCubit>()..loadUserFromPrefs(),
+            ),
+          ],
+          child: const DoctorClinicsScreen(),
+        ),
+        item: ItemConfig(
+          icon: SvgPicture.asset("assets/svg_images/clinic_active.svg"),
+          inactiveIcon: SvgPicture.asset("assets/svg_images/clinic.svg"),
+          title: "Clinics",
           activeForegroundColor: ColorManager.primary,
           inactiveForegroundColor: ColorManager.gray,
         ),

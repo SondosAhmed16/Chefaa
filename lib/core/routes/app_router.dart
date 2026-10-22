@@ -10,6 +10,10 @@ import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_cubit
 import 'package:chefaa/features/doctor/auth/presentation/pages/doctor_register_screen.dart';
 import 'package:chefaa/features/doctor/chatbot/presentation/cubit/doctor_chatbot_cubit.dart';
 import 'package:chefaa/features/doctor/chatbot/presentation/pages/doctor_chatbot_screen.dart';
+import 'package:chefaa/features/doctor/home/presentation/cubit/doctor_home_cubit.dart';
+import 'package:chefaa/features/doctor/home/presentation/pages/add_clinic_screen.dart';
+import 'package:chefaa/features/doctor/home/presentation/pages/clinic_details_screen.dart';
+import 'package:chefaa/features/doctor/home/presentation/pages/doctor_clinics_screen.dart';
 import 'package:chefaa/features/doctor/layout/presentation/doctor_layout.dart';
 import 'package:chefaa/features/doctor/profile/presentation/cubit/doctor_profile_cubit.dart';
 import 'package:chefaa/features/doctor/profile/presentation/pages/complete_doctor_profile.dart';
@@ -129,8 +133,10 @@ class Routes {
   static const String completeDoctorProfile = "/completeDoctorProfile";
   static const String getDoctorProfile = "/getDoctorProfile";
   static const String DoctorLayout = "/DoctorLayout";
-    static const String doctorChatbot = "/DoctorChatbot";
-
+  static const String doctorChatbot = "/DoctorChatbot";
+  static const String doctorClinics = "/DoctorClinics";
+  static const String doctorClinic = "/DoctorClinic";
+  static const String addClinic = "/addClinic";
 }
 
 class AppRouter {
@@ -527,12 +533,40 @@ class AppRouter {
           ),
         );
 
-        case Routes.doctorChatbot:
+      case Routes.doctorClinics:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<DoctorHomeCubit>(),
+            child: const DoctorClinicsScreen(),
+          ),
+        );
+
+      case Routes.doctorClinic:
+        final clinicId = settings.arguments as String? ?? '';
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) =>
+                getIt<DoctorHomeCubit>()..getMyClinic(clinicId: clinicId),
+            child: ClinicDetailsScreen(clinicId: clinicId),
+          ),
+        );
+
+      case Routes.doctorChatbot:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<DoctorChatbotCubit>(),
             child: const DoctorChatbotScreen(),
           ),
+        );
+
+      case Routes.addClinic:
+        final doctorId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<DoctorHomeCubit>(),
+            child: AddClinicScreen(doctorId: doctorId),
+          ),
+          settings: settings,
         );
 
       default:
