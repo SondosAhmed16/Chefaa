@@ -76,6 +76,15 @@ class ApiEndpoints {
   static String deleteMyClinic(String clinicId) => "clinic/$clinicId";
   static String updateMyClinic(String clinicId) => "clinic/$clinicId";
   static const String addClinic = "clinic/";
+  static const String doctorAppoGet = "appointments/my";
+  static const String addPrescription = "appointments/prescription";
+  static String editPrescription(String appoId) =>
+      "appointments/$appoId/updatePrescription";
+  static String previousPrescription(String appoId) =>
+      "appointments/$appoId/getPreviousPrescription";
+  static String markAppoComplete(String appoId) =>
+      "appointments/$appoId/complete";
+  static String markAppoPied(String appoId) => "appointments/$appoId/mark-paid";
 }
 
 class ApiKey {

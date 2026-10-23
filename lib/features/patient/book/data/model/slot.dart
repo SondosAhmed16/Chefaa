@@ -4,15 +4,15 @@ import 'package:collection/collection.dart';
 
 class Slot {
   int? index;
-  int? start;
-  int? end;
+  num? start;
+  num? end;
   String? startTime;
   String? endTime;
   bool? available;
   int? bookedCount;
-  int? patientsPerSlot;
-  int? remainingInSlot;
-  int? remainingInDay;
+  num? patientsPerSlot;
+  num? remainingInSlot;
+  num? remainingInDay;
   String? reason;
 
   Slot({
@@ -36,15 +36,15 @@ class Slot {
 
   factory Slot.fromMap(Map<String, dynamic> data) => Slot(
     index: data['index'] as int?,
-    start: data['start'] as int?,
-    end: data['end'] as int?,
+    start: data['start'] as num?,
+    end: data['end'] as num?,
     startTime: data['startTime'] as String?,
     endTime: data['endTime'] as String?,
     available: data['available'] as bool?,
     bookedCount: data['bookedCount'] as int?,
-    patientsPerSlot: data['patientsPerSlot'] as int?,
-    remainingInSlot: data['remainingInSlot'] as int?,
-    remainingInDay: data['remainingInDay'] as int?,
+    patientsPerSlot: data['patientsPerSlot'] as num?,
+    remainingInSlot: data['remainingInSlot'] as num?,
+    remainingInDay: data['remainingInDay'] as num?,
     reason: data['reason'] as String?,
   );
 
@@ -76,15 +76,15 @@ class Slot {
 
   Slot copyWith({
     int? index,
-    int? start,
-    int? end,
+    num? start,
+    num? end,
     String? startTime,
     String? endTime,
     bool? available,
     int? bookedCount,
-    int? patientsPerSlot,
-    int? remainingInSlot,
-    int? remainingInDay,
+    num? patientsPerSlot,
+    num? remainingInSlot,
+    num? remainingInDay,
     String? reason,
   }) {
     return Slot(

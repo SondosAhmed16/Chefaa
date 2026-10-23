@@ -54,9 +54,6 @@ class _AddClinicScreenState extends State<AddClinicScreen> {
               const SnackBar(content: Text("Clinic added successfully")),
             );
             Navigator.pop(context, true);
-            
-
-           
           } else if (state is AddClinicError) {
             ScaffoldMessenger.of(
               context,
@@ -412,7 +409,7 @@ class _AddClinicScreenState extends State<AddClinicScreen> {
     );
   }
 
-  String _formatMinutes(int? totalMinutes) {
+  String _formatMinutes(num? totalMinutes) {
     if (totalMinutes == null) return "";
     final hours = totalMinutes ~/ 60;
     final minutes = totalMinutes % 60;

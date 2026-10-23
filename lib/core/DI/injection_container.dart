@@ -9,6 +9,12 @@ import 'package:chefaa/features/auth/domain/useCases/login_usecase.dart';
 import 'package:chefaa/features/auth/domain/useCases/reset_password_usecase.dart';
 import 'package:chefaa/features/auth/domain/useCases/verify_code_usecase.dart';
 import 'package:chefaa/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:chefaa/features/doctor/appointment/data/datasource/doctor_appo_datasource.dart';
+import 'package:chefaa/features/doctor/appointment/data/datasource/doctor_appo_datasource_imp.dart';
+import 'package:chefaa/features/doctor/appointment/data/repository/doctor_appo_repo_imp.dart';
+import 'package:chefaa/features/doctor/appointment/domain/repository/doctor_appointment_repo.dart';
+import 'package:chefaa/features/doctor/appointment/domain/usecase/get_mu_appo_repo.dart';
+import 'package:chefaa/features/doctor/appointment/presentation/cubit/doctor_repo_cubit.dart';
 import 'package:chefaa/features/doctor/auth/data/data%20source/data_source_doctor_auth.dart';
 import 'package:chefaa/features/doctor/auth/data/data%20source/data_source_doctor_auth_implement.dart';
 import 'package:chefaa/features/doctor/auth/data/repository/register_doctor_repository_implement.dart';
@@ -232,6 +238,7 @@ Future<void> initAppModule() async {
   _initDoctorProfileModule();
   _initDoctorChatbotModule();
   _initDoctorHomeModule();
+  _initDoctorAppointmentModule();
 }
 
 void _initAuthModule() {
@@ -801,5 +808,20 @@ void _initDoctorHomeModule() {
       updateClinicUsecase: getIt<UpdateClinicUsecase>(),
       addClinicUsecase: getIt<AddClinicUsecase>(),
     ),
+  );
+}
+
+void _initDoctorAppointmentModule() {
+  getIt.registerLazySingleton<DoctorAppoDatasource>(
+    () => DoctorAppoDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<DoctorAppointmentRepo>(
+    () => DoctorAppoRepoImp(datasource: getIt<DoctorAppoDatasource>()),
+  );
+  getIt.registerLazySingleton<GetMuAppoRepo>(
+    () => GetMuAppoRepo(repo: getIt<DoctorAppointmentRepo>()),
+  );
+  getIt.registerFactory<DoctorRepoCubit>(
+    () => DoctorRepoCubit(getMuAppoRepo: getIt<GetMuAppoRepo>(), doctorAppointmentRepo: getIt<DoctorAppointmentRepo>()),
   );
 }

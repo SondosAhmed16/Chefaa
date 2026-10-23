@@ -14,7 +14,7 @@ class Model {
   String? about;
   List<String>? degrees;
   String? gender;
-  int? rating;
+  double? rating;
   List<String>? prePaymentNumbers;
   int? clinicConsultationPrice;
   List<dynamic>? reviews;
@@ -53,7 +53,7 @@ class Model {
     degrees: (data['degrees'] as List?)?.cast<String>(),
     prePaymentNumbers: (data['prePaymentNumbers'] as List?)?.cast<String>(),
     gender: data['gender'] as String?,
-    rating: data['rating'] as int?,
+    rating: data['rating'] != null ? (data['rating'] as num).toDouble() : null,
     clinicConsultationPrice: data['clinicConsultationPrice'] as int?,
     reviews: data['reviews'] as List<dynamic>?,
     clinics: (data['clinics'] as List<dynamic>?)
@@ -100,7 +100,7 @@ class Model {
     String? about,
     List<String>? degrees,
     String? gender,
-    int? rating,
+    double? rating,
     List<String>? prePaymentNumbers,
     int? clinicConsultationPrice,
     List<dynamic>? reviews,

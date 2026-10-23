@@ -63,7 +63,7 @@ class Clinic {
         : DefaultSchedule.fromMap(
             data['defaultSchedule'] as Map<String, dynamic>,
           ),
-    price: data['price'] as int?,
+    price: data['price'] != null ? (data['price'] as num).toInt() : null,
     operatingLicense: data['operatingLicense'] as String?,
     status: data['status'] as String?,
     activatedAt: data['activatedAt'] as dynamic,

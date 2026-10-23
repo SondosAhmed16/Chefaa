@@ -155,7 +155,6 @@ class DoctorHomeCubit extends Cubit<DoctorHomeState> {
     };
   }
 
-  // تحديث _buildDays لاستقبال dayBreaks وتضمينها مع كل يوم
   List<Map<String, dynamic>> _buildDays({Map<String, List<Break>>? dayBreaks}) {
     return selectedDays.entries.where((e) => e.value).map((e) {
       final open = openTimes[e.key];
@@ -172,12 +171,11 @@ class DoctorHomeCubit extends Cubit<DoctorHomeState> {
         "isActive": true,
         "open": open != null ? _toMinutes(open) : 0,
         "close": close != null ? _toMinutes(close) : 0,
-        "breaks": breaks, // إرسال البريكات الخاصة باليوم
+        "breaks": breaks,
       };
     }).toList();
   }
 
-  // تحديث _buildSchedule لتمرير dayBreaks إلى _buildDays
   Map<String, dynamic> _buildSchedule({Map<String, List<Break>>? dayBreaks}) {
     final activeDays = _buildDays(dayBreaks: dayBreaks);
 

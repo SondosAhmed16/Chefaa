@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 
 class Break {
-  int? start;
-  int? end;
+  num? start;
+  num? end;
   String? label;
 
   Break({this.start, this.end, this.label});
@@ -13,8 +13,8 @@ class Break {
   String toString() => 'Break(start: $start, end: $end, label: $label)';
 
   factory Break.fromMap(Map<String, dynamic> data) => Break(
-    start: data['start'] as int?,
-    end: data['end'] as int?,
+    start: data['start'] as num?,
+    end: data['end'] as num?,
     label: data['label'] as String?,
   );
 
@@ -32,7 +32,7 @@ class Break {
   /// Converts [Break] to a JSON string.
   String toJson() => json.encode(toMap());
 
-  Break copyWith({int? start, int? end, String? label}) {
+  Break copyWith({num? start, num? end, String? label}) {
     return Break(
       start: start ?? this.start,
       end: end ?? this.end,

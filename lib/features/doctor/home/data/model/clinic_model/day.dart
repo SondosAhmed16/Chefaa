@@ -7,8 +7,8 @@ import 'break.dart';
 class Day {
   String? day;
   bool? isActive;
-  int? open;
-  int? close;
+  num? open;
+  num? close;
   List<Break>? breaks;
   dynamic slotDuration;
   dynamic dailyCapacity;
@@ -37,8 +37,8 @@ class Day {
   factory Day.fromMap(Map<String, dynamic> data) => Day(
     day: data['day'] as String?,
     isActive: data['isActive'] as bool?,
-    open: data['open'] as int?,
-    close: data['close'] as int?,
+    open: data['open'] as num?,
+    close: data['close'] as num?,
     breaks: (data['breaks'] as List<dynamic>?)
         ?.map((e) => Break.fromMap(e as Map<String, dynamic>))
         .toList(),
@@ -77,8 +77,8 @@ class Day {
   Day copyWith({
     String? day,
     bool? isActive,
-    int? open,
-    int? close,
+    num? open,
+    num? close,
     List<Break>? breaks,
     dynamic slotDuration,
     dynamic dailyCapacity,

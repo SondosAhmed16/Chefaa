@@ -42,17 +42,13 @@ class _ClinicDetailsScreenState extends State<ClinicDetailsScreen> {
           elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: ColorManager.white),
-            onPressed: () => Navigator.pop(
-              context,
-              hasBeenUpdated,
-            ), 
+            onPressed: () => Navigator.pop(context, hasBeenUpdated),
           ),
           title: Text(
             "Clinic Details",
             style: getBoldStyle(color: ColorManager.white, fontSize: 18),
           ),
           centerTitle: true,
-         
         ),
         body: BlocConsumer<DoctorHomeCubit, DoctorHomeState>(
           listener: (context, state) {
@@ -62,7 +58,7 @@ class _ClinicDetailsScreenState extends State<ClinicDetailsScreen> {
                   content: Text(state.message ?? "Clinic deleted successfully"),
                 ),
               );
-              Navigator.pop(context, true); 
+              Navigator.pop(context, true);
             } else if (state is DeleteClinicError) {
               ScaffoldMessenger.of(
                 context,
@@ -74,7 +70,7 @@ class _ClinicDetailsScreenState extends State<ClinicDetailsScreen> {
               setState(() {
                 isEditing = false;
                 isDataInitialized = false;
-                hasBeenUpdated = true; 
+                hasBeenUpdated = true;
               });
               cubit.getMyClinic(clinicId: widget.clinicId);
             } else if (state is UpdateClinicError) {
@@ -141,14 +137,14 @@ class _ClinicDetailsScreenState extends State<ClinicDetailsScreen> {
 
                       if (dayObj.open != null) {
                         cubit.openTimes[dayName] = TimeOfDay(
-                          hour: dayObj.open! ~/ 60,
-                          minute: dayObj.open! % 60,
+                          hour: (dayObj.open! ~/ 60).toInt(),
+                          minute: (dayObj.open! % 60).toInt(),
                         );
                       }
                       if (dayObj.close != null) {
                         cubit.closeTimes[dayName] = TimeOfDay(
-                          hour: dayObj.close! ~/ 60,
-                          minute: dayObj.close! % 60,
+                          hour: (dayObj.close! ~/ 60).toInt(),
+                          minute: (dayObj.close! % 60).toInt(),
                         );
                       }
 
@@ -840,7 +836,7 @@ class _ClinicDetailsScreenState extends State<ClinicDetailsScreen> {
     );
   }
 
-  String _formatMinutes(int? totalMinutes) {
+  String _formatMinutes(num? totalMinutes) {
     if (totalMinutes == null) return "";
     final hours = totalMinutes ~/ 60;
     final minutes = totalMinutes % 60;

@@ -6,9 +6,9 @@ import 'day.dart';
 
 class DefaultSchedule {
   List<Day>? days;
-  int? slotDuration;
-  int? dailyCapacity;
-  int? patientsPerSlot;
+  num? slotDuration;
+  num? dailyCapacity;
+  num? patientsPerSlot;
 
   DefaultSchedule({
     this.days,
@@ -27,9 +27,9 @@ class DefaultSchedule {
       days: (data['days'] as List<dynamic>?)
           ?.map((e) => Day.fromMap(e as Map<String, dynamic>))
           .toList(),
-      slotDuration: data['slotDuration'] as int?,
-      dailyCapacity: data['dailyCapacity'] as int?,
-      patientsPerSlot: data['patientsPerSlot'] as int?,
+      slotDuration: data['slotDuration'] as num?,
+      dailyCapacity: data['dailyCapacity'] as num?,
+      patientsPerSlot: data['patientsPerSlot'] as num?,
     );
   }
 
@@ -54,9 +54,9 @@ class DefaultSchedule {
 
   DefaultSchedule copyWith({
     List<Day>? days,
-    int? slotDuration,
-    int? dailyCapacity,
-    int? patientsPerSlot,
+    num? slotDuration,
+    num? dailyCapacity,
+    num? patientsPerSlot,
   }) {
     return DefaultSchedule(
       days: days ?? this.days,

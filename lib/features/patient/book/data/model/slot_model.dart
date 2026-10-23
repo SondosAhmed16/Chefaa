@@ -9,13 +9,13 @@ class SlotModel {
   String? day;
   bool? isPast;
   String? status;
-  int? open;
-  int? close;
-  int? slotDuration;
-  int? dailyCapacity;
-  int? patientsPerSlot;
-  int? totalBookedToday;
-  int? totalSlots;
+  num? open;
+  num? close;
+  num? slotDuration;
+  num? dailyCapacity;
+  num? patientsPerSlot;
+  num? totalBookedToday;
+  num? totalSlots;
   bool? hasAppointments;
   List<dynamic>? breaks;
   List<Slot>? slots;
@@ -47,13 +47,13 @@ class SlotModel {
     day: data['day'] as String?,
     isPast: data['isPast'] as bool?,
     status: data['status'] as String?,
-    open: data['open'] as int?,
-    close: data['close'] as int?,
-    slotDuration: data['slotDuration'] as int?,
-    dailyCapacity: data['dailyCapacity'] as int?,
-    patientsPerSlot: data['patientsPerSlot'] as int?,
-    totalBookedToday: data['totalBookedToday'] as int?,
-    totalSlots: data['totalSlots'] as int?,
+    open: data['open'] as num?,
+    close: data['close'] as num?,
+    slotDuration: data['slotDuration'] as num?,
+    dailyCapacity: data['dailyCapacity'] as num?,
+    patientsPerSlot: data['patientsPerSlot'] as num?,
+    totalBookedToday: data['totalBookedToday'] as num?,
+    totalSlots: data['totalSlots'] as num?,
     hasAppointments: data['hasAppointments'] as bool?,
     breaks: data['breaks'] as List<dynamic>?,
     slots: (data['slots'] as List<dynamic>?)
@@ -95,13 +95,13 @@ class SlotModel {
     String? day,
     bool? isPast,
     String? status,
-    int? open,
-    int? close,
-    int? slotDuration,
-    int? dailyCapacity,
-    int? patientsPerSlot,
-    int? totalBookedToday,
-    int? totalSlots,
+    num? open,
+    num? close,
+    num? slotDuration,
+    num? dailyCapacity,
+    num? patientsPerSlot,
+    num? totalBookedToday,
+    num? totalSlots,
     bool? hasAppointments,
     List<dynamic>? breaks,
     List<Slot>? slots,

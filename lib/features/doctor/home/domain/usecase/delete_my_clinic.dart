@@ -4,11 +4,13 @@ import 'package:chefaa/features/doctor/home/domain/repository/doctor_home_repo.d
 import 'package:dartz/dartz.dart';
 
 class DeleteMyClinic {
-    final DoctorHomeRepo repo;
+  final DoctorHomeRepo repo;
 
   DeleteMyClinic({required this.repo});
 
-  Future<Either<ErrorModel, DeleteClinicModel>> call({required String clinicId}) {
+  Future<Either<ErrorModel, DeleteClinicModel>> call({
+    required String clinicId,
+  }) {
     return repo.deleteMyClinic(clinicId: clinicId);
   }
 }
