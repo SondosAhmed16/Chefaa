@@ -60,7 +60,9 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
 
   void _removeMedicineRow(int index) {
     setState(() {
-      _medicinesList[index].values.forEach((controller) => controller.dispose());
+      _medicinesList[index].values.forEach(
+        (controller) => controller.dispose(),
+      );
       _medicinesList.removeAt(index);
     });
   }
@@ -85,7 +87,10 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
       appBar: AppBar(
         title: Text(
           'Add Prescription',
-          style: getBoldStyle(color: ColorManager.white, fontSize: FontSize.s18),
+          style: getBoldStyle(
+            color: ColorManager.white,
+            fontSize: FontSize.s18,
+          ),
         ),
         backgroundColor: ColorManager.primary,
         foregroundColor: ColorManager.white,
@@ -94,12 +99,19 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
         listener: (context, state) {
           if (state is AddPrescriptionSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.addPrescreptionModel.message ?? 'Added successfully')),
+              SnackBar(
+                content: Text(
+                  state.addPrescreptionModel.message ?? 'Added successfully',
+                ),
+              ),
             );
             Navigator.pop(context);
           } else if (state is AddPrescriptionError) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error.message), backgroundColor: ColorManager.error),
+              SnackBar(
+                content: Text(state.error.message),
+                backgroundColor: ColorManager.error,
+              ),
             );
           }
         },
@@ -115,7 +127,9 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                   CustomTextField(
                     controller: _diagnosisController,
                     text: 'Diagnosis',
-                    validator: (value) => value == null || value.isEmpty ? 'Please enter diagnosis' : null,
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Please enter diagnosis'
+                        : null,
                   ),
                   const SizedBox(height: 16),
 
@@ -124,11 +138,18 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                     children: [
                       Text(
                         'Medicines',
-                        style: getBoldStyle(color: ColorManager.black, fontSize: FontSize.s18),
+                        style: getBoldStyle(
+                          color: ColorManager.black,
+                          fontSize: FontSize.s18,
+                        ),
                       ),
                       IconButton(
                         onPressed: () => _addMedicineRow(),
-                        icon: const Icon(Icons.add_circle, color: ColorManager.primary, size: 30),
+                        icon: const Icon(
+                          Icons.add_circle,
+                          color: ColorManager.primary,
+                          size: 30,
+                        ),
                       ),
                     ],
                   ),
@@ -153,25 +174,46 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                               children: [
                                 Text(
                                   'Medicine #${index + 1}',
-                                  style: getBoldStyle(color: ColorManager.primary, fontSize: FontSize.s14),
+                                  style: getBoldStyle(
+                                    color: ColorManager.primary,
+                                    fontSize: FontSize.s14,
+                                  ),
                                 ),
                                 if (_medicinesList.length > 1)
                                   IconButton(
-                                    icon: const Icon(Icons.delete, color: ColorManager.error),
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: ColorManager.error,
+                                    ),
                                     onPressed: () => _removeMedicineRow(index),
                                   ),
                               ],
                             ),
                             const SizedBox(height: 8),
-                            CustomTextField(controller: med['name']!, text: 'Medicine Name'),
+                            CustomTextField(
+                              controller: med['name']!,
+                              text: 'Medicine Name',
+                            ),
                             const SizedBox(height: 10),
-                            CustomTextField(controller: med['dosage']!, text: 'Dosage (e.g., 1 tablet)'),
+                            CustomTextField(
+                              controller: med['dosage']!,
+                              text: 'Dosage (e.g., 1 tablet)',
+                            ),
                             const SizedBox(height: 10),
-                            CustomTextField(controller: med['frequency']!, text: 'Frequency (e.g., Every 12 hours)'),
+                            CustomTextField(
+                              controller: med['frequency']!,
+                              text: 'Frequency (e.g., Every 12 hours)',
+                            ),
                             const SizedBox(height: 10),
-                            CustomTextField(controller: med['duration']!, text: 'Duration (e.g., 3 days)'),
+                            CustomTextField(
+                              controller: med['duration']!,
+                              text: 'Duration (e.g., 3 days)',
+                            ),
                             const SizedBox(height: 10),
-                            CustomTextField(controller: med['instructions']!, text: 'Instructions (e.g., Take after meals)'),
+                            CustomTextField(
+                              controller: med['instructions']!,
+                              text: 'Instructions (e.g., Take after meals)',
+                            ),
                           ],
                         ),
                       ),
@@ -197,10 +239,7 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  CustomTextField(
-                    controller: _notesController,
-                    text: 'Notes',
-                  ),
+                  CustomTextField(controller: _notesController, text: 'Notes'),
                   const SizedBox(height: 24),
 
                   CustemButton(
@@ -208,33 +247,42 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                     isLoading: isLoading,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        List<Map<String, dynamic>> medicinesData = _medicinesList.map((med) {
-                          return {
-                            'name': med['name']!.text,
-                            'dosage': med['dosage']!.text,
-                            'frequency': med['frequency']!.text,
-                            'duration': med['duration']!.text,
-                            'instructions': med['instructions']!.text,
-                          };
-                        }).toList();
+                        List<Map<String, dynamic>> medicinesData =
+                            _medicinesList.map((med) {
+                              return {
+                                'name': med['name']!.text,
+                                'dosage': med['dosage']!.text,
+                                'frequency': med['frequency']!.text,
+                                'duration': med['duration']!.text,
+                                'instructions': med['instructions']!.text,
+                              };
+                            }).toList();
 
-                        List<String> labTestsList = _labTestsController.text.isNotEmpty
-                            ? _labTestsController.text.split(',').map((e) => e.trim()).toList()
+                        List<String> labTestsList =
+                            _labTestsController.text.isNotEmpty
+                            ? _labTestsController.text
+                                  .split(',')
+                                  .map((e) => e.trim())
+                                  .toList()
                             : [];
 
-                        List<String> imagingList = _imagingController.text.isNotEmpty
-                            ? _imagingController.text.split(',').map((e) => e.trim()).toList()
+                        List<String> imagingList =
+                            _imagingController.text.isNotEmpty
+                            ? _imagingController.text
+                                  .split(',')
+                                  .map((e) => e.trim())
+                                  .toList()
                             : [];
 
                         context.read<DoctorRepoCubit>().addPrescription(
-                              appointment: widget.appointmentId,
-                              diagnosis: _diagnosisController.text,
-                              medicines: medicinesData,
-                              labTests: labTestsList,
-                              imaging: imagingList,
-                              nextVisit: _nextVisitController.text,
-                              notes: _notesController.text,
-                            );
+                          appointment: widget.appointmentId,
+                          diagnosis: _diagnosisController.text,
+                          medicines: medicinesData,
+                          labTests: labTestsList,
+                          imaging: imagingList,
+                          nextVisit: _nextVisitController.text,
+                          notes: _notesController.text,
+                        );
                       }
                     },
                   ),

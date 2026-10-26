@@ -69,10 +69,12 @@ class AddPrescriptionError extends DoctorAppoState {
 }
 
 class EditPrescriptionLoading extends DoctorAppoState {}
+
 class EditPrescriptionSuccess extends DoctorAppoState {
   final EditPrescriptionModel editPrescriptionModel;
   EditPrescriptionSuccess({required this.editPrescriptionModel});
 }
+
 class EditPrescriptionError extends DoctorAppoState {
   final ErrorModel error;
   EditPrescriptionError({required this.error});
@@ -82,7 +84,7 @@ class CompleteAppoLoading extends DoctorAppoState {}
 
 class CompleteAppoSuccess extends DoctorAppoSuccess {
   final CompletedAppointmentModel completedAppointmentModel;
-  
+
   CompleteAppoSuccess({
     required this.completedAppointmentModel,
     required super.upcoming,

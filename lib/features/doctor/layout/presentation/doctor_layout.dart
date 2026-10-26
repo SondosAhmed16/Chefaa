@@ -2,6 +2,8 @@ import 'package:chefaa/core/DI/injection_container.dart';
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/features/doctor/appointment/presentation/cubit/doctor_repo_cubit.dart';
 import 'package:chefaa/features/doctor/appointment/presentation/pages/my_patients_screen.dart';
+import 'package:chefaa/features/doctor/brief/presentation/cubit/doctor_brief_cubit.dart';
+import 'package:chefaa/features/doctor/brief/presentation/pages/doctor_breif_screen.dart';
 import 'package:chefaa/features/doctor/chatbot/presentation/cubit/doctor_chatbot_cubit.dart';
 import 'package:chefaa/features/doctor/chatbot/presentation/pages/doctor_chatbot_screen.dart';
 import 'package:chefaa/features/doctor/home/presentation/cubit/doctor_home_cubit.dart';
@@ -91,8 +93,23 @@ class _DoctorLayoutState extends State<DoctorLayout> {
         ),
         item: ItemConfig(
           icon: SvgPicture.asset("assets/svg_images/booking.svg"),
-          inactiveIcon: SvgPicture.asset("assets/svg_images/booking_inactive.svg"),
+          inactiveIcon: SvgPicture.asset(
+            "assets/svg_images/booking_inactive.svg",
+          ),
           title: "Appointments",
+          activeForegroundColor: ColorManager.primary,
+          inactiveForegroundColor: ColorManager.gray,
+        ),
+      ),
+      PersistentTabConfig(
+        screen: BlocProvider(
+          create: (_) => getIt<DoctorBriefCubit>()..getDoctorBrief(),
+          child: DoctorBriefScreen(),
+        ),
+        item: ItemConfig(
+          icon: SvgPicture.asset("assets/svg_images/doc_brief_active.svg"),
+          inactiveIcon: SvgPicture.asset("assets/svg_images/doc_brief.svg"),
+          title: "Daily Breif",
           activeForegroundColor: ColorManager.primary,
           inactiveForegroundColor: ColorManager.gray,
         ),

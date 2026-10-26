@@ -78,7 +78,9 @@ class MyPatientsScreen extends StatelessWidget {
                         child: Text(
                           'Upcoming',
                           style: getMediumStyle(
-                            color: selectedIndex == 0 ? ColorManager.white : ColorManager.black,
+                            color: selectedIndex == 0
+                                ? ColorManager.white
+                                : ColorManager.black,
                             fontSize: FontSize.s14,
                           ),
                         ),
@@ -107,7 +109,9 @@ class MyPatientsScreen extends StatelessWidget {
                         child: Text(
                           'Completed',
                           style: getMediumStyle(
-                            color: selectedIndex == 1 ? ColorManager.white : ColorManager.black,
+                            color: selectedIndex == 1
+                                ? ColorManager.white
+                                : ColorManager.black,
                             fontSize: FontSize.s14,
                           ),
                         ),
@@ -126,12 +130,19 @@ class MyPatientsScreen extends StatelessWidget {
               builder: (context, state) {
                 if (state is DoctorAppoLoading ||
                     (state is DoctorAppoSuccess && state.isUpcomingLoading)) {
-                  return const Center(child: CircularProgressIndicator(color: ColorManager.primary));
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: ColorManager.primary,
+                    ),
+                  );
                 } else if (state is DoctorAppoError) {
                   return Center(
                     child: Text(
                       state.error,
-                      style: getMediumStyle(color: ColorManager.error, fontSize: FontSize.s16),
+                      style: getMediumStyle(
+                        color: ColorManager.error,
+                        fontSize: FontSize.s16,
+                      ),
                     ),
                   );
                 } else if (state is DoctorAppoSuccess) {
@@ -141,7 +152,10 @@ class MyPatientsScreen extends StatelessWidget {
                     return Center(
                       child: Text(
                         'No patients found',
-                        style: getRegularStyle(color: ColorManager.gray, fontSize: FontSize.s16),
+                        style: getRegularStyle(
+                          color: ColorManager.gray,
+                          fontSize: FontSize.s16,
+                        ),
                       ),
                     );
                   }

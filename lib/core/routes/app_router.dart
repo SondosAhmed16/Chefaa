@@ -8,6 +8,8 @@ import 'package:chefaa/features/auth/presentation/pages/reset_password_screen.da
 import 'package:chefaa/features/auth/presentation/pages/verify_code_screen.dart';
 import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_cubit.dart';
 import 'package:chefaa/features/doctor/auth/presentation/pages/doctor_register_screen.dart';
+import 'package:chefaa/features/doctor/brief/presentation/cubit/doctor_brief_cubit.dart';
+import 'package:chefaa/features/doctor/brief/presentation/pages/doctor_breif_screen.dart';
 import 'package:chefaa/features/doctor/chatbot/presentation/cubit/doctor_chatbot_cubit.dart';
 import 'package:chefaa/features/doctor/chatbot/presentation/pages/doctor_chatbot_screen.dart';
 import 'package:chefaa/features/doctor/home/presentation/cubit/doctor_home_cubit.dart';
@@ -137,6 +139,7 @@ class Routes {
   static const String doctorClinics = "/DoctorClinics";
   static const String doctorClinic = "/DoctorClinic";
   static const String addClinic = "/addClinic";
+  static const String doctorBrief = '/doctorBrief';
 }
 
 class AppRouter {
@@ -567,6 +570,14 @@ class AppRouter {
             child: AddClinicScreen(doctorId: doctorId),
           ),
           settings: settings,
+        );
+
+      case Routes.doctorBrief:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<DoctorBriefCubit>()..getDoctorBrief(),
+            child: const DoctorBriefScreen(),
+          ),
         );
 
       default:

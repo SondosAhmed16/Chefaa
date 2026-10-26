@@ -21,6 +21,11 @@ import 'package:chefaa/features/doctor/auth/data/repository/register_doctor_repo
 import 'package:chefaa/features/doctor/auth/domain/repository/register_doctor_reopsitory.dart';
 import 'package:chefaa/features/doctor/auth/domain/usecases/register_doctor_usecase.dart';
 import 'package:chefaa/features/doctor/auth/presentation/cubit/doctor_auth_cubit.dart';
+import 'package:chefaa/features/doctor/brief/data/datasource/doctor_brief_datasource.dart';
+import 'package:chefaa/features/doctor/brief/data/datasource/doctor_brief_datasource_imo.dart';
+import 'package:chefaa/features/doctor/brief/data/repository/doctor_brief_repo_imp.dart';
+import 'package:chefaa/features/doctor/brief/domain/repository/doctor_brief_repo.dart';
+import 'package:chefaa/features/doctor/brief/presentation/cubit/doctor_brief_cubit.dart';
 import 'package:chefaa/features/doctor/chatbot/data/datasource/doctor_chatbot_datasource.dart';
 import 'package:chefaa/features/doctor/chatbot/data/datasource/doctor_chatbot_datasource_imp.dart';
 import 'package:chefaa/features/doctor/chatbot/data/repository/doctor_chatbot_repo_imp.dart';
@@ -239,6 +244,7 @@ Future<void> initAppModule() async {
   _initDoctorChatbotModule();
   _initDoctorHomeModule();
   _initDoctorAppointmentModule();
+  _initDoctorBriefModule();
 }
 
 void _initAuthModule() {
@@ -822,6 +828,23 @@ void _initDoctorAppointmentModule() {
     () => GetMuAppoRepo(repo: getIt<DoctorAppointmentRepo>()),
   );
   getIt.registerFactory<DoctorRepoCubit>(
-    () => DoctorRepoCubit(getMuAppoRepo: getIt<GetMuAppoRepo>(), doctorAppointmentRepo: getIt<DoctorAppointmentRepo>()),
+    () => DoctorRepoCubit(
+      getMuAppoRepo: getIt<GetMuAppoRepo>(),
+      doctorAppointmentRepo: getIt<DoctorAppointmentRepo>(),
+    ),
+  );
+}
+
+void _initDoctorBriefModule() {
+  getIt.registerLazySingleton<DoctorBriefDatasource>(
+    () => DoctorBriefDatasourceImo(api: getIt<ApiConsumer>()),
+  );
+
+  getIt.registerLazySingleton<DoctorBriefRepo>(
+    () => DoctorBriefRepoImp(datasource: getIt<DoctorBriefDatasource>()),
+  );
+
+  getIt.registerFactory<DoctorBriefCubit>(
+    () => DoctorBriefCubit(doctorBriefRepo: getIt<DoctorBriefRepo>()),
   );
 }

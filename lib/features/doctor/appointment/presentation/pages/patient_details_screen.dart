@@ -22,7 +22,8 @@ class PatientDetailsScreen extends StatelessWidget {
     final user = patient?.userId;
     final addressText = patient?.address?.addressText ?? 'N/A';
 
-    final isPaid = appointment.paymentStatus == 'paid-at-clinic' ||
+    final isPaid =
+        appointment.paymentStatus == 'paid-at-clinic' ||
         appointment.paymentStatus == 'paid-online';
 
     return Scaffold(
@@ -190,9 +191,7 @@ class PatientDetailsScreen extends StatelessWidget {
                               'Marked as paid successfully',
                         ),
                         backgroundColor: ColorManager.lightGreen,
-                        
                       ),
-                      
                     );
                     Navigator.pop(context);
                   } else if (state is MarkAppoPaiedError) {
@@ -224,16 +223,14 @@ class PatientDetailsScreen extends StatelessWidget {
                               final appointmentId = appointment.id;
                               if (appointmentId != null) {
                                 context.read<DoctorRepoCubit>().markAppoPaied(
-                                      appoId: appointmentId,
-                                    );
+                                  appoId: appointmentId,
+                                );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text('Appointment ID is missing!'),
                                     backgroundColor: ColorManager.error,
-                                    
                                   ),
-                                  
                                 );
                               }
                             },
@@ -252,9 +249,7 @@ class PatientDetailsScreen extends StatelessWidget {
                                 color: ColorManager.white,
                                 fontSize: FontSize.s16,
                               ),
-                              
                             ),
-                            
                     ),
                   );
                 },

@@ -14,10 +14,12 @@ class PreviousPrescriptionScreen extends StatefulWidget {
   const PreviousPrescriptionScreen({super.key, required this.appointmentId});
 
   @override
-  State<PreviousPrescriptionScreen> createState() => _PreviousPrescriptionScreenState();
+  State<PreviousPrescriptionScreen> createState() =>
+      _PreviousPrescriptionScreenState();
 }
 
-class _PreviousPrescriptionScreenState extends State<PreviousPrescriptionScreen> {
+class _PreviousPrescriptionScreenState
+    extends State<PreviousPrescriptionScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _diagnosisController;
   late final TextEditingController _labTestsController;
@@ -81,7 +83,10 @@ class _PreviousPrescriptionScreenState extends State<PreviousPrescriptionScreen>
       appBar: AppBar(
         title: Text(
           'Previous Prescription',
-          style: getBoldStyle(color: ColorManager.white, fontSize: FontSize.s18),
+          style: getBoldStyle(
+            color: ColorManager.white,
+            fontSize: FontSize.s18,
+          ),
         ),
         backgroundColor: ColorManager.primary,
         foregroundColor: ColorManager.white,
@@ -101,7 +106,10 @@ class _PreviousPrescriptionScreenState extends State<PreviousPrescriptionScreen>
             return Center(
               child: Text(
                 state.error.message,
-                style: getMediumStyle(color: ColorManager.error, fontSize: FontSize.s16),
+                style: getMediumStyle(
+                  color: ColorManager.error,
+                  fontSize: FontSize.s16,
+                ),
               ),
             );
           }
@@ -122,7 +130,10 @@ class _PreviousPrescriptionScreenState extends State<PreviousPrescriptionScreen>
 
                   Text(
                     'Medicines',
-                    style: getBoldStyle(color: ColorManager.black, fontSize: FontSize.s18),
+                    style: getBoldStyle(
+                      color: ColorManager.black,
+                      fontSize: FontSize.s18,
+                    ),
                   ),
                   const SizedBox(height: 8),
 

@@ -85,6 +85,8 @@ class ApiEndpoints {
   static String markAppoComplete(String appoId) =>
       "appointments/$appoId/complete";
   static String markAppoPied(String appoId) => "appointments/$appoId/mark-paid";
+  static const String doctorBrief = "doctor/ai/brief";
+  static const String doctorfinancial = "doctor/ai/financials";
 }
 
 class ApiKey {
