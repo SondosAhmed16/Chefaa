@@ -81,6 +81,15 @@ import 'package:chefaa/features/patient/search/presentation/pages/search_page.da
 import 'package:chefaa/features/patient/search/presentation/pages/speciality_page.dart';
 import 'package:chefaa/features/pharmacy/auth/presentation/cubit/pharmacy_auth_cubit.dart';
 import 'package:chefaa/features/pharmacy/auth/presentation/pages/pharmacy_register_screen.dart';
+import 'package:chefaa/features/pharmacy/chatbot/presentation/cubit/pharmacy_chatbot_cubit.dart';
+import 'package:chefaa/features/pharmacy/chatbot/presentation/pages/pharmacy_chatbot_screen.dart';
+import 'package:chefaa/features/pharmacy/layout/presentation/pharmacy_layout.dart';
+import 'package:chefaa/features/pharmacy/orders/presentation/cubit/pharm_orders_cubit.dart';
+import 'package:chefaa/features/pharmacy/orders/presentation/pages/pharmacy_orders_view.dart';
+import 'package:chefaa/features/pharmacy/profile/presentation/cubit/pharmacy_profile_cubit.dart';
+import 'package:chefaa/features/pharmacy/profile/presentation/pages/pharmacy_profile_screen.dart';
+import 'package:chefaa/features/pharmacy/stock/presentation/cubit/stock_cubit.dart';
+import 'package:chefaa/features/pharmacy/stock/presentation/pages/stock_view.dart';
 import 'package:chefaa/features/splash/presentation/pages/splash_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -140,6 +149,13 @@ class Routes {
   static const String doctorClinic = "/DoctorClinic";
   static const String addClinic = "/addClinic";
   static const String doctorBrief = '/doctorBrief';
+  /******************************************************************** */
+  static const String completePharmacyProfile = "/completePharmacyProfile";
+  static const String getPharmacyProfile = "/getPharmacyProfile";
+  static const String pharmacyLayout = "/pharmacyLayout";
+  static const String pharmChatbot = "/pharmChatbot";
+  static const String pharmStock = "/pharmStock";
+  static const String pharmacyOrders = '/pharmacyOrders';
 }
 
 class AppRouter {
@@ -577,6 +593,40 @@ class AppRouter {
           builder: (_) => BlocProvider(
             create: (context) => getIt<DoctorBriefCubit>()..getDoctorBrief(),
             child: const DoctorBriefScreen(),
+          ),
+        );
+      /***********************************************/
+      case Routes.pharmacyLayout:
+        return MaterialPageRoute(builder: (_) => const PharmacyLayout());
+
+      case Routes.getPharmacyProfile:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<PharmacyProfileCubit>(),
+            child: const PharmacyProfileScreen(),
+          ),
+        );
+
+      case Routes.pharmChatbot:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<PharmacyChatbotCubit>(),
+            child: PharmacyChatbotScreen(),
+          ),
+        );
+
+      case Routes.pharmStock:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<StockCubit>(),
+            child: StockView(),
+          ),
+        );
+        case Routes.pharmacyOrders:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<PharmOrdersCubit>(),
+            child: const PharmacyOrdersView(),
           ),
         );
 

@@ -68,7 +68,7 @@ class Datum {
 
   Datum copyWith({
     String? id,
-    int? rating,
+    num? rating,
     String? deliveryTime,
     List<Address>? addresses,
     String? phone,

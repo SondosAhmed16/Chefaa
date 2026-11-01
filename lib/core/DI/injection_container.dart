@@ -198,6 +198,26 @@ import 'package:chefaa/features/pharmacy/auth/data/repository/register_pharmacy_
 import 'package:chefaa/features/pharmacy/auth/domain/repository/register_pharmacy_reopsitory.dart';
 import 'package:chefaa/features/pharmacy/auth/domain/usecases/register_pharmacy_usecase.dart';
 import 'package:chefaa/features/pharmacy/auth/presentation/cubit/pharmacy_auth_cubit.dart';
+import 'package:chefaa/features/pharmacy/chatbot/data/datasource/pharmacy_chatbot_datasource.dart';
+import 'package:chefaa/features/pharmacy/chatbot/data/datasource/pharmacy_chatbot_datasource_imp.dart';
+import 'package:chefaa/features/pharmacy/chatbot/data/repository/pharmacy_chatbot_repo_imp.dart';
+import 'package:chefaa/features/pharmacy/chatbot/domain/repository/chatbot_pharmacy_repo.dart';
+import 'package:chefaa/features/pharmacy/chatbot/presentation/cubit/pharmacy_chatbot_cubit.dart';
+import 'package:chefaa/features/pharmacy/orders/data/datasource/pharm_order_datasource.dart';
+import 'package:chefaa/features/pharmacy/orders/data/datasource/pharm_order_datasource_imp.dart';
+import 'package:chefaa/features/pharmacy/orders/data/repository/pharm_order_repo_imp.dart';
+import 'package:chefaa/features/pharmacy/orders/domain/repository/pharm_order_repo.dart';
+import 'package:chefaa/features/pharmacy/orders/presentation/cubit/pharm_orders_cubit.dart';
+import 'package:chefaa/features/pharmacy/profile/data/datasource/pharmacy_profile_datasource_imp.dart';
+import 'package:chefaa/features/pharmacy/profile/data/datasource/pharmacy_profille_datasource.dart';
+import 'package:chefaa/features/pharmacy/profile/data/repository/pharmacy_profile_repo_imp.dart';
+import 'package:chefaa/features/pharmacy/profile/domain/repository/pharmacy_profile_repo.dart';
+import 'package:chefaa/features/pharmacy/profile/presentation/cubit/pharmacy_profile_cubit.dart';
+import 'package:chefaa/features/pharmacy/stock/data/datasource/stock_datasource.dart';
+import 'package:chefaa/features/pharmacy/stock/data/datasource/stock_datasource_imp.dart';
+import 'package:chefaa/features/pharmacy/stock/data/repository/stock_repo_imp.dart';
+import 'package:chefaa/features/pharmacy/stock/domain/repository/stock_repo.dart';
+import 'package:chefaa/features/pharmacy/stock/presentation/cubit/stock_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -245,6 +265,10 @@ Future<void> initAppModule() async {
   _initDoctorHomeModule();
   _initDoctorAppointmentModule();
   _initDoctorBriefModule();
+  _initPharmacyProfileModule();
+  _initPharmacyChatbotModule();
+  _initPharmacyStockModule();
+  _initPharmacyOrdersModule();
 }
 
 void _initAuthModule() {
@@ -846,5 +870,53 @@ void _initDoctorBriefModule() {
 
   getIt.registerFactory<DoctorBriefCubit>(
     () => DoctorBriefCubit(doctorBriefRepo: getIt<DoctorBriefRepo>()),
+  );
+}
+
+void _initPharmacyProfileModule() {
+  getIt.registerLazySingleton<PharmacyProfilleDatasource>(
+    () => PharmacyProfileDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<PharmacyProfileRepo>(
+    () =>
+        PharmacyProfileRepoImp(datasource: getIt<PharmacyProfilleDatasource>()),
+  );
+
+  getIt.registerFactory<PharmacyProfileCubit>(
+    () => PharmacyProfileCubit(repo: getIt<PharmacyProfileRepo>()),
+  );
+}
+
+void _initPharmacyChatbotModule() {
+  getIt.registerLazySingleton<PharmacyChatbotDatasource>(
+    () => PharmacyChatbotDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<ChatbotPharmacyRepo>(
+    () =>
+        PharmacyChatbotRepoImp(datasource: getIt<PharmacyChatbotDatasource>()),
+  );
+  getIt.registerFactory<PharmacyChatbotCubit>(
+    () => PharmacyChatbotCubit(repo: getIt<ChatbotPharmacyRepo>()),
+  );
+}
+
+void _initPharmacyStockModule() {
+  getIt.registerLazySingleton<StockDatasource>(
+    () => StockDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<StockRepo>(
+    () => StockRepoImp(datasource: getIt<StockDatasource>()),
+  );
+  getIt.registerFactory<StockCubit>(() => StockCubit(repo: getIt<StockRepo>()));
+}
+void _initPharmacyOrdersModule() {
+  getIt.registerLazySingleton<PharmOrderDatasource>(
+    () => PharmOrderDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<PharmOrderRepo>(
+    () => PharmOrderRepoImp(datasource: getIt<PharmOrderDatasource>()),
+  );
+  getIt.registerFactory<PharmOrdersCubit>(
+    () => PharmOrdersCubit(pharmOrderRepo: getIt<PharmOrderRepo>()),
   );
 }

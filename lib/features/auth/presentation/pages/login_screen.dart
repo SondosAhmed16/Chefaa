@@ -59,10 +59,11 @@ class LoginScreen extends StatelessWidget {
                         break;
 
                       case 'pharmacy':
-                        // Navigator.of(context).pushNamedAndRemoveUntil(
-                        //   Routes.pharmacyHome,
-                        //   (route) => false,
-                        // );
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.pharmacyLayout,
+                          (route) => false,
+                        );
+
                         break;
 
                       case 'lab':

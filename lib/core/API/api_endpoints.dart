@@ -87,6 +87,20 @@ class ApiEndpoints {
   static String markAppoPied(String appoId) => "appointments/$appoId/mark-paid";
   static const String doctorBrief = "doctor/ai/brief";
   static const String doctorfinancial = "doctor/ai/financials";
+  /***********************************************************/
+  static const String getPharmProfile = "pharmacy/profile";
+  static const String updatePharmProfile = "pharmacy/profile";
+  static const String updatePharmSettings = "pharmacy/settings/delivery";
+  static const String pharmChatbot = "pharmacy/ai/chat";
+  static const String addMedicine = "pharmacy/inventory/add";
+  static const String getStock = "pharmacy/inventory";
+  static String restok(String medId) => "pharmacy/inventory/$medId";
+  static const String getOrder = "pharmacy/orders";
+  static String acceptOrder(String orderId) =>
+      "pharmacy/orders/$orderId/accept";
+  static String readyOrder(String orderId) => "pharmacy/orders/$orderId/ready";
+  static String completeOrder(String orderId) =>
+      "pharmacy/orders/$orderId/complete";
 }
 
 class ApiKey {

@@ -58,7 +58,7 @@ List<BriefSection> parseBriefText(String briefText) {
 
       List<String> items = [];
       List<String> textLines = [];
-      
+
       // متغيرات الأرقام
       String? totalAppo, completedAppo, pendingCls;
       String? confirmedRev, expectedRev, platFee;
@@ -74,8 +74,14 @@ List<BriefSection> parseBriefText(String briefText) {
         // استخراج أرقام الأسبوع بدقة حسب الريسبونس الخاص بك
         if (title.contains("Week at a Glance")) {
           if (cleanedLine.contains("Total appointments:")) {
-            totalAppo = _extractRegexNumber(cleanedLine, r'Total appointments:\s*(\d+)');
-            completedAppo = _extractRegexNumber(cleanedLine, r'\((\d+)\s*completed');
+            totalAppo = _extractRegexNumber(
+              cleanedLine,
+              r'Total appointments:\s*(\d+)',
+            );
+            completedAppo = _extractRegexNumber(
+              cleanedLine,
+              r'\((\d+)\s*completed',
+            );
             pendingCls = _extractRegexNumber(cleanedLine, r'(\d+)\s*upcoming');
           }
         }
@@ -92,8 +98,12 @@ List<BriefSection> parseBriefText(String briefText) {
         }
 
         // تجميع الـ List Items أو النصوص العادية
-        if (cleanedLine.startsWith('-') || cleanedLine.startsWith('•') || RegExp(r'^\d+\.').hasMatch(cleanedLine)) {
-          String itemText = cleanedLine.replaceFirst(RegExp(r'^([-•]|\d+\.)\s*'), '').trim();
+        if (cleanedLine.startsWith('-') ||
+            cleanedLine.startsWith('•') ||
+            RegExp(r'^\d+\.').hasMatch(cleanedLine)) {
+          String itemText = cleanedLine
+              .replaceFirst(RegExp(r'^([-•]|\d+\.)\s*'), '')
+              .trim();
           if (itemText.isNotEmpty) items.add(itemText);
         } else {
           textLines.add(cleanedLine);

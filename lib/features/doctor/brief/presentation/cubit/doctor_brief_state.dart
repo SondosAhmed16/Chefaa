@@ -16,5 +16,3 @@ class GetDoctorBriefFailure extends DoctorBriefState {
   final ErrorModel errorModel;
   GetDoctorBriefFailure({required this.errorModel});
 }
-
-

@@ -14,6 +14,4 @@ class DoctorBriefDatasourceImo implements DoctorBriefDatasource {
       queryParam: {"lang": "english"},
     );
   }
-
-
 }

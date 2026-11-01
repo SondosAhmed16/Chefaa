@@ -97,7 +97,9 @@ class DoctorBriefScreen extends StatelessWidget {
 
                 // فلترة عناصر الـ listItems لتجنب أي رموز فارغة أو `--`
                 final validListItems = section.listItems
-                    .where((item) => item.trim().isNotEmpty && item.trim() != "--")
+                    .where(
+                      (item) => item.trim().isNotEmpty && item.trim() != "--",
+                    )
                     .toList();
 
                 return Padding(
@@ -129,7 +131,8 @@ class DoctorBriefScreen extends StatelessWidget {
 
                         // 1. قسم جدول اليوم (Today's Schedule)
                         if (isTodaySchedule) ...[
-                          if (section.content.isNotEmpty && section.content != "--") ...[
+                          if (section.content.isNotEmpty &&
+                              section.content != "--") ...[
                             Text(
                               section.content,
                               style: getRegularStyle(
@@ -160,7 +163,7 @@ class DoctorBriefScreen extends StatelessWidget {
                                   .toList(),
                             ),
                           ],
-                        ] 
+                        ]
                         // 2. قسم الإجراءات المطلوبة (Action Items)
                         else if (isActionItems) ...[
                           if (section.content.isNotEmpty) ...[
@@ -194,7 +197,7 @@ class DoctorBriefScreen extends StatelessWidget {
                                   .toList(),
                             ),
                           ],
-                        ] 
+                        ]
                         // 3. نظرة عامة على الأسبوع (Week at a Glance)
                         else if (isWeekGlance) ...[
                           if (section.content.isNotEmpty) ...[
@@ -212,14 +215,14 @@ class DoctorBriefScreen extends StatelessWidget {
                             completed: section.completedAppointments ?? "0",
                             pending: section.pendingClinics ?? "0",
                           ),
-                        ] 
+                        ]
                         // 4. حالة العيادات (Clinic Status) - عرض الكونتينر الثاني والثالث والرابع فقط
                         else if (isClinicStatus) ...[
                           Builder(
                             builder: (context) {
                               // اخذ العناصر من الثاني للاخير (تخطى العنصر الأول الخاص بالإجمالي)
-                              final clinicItems = validListItems.length > 1 
-                                  ? validListItems.sublist(1) 
+                              final clinicItems = validListItems.length > 1
+                                  ? validListItems.sublist(1)
                                   : validListItems;
 
                               return Column(
@@ -237,13 +240,15 @@ class DoctorBriefScreen extends StatelessWidget {
                                       ),
                                     ),
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         const Padding(
                                           padding: EdgeInsets.only(top: 5.0),
                                           child: CircleAvatar(
                                             radius: 4,
-                                            backgroundColor: ColorManager.amber600,
+                                            backgroundColor:
+                                                ColorManager.amber600,
                                           ),
                                         ),
                                         const SizedBox(width: 10),
@@ -277,7 +282,7 @@ class DoctorBriefScreen extends StatelessWidget {
                               );
                             },
                           ),
-                        ] 
+                        ]
                         // 5. باقي الأقسام العادية (مثل Motivational Closing Line)
                         else ...[
                           if (section.content.isNotEmpty)

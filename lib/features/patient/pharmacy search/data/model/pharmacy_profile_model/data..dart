@@ -11,7 +11,7 @@ class Data {
   String? pharmacyName;
   bool? openNow;
   bool? alwaysOpen;
-  int? rating;
+  num? rating;
   int? totalReviews;
   String? deliveryTime;
   int? deliveryFee;
@@ -55,7 +55,7 @@ class Data {
     pharmacyName: data['pharmacyName'] as String?,
     openNow: data['openNow'] as bool?,
     alwaysOpen: data['alwaysOpen'] as bool?,
-    rating: data['rating'] as int?,
+    rating: data['rating'] as num?,
     totalReviews: data['totalReviews'] as int?,
     deliveryTime: data['deliveryTime'] as String?,
     deliveryFee: data['deliveryFee'] as int?,
