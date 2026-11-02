@@ -1,4 +1,6 @@
 import 'package:chefaa/core/resources/style.dart';
+import 'package:chefaa/core/widgets/custem_button.dart';
+import 'package:chefaa/core/widgets/custom_text_feild.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chefaa/core/resources/color.dart';
@@ -12,6 +14,11 @@ class LabServicesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.lightGray,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showAddServiceBottomSheet(context),
+        backgroundColor: ColorManager.primary,
+        child: const Icon(Icons.add, color: ColorManager.white),
+      ),
       body: Column(
         children: [
           Container(
@@ -57,7 +64,8 @@ class LabServicesScreen extends StatelessWidget {
           Expanded(
             child: BlocConsumer<LabServicesCubit, LabServicesState>(
               listener: (context, state) {
-                if (state is LabServicesToggleSuccess) {
+                if (state is LabServicesToggleSuccess ||
+                    state is LabServicesAddSuccess) {
                   context.read<LabServicesCubit>().getCenterServices();
                 } else if (state is LabServicesToggleError) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -87,7 +95,9 @@ class LabServicesScreen extends StatelessWidget {
                   );
                 } else if (state is LabServicesSuccess ||
                     state is LabServicesToggleLoading ||
-                    state is LabServicesToggleSuccess) {
+                    state is LabServicesToggleSuccess ||
+                    state is LabServicesAddLoading ||
+                    state is LabServicesAddSuccess) {
                   final labTests = state is LabServicesSuccess
                       ? (state.services.data?.labTests ?? [])
                       : (context.read<LabServicesCubit>().state
@@ -435,6 +445,220 @@ class LabServicesScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showAddServiceBottomSheet(BuildContext context) {
+    final cubit = context.read<LabServicesCubit>();
+
+    final nameController = TextEditingController();
+    final priceController = TextEditingController();
+    final estimatedTimeController = TextEditingController();
+    final instructionsController = TextEditingController();
+    final sessionDurationController = TextEditingController();
+
+    ValueNotifier<String> selectedCategory = ValueNotifier<String>('test');
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: ColorManager.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (bottomSheetContext) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 20,
+            bottom: MediaQuery.of(bottomSheetContext).viewInsets.bottom + 20,
+          ),
+          child: SingleChildScrollView(
+            child: ValueListenableBuilder<String>(
+              valueListenable: selectedCategory,
+              builder: (context, categoryValue, _) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Add New Service',
+                      style: getBoldStyle(
+                        fontSize: 18,
+                        color: ColorManager.darkGray,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Category Dropdown Field
+                    Text(
+                      'Category',
+                      style: getMediumStyle(
+                        fontSize: 14,
+                        color: ColorManager.darkGray,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: ColorManager.white,
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(
+                          color: ColorManager.gray,
+                          width: 1.2,
+                        ),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: categoryValue,
+                          isExpanded: true,
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'test',
+                              child: Text('Test'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'scan',
+                              child: Text('Scan'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            if (value != null) {
+                              selectedCategory.value = value;
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+
+                    // Name Field
+                    Text(
+                      'Name',
+                      style: getMediumStyle(
+                        fontSize: 14,
+                        color: ColorManager.darkGray,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    CustomTextField(
+                      controller: nameController,
+                      text: 'Enter service name',
+                    ),
+                    const SizedBox(height: 14),
+
+                    // Price Field
+                    Text(
+                      'Price',
+                      style: getMediumStyle(
+                        fontSize: 14,
+                        color: ColorManager.darkGray,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    CustomTextField(
+                      controller: priceController,
+                      text: 'Enter price',
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 14),
+
+                    // Estimated Time Field
+                    Text(
+                      'Estimated Time',
+                      style: getMediumStyle(
+                        fontSize: 14,
+                        color: ColorManager.darkGray,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    CustomTextField(
+                      controller: estimatedTimeController,
+                      text: 'Enter estimated time',
+                    ),
+                    const SizedBox(height: 14),
+
+                    if (categoryValue == 'test') ...[
+                      Text(
+                        'Instructions',
+                        style: getMediumStyle(
+                          fontSize: 14,
+                          color: ColorManager.darkGray,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      CustomTextField(
+                        controller: instructionsController,
+                        text: 'Enter instructions',
+                      ),
+                    ] else ...[
+                      Text(
+                        'Session Duration',
+                        style: getMediumStyle(
+                          fontSize: 14,
+                          color: ColorManager.darkGray,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      CustomTextField(
+                        controller: sessionDurationController,
+                        text: 'Enter session duration',
+                      ),
+                    ],
+                    const SizedBox(height: 24),
+
+                    // Save Button
+                    BlocConsumer<LabServicesCubit, LabServicesState>(
+                      bloc: cubit,
+                      listener: (context, state) {
+                        if (state is LabServicesAddSuccess) {
+                          Navigator.pop(bottomSheetContext);
+                        } else if (state is LabServicesAddError) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(state.error.message),
+                              backgroundColor: ColorManager.error,
+                            ),
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        bool isLoading = state is LabServicesAddLoading;
+                        return CustemButton(
+                          text: 'Save',
+                          isLoading: isLoading,
+                          onPressed: () {
+                            final Map<String, dynamic> body = {
+                              "name": nameController.text.trim(),
+                              "category": categoryValue,
+                              "price":
+                                  int.tryParse(priceController.text.trim()) ??
+                                  0,
+                              "estimatedTime": estimatedTimeController.text
+                                  .trim(),
+                              if (categoryValue == 'test')
+                                "instructions": instructionsController.text
+                                    .trim()
+                              else
+                                "sessionDuration": sessionDurationController
+                                    .text
+                                    .trim(),
+                            };
+
+                            cubit.AddService(body: body);
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

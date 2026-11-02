@@ -16,4 +16,9 @@ class LabServicesDatasourceImp implements LabServicesDatasource {
   Future<dynamic> toggleService({required String serviceId}) async {
     return await api.patch(ApiEndpoints.toggleService(serviceId));
   }
+
+  @override
+  Future<dynamic> addService({required Map<String, dynamic> body}) async {
+    return await api.post(ApiEndpoints.addService, data: body);
+  }
 }

@@ -74,6 +74,11 @@ import 'package:chefaa/features/facility/profile/domain/repository/lab_profile_r
 import 'package:chefaa/features/facility/profile/domain/usecase/get_lab_profile_usecase.dart';
 import 'package:chefaa/features/facility/profile/domain/usecase/update_lab_profile_usecase.dart';
 import 'package:chefaa/features/facility/profile/presentation/cubit/lab_profile_cubit.dart';
+import 'package:chefaa/features/facility/requests/data/datasource/requests_datasource.dart';
+import 'package:chefaa/features/facility/requests/data/datasource/requests_datasource_imp.dart';
+import 'package:chefaa/features/facility/requests/data/repository/requests_repo_imp.dart';
+import 'package:chefaa/features/facility/requests/domain/repository/requests_repo.dart';
+import 'package:chefaa/features/facility/requests/presentation/cubit/requests_cubit.dart';
 import 'package:chefaa/features/facility/services/data/datasource/lab_services_datasource.dart';
 import 'package:chefaa/features/facility/services/data/datasource/lab_services_datasource_imp.dart';
 import 'package:chefaa/features/facility/services/data/repository/lab_services_repo_imp.dart';
@@ -269,6 +274,7 @@ Future<void> initAppModule() async {
   _initPharmacyChatbotModule();
   _initPharmacyStockModule();
   _initPharmacyOrdersModule();
+  _initLabAddRequestModule();
 }
 
 void _initAuthModule() {
@@ -726,7 +732,21 @@ void _initLabServicesModule() {
     () => LabServicesCubit(
       getCenterServicesUsecase: getIt<GetCenterServicesUsecase>(),
       toggleServiceUsecase: getIt<ToggleServiceUsecase>(),
+      repo: getIt<LabServicesRepo>(),
     ),
+  );
+}
+
+void _initLabAddRequestModule() {
+  getIt.registerLazySingleton<RequestsDatasource>(
+    () => RequestsDatasourceImp(api: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<RequestsRepo>(
+    () => RequestsRepoImp(datasource: getIt<RequestsDatasource>()),
+  );
+
+  getIt.registerFactory<RequestsCubit>(
+    () => RequestsCubit(requestsRepo: getIt<RequestsRepo>(), getLabDashboardUsecase: getIt<GetLabDashboardUsecase>(),),
   );
 }
 
@@ -909,6 +929,7 @@ void _initPharmacyStockModule() {
   );
   getIt.registerFactory<StockCubit>(() => StockCubit(repo: getIt<StockRepo>()));
 }
+
 void _initPharmacyOrdersModule() {
   getIt.registerLazySingleton<PharmOrderDatasource>(
     () => PharmOrderDatasourceImp(api: getIt<ApiConsumer>()),

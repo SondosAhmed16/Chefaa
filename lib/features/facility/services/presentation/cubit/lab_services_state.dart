@@ -1,4 +1,5 @@
 import 'package:chefaa/core/error%20handle/error_model.dart';
+import 'package:chefaa/features/facility/services/data/model/add_service_model/add_service_model.dart';
 import 'package:chefaa/features/facility/services/data/model/lab_services_model.dart';
 import 'package:chefaa/features/facility/services/data/model/toggle_service_model.dart';
 
@@ -32,4 +33,18 @@ class LabServicesToggleError extends LabServicesState {
   final ErrorModel error;
 
   LabServicesToggleError({required this.error});
+}
+
+class LabServicesAddLoading extends LabServicesState {}
+
+class LabServicesAddSuccess extends LabServicesState {
+  final AddServiceModel service;
+
+  LabServicesAddSuccess({required this.service});
+}
+
+class LabServicesAddError extends LabServicesState {
+  final ErrorModel error;
+
+  LabServicesAddError({required this.error});
 }

@@ -96,7 +96,7 @@ class _PharmacyLayoutState extends State<PharmacyLayout> {
           icon: SizedBox(
             width: 24,
             height: 24,
-            child: SvgPicture.asset("assets/svg_images/order_active.svg"), 
+            child: SvgPicture.asset("assets/svg_images/order_active.svg"),
           ),
           inactiveIcon: SizedBox(
             width: 24,

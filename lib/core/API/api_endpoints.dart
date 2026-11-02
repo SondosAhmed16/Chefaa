@@ -65,6 +65,8 @@ class ApiEndpoints {
       "lab/toggle-service/$serviceId";
   static const String getCenterDashboard = "lab/dashboard";
   static const String getCenterNotification = "lab/lab-notifications";
+  static const String addService = "lab/add-service";
+  static const String addRequest = "lab/add-request";
 
   /************************************************* */
 

@@ -85,7 +85,6 @@ class LabDashboardScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-
                               Row(
                                 children: [
                                   GestureDetector(
@@ -118,7 +117,6 @@ class LabDashboardScreen extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 24),
-
                           Row(
                             children: [
                               Expanded(
@@ -153,7 +151,6 @@ class LabDashboardScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -204,7 +201,6 @@ class LabDashboardScreen extends StatelessWidget {
                                   ),
                           ),
                           const SizedBox(height: 16),
-
                           _buildBodySectionContainer(
                             title: "Uploaded Results Today",
                             child:
@@ -252,7 +248,6 @@ class LabDashboardScreen extends StatelessWidget {
                                   ),
                           ),
                           const SizedBox(height: 16),
-
                           _buildBodySectionContainer(
                             title: "Timeout / Ready Patients",
                             child:
@@ -291,6 +286,56 @@ class LabDashboardScreen extends StatelessWidget {
                                       );
                                     },
                                   ),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    await Navigator.pushNamed(
+                                      context,
+                                      Routes.addRequest,
+                                    );
+                                    if (context.mounted) {
+                                      context
+                                          .read<LabDashboardCubit>()
+                                          .getLabDashboard();
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: ColorManager.primary,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Add Request',
+                                    style: TextStyle(color: ColorManager.white),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: ColorManager.lightBlue,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Upload Result',
+                                    style: TextStyle(
+                                      color: ColorManager.primary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

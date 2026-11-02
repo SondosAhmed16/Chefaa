@@ -38,7 +38,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
         ],
       ),
       child: Material(
-        color: Colors.transparent, 
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(16),
         child: Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
@@ -54,7 +54,10 @@ class _OrderItemCardState extends State<OrderItemCard> {
               children: [
                 Text(
                   order.orderNumber ?? "N/A",
-                  style: getBoldStyle(color: ColorManager.primary, fontSize: 15),
+                  style: getBoldStyle(
+                    color: ColorManager.primary,
+                    fontSize: 15,
+                  ),
                 ),
                 _buildStatusBadge(order.status ?? ""),
               ],
@@ -66,7 +69,10 @@ class _OrderItemCardState extends State<OrderItemCard> {
                 children: [
                   Text(
                     "Customer: ${order.userId?.name ?? "Unknown"}",
-                    style: getMediumStyle(color: ColorManager.darkGray, fontSize: 13),
+                    style: getMediumStyle(
+                      color: ColorManager.darkGray,
+                      fontSize: 13,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Row(
@@ -74,11 +80,17 @@ class _OrderItemCardState extends State<OrderItemCard> {
                     children: [
                       Text(
                         "Type: ${order.orderType ?? "Pickup"} | Items: $itemsCount",
-                        style: getRegularStyle(color: ColorManager.gray, fontSize: 12),
+                        style: getRegularStyle(
+                          color: ColorManager.gray,
+                          fontSize: 12,
+                        ),
                       ),
                       Text(
                         "${order.totalPrice ?? 0} EGP",
-                        style: getBoldStyle(color: ColorManager.black, fontSize: 14),
+                        style: getBoldStyle(
+                          color: ColorManager.black,
+                          fontSize: 14,
+                        ),
                       ),
                     ],
                   ),
@@ -87,13 +99,22 @@ class _OrderItemCardState extends State<OrderItemCard> {
             ),
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Divider(color: ColorManager.input),
                     const SizedBox(height: 4),
-                    Text("Medicines Details:", style: getBoldStyle(color: ColorManager.darkGray, fontSize: 13)),
+                    Text(
+                      "Medicines Details:",
+                      style: getBoldStyle(
+                        color: ColorManager.darkGray,
+                        fontSize: 13,
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     ...items.map((item) {
                       return Padding(
@@ -104,12 +125,18 @@ class _OrderItemCardState extends State<OrderItemCard> {
                             Expanded(
                               child: Text(
                                 "${item.medicineId?.medicineName ?? "Medicine"} (x${item.quantity ?? 1})",
-                                style: getRegularStyle(color: ColorManager.black, fontSize: 13),
+                                style: getRegularStyle(
+                                  color: ColorManager.black,
+                                  fontSize: 13,
+                                ),
                               ),
                             ),
                             Text(
                               "${(item.price ?? 0) * (item.quantity ?? 1)} EGP",
-                              style: getMediumStyle(color: ColorManager.darkGray, fontSize: 13),
+                              style: getMediumStyle(
+                                color: ColorManager.darkGray,
+                                fontSize: 13,
+                              ),
                             ),
                           ],
                         ),
@@ -119,8 +146,20 @@ class _OrderItemCardState extends State<OrderItemCard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Payment Method:", style: getRegularStyle(color: ColorManager.gray, fontSize: 12)),
-                        Text(order.paymentMethod ?? "Cash", style: getMediumStyle(color: ColorManager.black, fontSize: 12)),
+                        Text(
+                          "Payment Method:",
+                          style: getRegularStyle(
+                            color: ColorManager.gray,
+                            fontSize: 12,
+                          ),
+                        ),
+                        Text(
+                          order.paymentMethod ?? "Cash",
+                          style: getMediumStyle(
+                            color: ColorManager.black,
+                            fontSize: 12,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 12),
@@ -132,7 +171,9 @@ class _OrderItemCardState extends State<OrderItemCard> {
                           text: "Accept Order",
                           isLoading: false,
                           onPressed: () {
-                            context.read<PharmOrdersCubit>().acceptOrder(orderId: order.id ?? "");
+                            context.read<PharmOrdersCubit>().acceptOrder(
+                              orderId: order.id ?? "",
+                            );
                           },
                         ),
                       )
@@ -143,7 +184,9 @@ class _OrderItemCardState extends State<OrderItemCard> {
                           text: "Prepare & Ready Order",
                           isLoading: false,
                           onPressed: () {
-                            context.read<PharmOrdersCubit>().readyOrder(orderId: order.id ?? "");
+                            context.read<PharmOrdersCubit>().readyOrder(
+                              orderId: order.id ?? "",
+                            );
                           },
                         ),
                       )
@@ -152,7 +195,10 @@ class _OrderItemCardState extends State<OrderItemCard> {
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
                         child: Text(
                           "Waiting for patient to receive and confirm completion.",
-                          style: getMediumStyle(color: ColorManager.amber600, fontSize: 12),
+                          style: getMediumStyle(
+                            color: ColorManager.amber600,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     const SizedBox(height: 8),
@@ -191,10 +237,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Text(
-        status,
-        style: getBoldStyle(color: color, fontSize: 11),
-      ),
+      child: Text(status, style: getBoldStyle(color: color, fontSize: 11)),
     );
   }
 }

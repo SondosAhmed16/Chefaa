@@ -29,6 +29,8 @@ import 'package:chefaa/features/facility/notification/presentation/cubit/lab_not
 import 'package:chefaa/features/facility/notification/presentation/pages/lab_notification_screen.dart';
 import 'package:chefaa/features/facility/profile/presentation/cubit/lab_profile_cubit.dart';
 import 'package:chefaa/features/facility/profile/presentation/pages/lab_profile_screen.dart';
+import 'package:chefaa/features/facility/requests/presentation/cubit/requests_cubit.dart';
+import 'package:chefaa/features/facility/requests/presentation/pages/add_request_screen.dart';
 import 'package:chefaa/features/facility/services/presentation/cubit/lab_services_cubit.dart';
 import 'package:chefaa/features/facility/services/presentation/pages/center_services_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/facility_selection_screen.dart';
@@ -140,6 +142,7 @@ class Routes {
   static const String labServices = "/labServices";
   static const String labDashboard = "/labDashboard";
   static const String labNotification = "/labNotification";
+  static const String addRequest = "/addRequest";
   /********************************************************** */
   static const String completeDoctorProfile = "/completeDoctorProfile";
   static const String getDoctorProfile = "/getDoctorProfile";
@@ -505,6 +508,22 @@ class AppRouter {
           ),
         );
 
+      case Routes.addRequest:
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider<RequestsCubit>(
+                create: (context) => getIt<RequestsCubit>(),
+              ),
+              BlocProvider<LabServicesCubit>(
+                create: (context) =>
+                    getIt<LabServicesCubit>()..getCenterServices(),
+              ),
+            ],
+            child: const AddRequestScreen(),
+          ),
+        );
+
       case Routes.labServices:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -622,7 +641,7 @@ class AppRouter {
             child: StockView(),
           ),
         );
-        case Routes.pharmacyOrders:
+      case Routes.pharmacyOrders:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<PharmOrdersCubit>(),
