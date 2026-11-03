@@ -746,7 +746,10 @@ void _initLabAddRequestModule() {
   );
 
   getIt.registerFactory<RequestsCubit>(
-    () => RequestsCubit(requestsRepo: getIt<RequestsRepo>(), getLabDashboardUsecase: getIt<GetLabDashboardUsecase>(),),
+    () => RequestsCubit(
+      requestsRepo: getIt<RequestsRepo>(),
+      getLabDashboardUsecase: getIt<GetLabDashboardUsecase>(),
+    ),
   );
 }
 

@@ -24,4 +24,17 @@ class RequestsCubit extends Cubit<RequestsState> {
       await getLabDashboardUsecase.call();
     });
   }
+
+  Future<void> uploadResult({required Map<String, dynamic> body}) async {
+    if (!isClosed) emit(UploadResultLoading());
+
+    final result = await requestsRepo.uploadResult(body: body);
+
+    result.fold((error) => emit(UploadResultError(error: error)), (
+      uploadResultModel,
+    ) async {
+      emit(UploadResultSuccess(uploadResultModel: uploadResultModel));
+      await getLabDashboardUsecase.call();
+    });
+  }
 }

@@ -67,6 +67,7 @@ class ApiEndpoints {
   static const String getCenterNotification = "lab/lab-notifications";
   static const String addService = "lab/add-service";
   static const String addRequest = "lab/add-request";
+  static const String uploadResult = "lab/upload-result";
 
   /************************************************* */
 

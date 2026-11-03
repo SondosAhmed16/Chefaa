@@ -39,7 +39,9 @@ class NewRequest {
   factory NewRequest.fromMap(Map<String, dynamic> data) => NewRequest(
     labId: data['labId'] as String?,
     patientId: data['patientId'] as String?,
-    services: (data['services'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
+    services: (data['services'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList(),
     viaAi: data['viaAI'] as bool?,
     status: data['status'] as String?,
     resultFile: data['resultFile'] as List<dynamic>?,

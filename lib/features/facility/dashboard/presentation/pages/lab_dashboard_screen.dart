@@ -320,7 +320,17 @@ class LabDashboardScreen extends StatelessWidget {
                               const SizedBox(width: 12),
                               Expanded(
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    await Navigator.pushNamed(
+                                      context,
+                                      Routes.uploadResult,
+                                    );
+                                    if (context.mounted) {
+                                      context
+                                          .read<LabDashboardCubit>()
+                                          .getLabDashboard();
+                                    }
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: ColorManager.lightBlue,
                                     shape: RoundedRectangleBorder(

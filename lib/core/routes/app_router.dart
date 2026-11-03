@@ -31,6 +31,7 @@ import 'package:chefaa/features/facility/profile/presentation/cubit/lab_profile_
 import 'package:chefaa/features/facility/profile/presentation/pages/lab_profile_screen.dart';
 import 'package:chefaa/features/facility/requests/presentation/cubit/requests_cubit.dart';
 import 'package:chefaa/features/facility/requests/presentation/pages/add_request_screen.dart';
+import 'package:chefaa/features/facility/requests/presentation/pages/upload_result_screen.dart';
 import 'package:chefaa/features/facility/services/presentation/cubit/lab_services_cubit.dart';
 import 'package:chefaa/features/facility/services/presentation/pages/center_services_screen.dart';
 import 'package:chefaa/features/onboarding/presentation/pages/facility_selection_screen.dart';
@@ -143,6 +144,8 @@ class Routes {
   static const String labDashboard = "/labDashboard";
   static const String labNotification = "/labNotification";
   static const String addRequest = "/addRequest";
+    static const String uploadResult = "/uploadResult";
+
   /********************************************************** */
   static const String completeDoctorProfile = "/completeDoctorProfile";
   static const String getDoctorProfile = "/getDoctorProfile";
@@ -521,6 +524,22 @@ class AppRouter {
               ),
             ],
             child: const AddRequestScreen(),
+          ),
+        );
+
+        case Routes.uploadResult:
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider<RequestsCubit>(
+                create: (context) => getIt<RequestsCubit>(),
+              ),
+              BlocProvider<LabDashboardCubit>(
+                create: (context) =>
+                    getIt<LabDashboardCubit>()..getLabDashboard(),
+              ),
+            ],
+            child: const UploadResultScreen(),
           ),
         );
 
