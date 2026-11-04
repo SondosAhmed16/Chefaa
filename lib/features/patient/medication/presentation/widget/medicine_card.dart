@@ -1,10 +1,13 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
 import 'package:chefaa/features/patient/medication/data/model/medications.dart';
+import 'package:chefaa/features/patient/medication/presentation/cubit/medication_cubit.dart';
+import 'package:chefaa/features/patient/medication/presentation/cubit/medication_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MedicineCard extends StatefulWidget {
+class MedicineCard extends StatelessWidget {
   final List<Medications> medications;
   final Function(Medications medication) onPressed;
 
@@ -15,104 +18,107 @@ class MedicineCard extends StatefulWidget {
   });
 
   @override
-  State<MedicineCard> createState() => _MedicineCardState();
-}
-
-class _MedicineCardState extends State<MedicineCard> {
-  late final ScrollController _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: 80.h, maxHeight: 200.h),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: ColorManager.lightGray,
-          borderRadius: BorderRadius.circular(25),
-          boxShadow: [
-            BoxShadow(
-              color: ColorManager.black.withAlpha(10),
-              blurRadius: 4,
-              offset: Offset(2, 10),
+    return BlocBuilder<MedicationCubit, MedicationState>(
+      builder: (context, state) {
+        List<Medications> currentMedications = medications;
+        if (state is MedicationListSuccessState) {
+          currentMedications = (state.medications.medications ?? [])
+              .where((med) => med.isActive == true)
+              .toList();
+        }
+
+        return ConstrainedBox(
+          constraints: BoxConstraints(minHeight: 80.h, maxHeight: 200.h),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: ColorManager.lightGray,
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: ColorManager.black.withAlpha(10),
+                  blurRadius: 4,
+                  offset: const Offset(2, 10),
+                ),
+              ],
             ),
-          ],
-        ),
-        child: RawScrollbar(
-          controller: _scrollController,
-          thumbVisibility: true,
-          thickness: 5,
-          radius: const Radius.circular(10),
-          trackVisibility: false,
-          thumbColor: ColorManager.gray.withAlpha(80),
-          minThumbLength: 30,
-          child: ListView.separated(
-            controller: _scrollController,
-            shrinkWrap: true,
-            itemCount: widget.medications.length,
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.only(right: 8),
-            separatorBuilder: (_, _) => const Divider(),
-            itemBuilder: (_, index) {
-              final med = widget.medications[index];
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: currentMedications.length,
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.only(right: 8),
+              separatorBuilder: (_, _) => const Divider(),
+              itemBuilder: (_, index) {
+                final med = currentMedications[index];
 
-              final lastHistoryStatus = med.adherenceHistory?.isNotEmpty == true
-                  ? med.adherenceHistory!.last.status
-                  : null;
+                bool isAlreadyTakenToday = false;
+                String? lastStatus;
 
-              final isAlreadyTaken =
-                  lastHistoryStatus?.toLowerCase() == 'taken';
+                if (med.adherenceHistory != null &&
+                    med.adherenceHistory!.isNotEmpty) {
+                  for (var history in med.adherenceHistory!) {
+                    if (history.date != null) {
+                      try {
+                        final historyDate = DateTime.parse(history.date!);
+                        final now = DateTime.now();
 
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          med.name?.isNotEmpty == true
-                              ? med.name![0].toUpperCase() +
-                                    med.name!.substring(1).toLowerCase()
-                              : 'Medication Name',
-                          style: getBoldStyle(
-                            color: ColorManager.black,
-                          ).copyWith(fontSize: 18),
-                        ),
-                        5.verticalSpace,
-                        Text(
-                          '${med.dosage} - ${med.schedule?.join(', ')}',
-                          style: getMediumStyle(
-                            color: ColorManager.gray,
-                          ).copyWith(fontSize: 16),
-                        ),
-                      ],
+                        if (historyDate.year == now.year &&
+                            historyDate.month == now.month &&
+                            historyDate.day == now.day) {
+                          if (history.status?.toLowerCase() == 'taken') {
+                            isAlreadyTakenToday = true;
+                            lastStatus = history.status;
+                            break;
+                          }
+                        }
+                      } catch (e) {}
+                    }
+                  }
+                }
+
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            med.name?.isNotEmpty == true
+                                ? med.name![0].toUpperCase() +
+                                      med.name!.substring(1).toLowerCase()
+                                : 'Medication Name',
+                            style: getBoldStyle(
+                              color: ColorManager.black,
+                            ).copyWith(fontSize: 18),
+                          ),
+                          5.verticalSpace,
+                          Text(
+                            '${med.dosage} - ${med.schedule?.join(', ')}',
+                            style: getMediumStyle(
+                              color: ColorManager.gray,
+                            ).copyWith(fontSize: 16),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  12.horizontalSpace,
-                  isAlreadyTaken
-                      ? _ConfirmedStatus(
-                          statusText: lastHistoryStatus ?? 'Taken',
-                        )
-                      : _ConfirmActions(onConfirm: () => widget.onPressed(med)),
-                ],
-              );
-            },
+                    12.horizontalSpace,
+
+                    isAlreadyTakenToday
+                        ? _ConfirmedStatus(statusText: lastStatus ?? 'Taken')
+                        : _ConfirmActions(
+                            onConfirm: () {
+                              onPressed(med);
+                            },
+                          ),
+                  ],
+                );
+              },
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -141,11 +147,11 @@ class _ConfirmActions extends StatelessWidget {
         ),
         20.horizontalSpace,
         ElevatedButton(
+          onPressed: onConfirm,
           child: Text(
             'Confirm',
             style: getMediumStyle(color: ColorManager.primary),
           ),
-          onPressed: onConfirm,
         ),
       ],
     );
@@ -159,7 +165,7 @@ class _ConfirmedStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayStatus = statusText.isNotEmpty
+    final String displayStatus = statusText.isNotEmpty
         ? statusText[0].toUpperCase() + statusText.substring(1).toLowerCase()
         : 'Taken';
 

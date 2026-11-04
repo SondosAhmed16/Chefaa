@@ -68,6 +68,9 @@ class MedicationCubit extends Cubit<MedicationState> {
         endDate: endDateController.text,
         isActive: isActive,
       );
+
+      _hasLoadedMedicationList = false;
+
       if (!isClosed) {
         emit(
           MedicationAdditionSuccessState(
@@ -119,7 +122,7 @@ class MedicationCubit extends Cubit<MedicationState> {
             num? parsedAdherence = confirmRes.adherenceRate is num
                 ? confirmRes.adherenceRate as num
                 : num.tryParse(confirmRes.adherenceRate?.toString() ?? '');
-
+               
             return e.copyWith(adherencePercentage: parsedAdherence);
           }
           return e;
@@ -138,6 +141,8 @@ class MedicationCubit extends Cubit<MedicationState> {
       if (!isClosed) {
         emit(MedicationConfirmSuccessState(confirmMedication: confirmRes));
       }
+      _hasLoadedMedicationList = false;
+      await getMedicationList(forceRefresh: true);
     } catch (e) {
       if (!isClosed) {
         String errorMsg = e is ErrorModel ? (e.message) : e.toString();
@@ -165,10 +170,14 @@ class MedicationCubit extends Cubit<MedicationState> {
         endDate: endDateController.text,
         isActive: isActive,
       );
+
+      _hasLoadedMedicationList = false;
+
       if (!isClosed) {
         emit(
           MedicationUpdateSuccessState(medicationResponse: medicationResponse),
         );
+        await getMedicationList(forceRefresh: true);
       }
     } catch (e) {
       if (!isClosed) {
@@ -179,6 +188,7 @@ class MedicationCubit extends Cubit<MedicationState> {
   }
 
   Future<void> deleteMedication(String medicationId) async {
+    _hasLoadedMedicationList = false;
     if (!isClosed) emit(MedicationDeleteLoadingState());
 
     try {

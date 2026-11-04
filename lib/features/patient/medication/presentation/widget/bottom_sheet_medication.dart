@@ -6,6 +6,7 @@ import 'package:chefaa/core/widgets/custem_button.dart';
 import 'package:chefaa/core/widgets/custom_text_feild.dart';
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_cubit.dart';
 import 'package:chefaa/features/patient/medication/presentation/cubit/medication_state.dart';
+import 'package:intl/intl.dart';
 
 void showBottomSheetMedication(BuildContext context, {dynamic medication}) {
   final cubit = BlocProvider.of<MedicationCubit>(context);
@@ -15,11 +16,18 @@ void showBottomSheetMedication(BuildContext context, {dynamic medication}) {
     cubit.dosageController.text =
         medication.dosage?.replaceAll(' mg', '') ?? '';
     cubit.formController.text = medication.form ?? '';
-    cubit.startDateController.text = medication.startDate ?? '';
-    cubit.endDateController.text = medication.endDate ?? '';
-    cubit.isActive = medication.isActive ?? false;
+    
+    cubit.startDateController.text = _formatDateString(medication.startDate);
+    cubit.endDateController.text = _formatDateString(medication.endDate);
+
+    cubit.isActive = medication.isActive ?? true;
+    cubit.timesPerDay = medication.timesPerDay?.toInt() ?? 1;
+    cubit.timesPerDayController.text = cubit.timesPerDay.toString();
   } else {
     cubit.clearControllers();
+    cubit.timesPerDay = 1;
+    cubit.timesPerDayController.text = '1';
+    cubit.isActive = true;
   }
 
   showModalBottomSheet(
@@ -38,6 +46,19 @@ void showBottomSheetMedication(BuildContext context, {dynamic medication}) {
   );
 }
 
+String _formatDateString(String? dateStr) {
+  if (dateStr == null || dateStr.isEmpty) return '';
+  try {
+    final parsedDate = DateTime.parse(dateStr);
+    return DateFormat('yyyy/MM/dd').format(parsedDate);
+  } catch (e) {
+    if (dateStr.contains('T')) {
+      return dateStr.split('T').first.replaceAll('-', '/');
+    }
+    return dateStr;
+  }
+}
+
 class BottomSheetMedication extends StatefulWidget {
   final dynamic medication;
 
@@ -49,6 +70,105 @@ class BottomSheetMedication extends StatefulWidget {
 
 class _BottomSheetMedicationState extends State<BottomSheetMedication> {
   bool get isEditing => widget.medication != null;
+
+  final List<TextEditingController> _doseControllers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _initDoseControllers();
+  }
+
+  void _initDoseControllers() {
+    final cubit = context.read<MedicationCubit>();
+
+    if (isEditing &&
+        widget.medication.schedule != null &&
+        widget.medication.schedule.isNotEmpty) {
+      for (var timeStr in widget.medication.schedule) {
+        _doseControllers.add(TextEditingController(text: timeStr.toString()));
+      }
+      cubit.timesPerDay = _doseControllers.length;
+      cubit.timesPerDayController.text = cubit.timesPerDay.toString();
+    } else {
+      _updateDoseControllersCount();
+    }
+  }
+
+  void _updateDoseControllersCount() {
+    final cubit = context.read<MedicationCubit>();
+    int count = cubit.timesPerDay;
+    if (count > 5) count = 5;
+    if (count < 1) count = 1;
+
+    while (_doseControllers.length < count) {
+      _doseControllers.add(TextEditingController(text: "09:00 AM"));
+    }
+    while (_doseControllers.length > count) {
+      _doseControllers.removeLast();
+    }
+  }
+
+  Future<void> _pickTime(
+      BuildContext context, TextEditingController controller, int index) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (picked != null) {
+      setState(() {
+        controller.text = _formatTimeOfDay(picked);
+
+        if (index == 0 && _doseControllers.length > 1) {
+          int timesPerDay = _doseControllers.length;
+          double intervalHours = 24 / timesPerDay;
+
+          int baseHour = picked.hour;
+          int baseMinute = picked.minute;
+
+          for (int i = 1; i < _doseControllers.length; i++) {
+            double totalMinutes =
+                (baseHour * 60 + baseMinute) + (intervalHours * 60 * i);
+            int nextHour = (totalMinutes ~/ 60) % 24;
+            int nextMinute = (totalMinutes % 60).round();
+
+            TimeOfDay nextTime = TimeOfDay(hour: nextHour, minute: nextMinute);
+            _doseControllers[i].text = _formatTimeOfDay(nextTime);
+          }
+        }
+      });
+    }
+  }
+
+  String _formatTimeOfDay(TimeOfDay time) {
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    return DateFormat('hh:mm a').format(dt);
+  }
+
+  Future<void> _pickDate(
+      BuildContext context, TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      setState(() {
+        controller.text = DateFormat('yyyy/MM/dd').format(picked);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    for (var c in _doseControllers) {
+      c.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +195,6 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
               controller: scrollController,
               children: [
                 const SizedBox(height: 12),
-                // Handle Bar
                 Center(
                   child: Container(
                     width: 50,
@@ -83,19 +202,11 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
                     decoration: BoxDecoration(
                       color: Colors.grey[400],
                       borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
                     ),
                   ),
                 ),
                 const SizedBox(height: 16),
 
-                // Title
                 Text(
                   isEditing ? "Edit Medication" : "Add Medication",
                   style: getBoldStyle(color: ColorManager.black, fontSize: 20),
@@ -159,13 +270,23 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
                     ),
                     const SizedBox(height: 12),
                     const Text(
-                      "Times per day",
+                      "Times per day (1 to 5)",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 6),
                     CustomTextField(
                       controller: cubit.timesPerDayController,
-                      text: "2 times/day",
+                      text: "1",
+                      keyboardType: TextInputType.number,
+                      onChanged: (val) {
+                        int? parsed = int.tryParse(val);
+                        if (parsed != null && parsed >= 1 && parsed <= 5) {
+                          setState(() {
+                            cubit.timesPerDay = parsed;
+                            _updateDoseControllersCount();
+                          });
+                        }
+                      },
                     ),
                     const SizedBox(height: 12),
                     const Text(
@@ -174,57 +295,42 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
                     ),
                     const SizedBox(height: 8),
 
-                    // Doses Rows (Dose 1 & Dose 2)
-                    Row(
-                      children: [
-                        Expanded(
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _doseControllers.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                "Dose 1",
-                                style: TextStyle(
+                              Text(
+                                "Dose ${index + 1}",
+                                style: const TextStyle(
                                   color: Colors.grey,
                                   fontSize: 12,
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              CustomTextField(
-                                controller: TextEditingController(
-                                  text: "09:00 AM",
+                              GestureDetector(
+                                onTap: () => _pickTime(
+                                    context, _doseControllers[index], index),
+                                child: AbsorbPointer(
+                                  child: CustomTextField(
+                                    controller: _doseControllers[index],
+                                    text: "Select Time",
+                                  ),
                                 ),
-                                text: "09:00 AM",
                               ),
                             ],
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Dose 2",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              CustomTextField(
-                                controller: TextEditingController(
-                                  text: "09:00 PM",
-                                ),
-                                text: "09:00 PM",
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
+
                     const SizedBox(height: 12),
 
-                    // Start Date & End Date
                     Row(
                       children: [
                         Expanded(
@@ -239,9 +345,15 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              CustomTextField(
-                                controller: cubit.startDateController,
-                                text: "12/12/2025",
+                              GestureDetector(
+                                onTap: () =>
+                                    _pickDate(context, cubit.startDateController),
+                                child: AbsorbPointer(
+                                  child: CustomTextField(
+                                    controller: cubit.startDateController,
+                                    text: "Select Start Date",
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -259,9 +371,15 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              CustomTextField(
-                                controller: cubit.endDateController,
-                                text: "26/12/2025",
+                              GestureDetector(
+                                onTap: () =>
+                                    _pickDate(context, cubit.endDateController),
+                                child: AbsorbPointer(
+                                  child: CustomTextField(
+                                    controller: cubit.endDateController,
+                                    text: "Select End Date",
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -292,7 +410,6 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
 
                 const SizedBox(height: 20),
 
-                // Action Button (Save / Add)
                 BlocBuilder<MedicationCubit, MedicationState>(
                   builder: (context, state) {
                     bool isLoading =
@@ -303,6 +420,9 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
                       text: isEditing ? "Save Medication" : "Add Medication",
                       isLoading: isLoading,
                       onPressed: () {
+                        cubit.scheduleController.text =
+                            _doseControllers.map((e) => e.text).join(',');
+
                         if (isEditing) {
                           cubit.updateMedication(
                             medicationId: widget.medication.id,

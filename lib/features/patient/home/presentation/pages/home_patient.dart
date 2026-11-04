@@ -1,7 +1,6 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
 import 'package:chefaa/core/routes/app_router.dart';
-import 'package:chefaa/core/services/share_services.dart';
 import 'package:chefaa/core/widgets/custom_bar_layout.dart';
 import 'package:chefaa/core/widgets/custom_text_feild.dart';
 import 'package:chefaa/features/patient/appointment/presentation/cubit/appointment_cubit.dart';
@@ -42,13 +41,10 @@ class _HomePatientState extends State<HomePatient> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final name = await ShareServices.getString('userName');
-      print(">>> CHECK STORED NAME: '$name'");
-
       context.read<UsersCubit>().loadUserFromPrefs();
       context.read<AppointmentCubit>().fetchAppointments();
+      context.read<MedicationCubit>().getMedicationList(forceRefresh: true);
     });
-
     context.read<UsersCubit>().loadUserFromPrefs();
     context.read<NotificationCubit>().getNotification();
   }
@@ -95,10 +91,18 @@ class _HomePatientState extends State<HomePatient> {
       body: BlocListener<MedicationCubit, MedicationState>(
         listenWhen: (previous, current) =>
             current is MedicationConfirmSuccessState ||
+            current is MedicationAdditionSuccessState ||
+            current is MedicationUpdateSuccessState ||
+            current is MedicationDeleteSuccessState ||
             current is MedicationListErrorState,
         listener: (context, state) {
-          if (state is MedicationConfirmSuccessState) {
-            context.read<MedicationCubit>().getMedicationList();
+          if (state is MedicationConfirmSuccessState ||
+              state is MedicationAdditionSuccessState ||
+              state is MedicationUpdateSuccessState ||
+              state is MedicationDeleteSuccessState) {
+            context.read<MedicationCubit>().getMedicationList(
+              forceRefresh: true,
+            );
           }
 
           if (state is MedicationListErrorState) {
@@ -166,8 +170,17 @@ class _HomePatientState extends State<HomePatient> {
                             }
 
                             return TextButton(
-                              onPressed: () => {
-                                Navigator.pushNamed(context, Routes.myMed),
+                              onPressed: () async {
+                                await Navigator.pushNamed(
+                                  context,
+                                  Routes.myMed,
+                                );
+
+                                if (context.mounted) {
+                                  context
+                                      .read<MedicationCubit>()
+                                      .getMedicationList(forceRefresh: true);
+                                }
                               },
 
                               child: Row(
@@ -250,7 +263,9 @@ class _HomePatientState extends State<HomePatient> {
 
                         if (state is MedicationListSuccessState) {
                           final medications =
-                              state.medications.medications ?? [];
+                              (state.medications.medications ?? [])
+                                  .where((med) => med.isActive == true)
+                                  .toList();
 
                           if (medications.isEmpty) {
                             return Container(
