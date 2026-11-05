@@ -122,7 +122,7 @@ class MedicationCubit extends Cubit<MedicationState> {
             num? parsedAdherence = confirmRes.adherenceRate is num
                 ? confirmRes.adherenceRate as num
                 : num.tryParse(confirmRes.adherenceRate?.toString() ?? '');
-               
+
             return e.copyWith(adherencePercentage: parsedAdherence);
           }
           return e;
@@ -136,6 +136,7 @@ class MedicationCubit extends Cubit<MedicationState> {
               ),
             ),
           );
+          await getMedicationList(forceRefresh: true);
         }
       }
       if (!isClosed) {
@@ -147,6 +148,7 @@ class MedicationCubit extends Cubit<MedicationState> {
       if (!isClosed) {
         String errorMsg = e is ErrorModel ? (e.message) : e.toString();
         emit(MedicationConfirmErrorState(errorMessage: errorMsg));
+        await getMedicationList(forceRefresh: true);
       }
     }
   }

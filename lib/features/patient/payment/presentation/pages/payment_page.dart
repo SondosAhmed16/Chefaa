@@ -4,6 +4,7 @@ import 'package:chefaa/core/resources/style.dart';
 import 'package:chefaa/core/routes/app_router.dart';
 import 'package:chefaa/core/widgets/custem_button.dart';
 import 'package:chefaa/features/patient/book/presentation/widget/payment_form.dart';
+import 'package:chefaa/features/patient/cart/presentation/cubit/cart_cubit.dart';
 import 'package:chefaa/features/patient/payment/presentation/cubit/payment_cubit.dart';
 import 'package:chefaa/features/patient/payment/presentation/cubit/payment_state.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+    final cartCubit = context.read<CartCubit>();
     return BlocProvider(
       create: (context) => getIt<PaymentCubit>(),
       child: Builder(
@@ -102,10 +104,15 @@ class _PaymentPageState extends State<PaymentPage> {
                       backgroundColor: Colors.green,
                     ),
                   );
-                  Navigator.pushReplacementNamed(
+                  Navigator.pushNamedAndRemoveUntil(
                     context,
-                    Routes.orderTrack,
-                    arguments: widget.orderId,
+                    Routes.homePatient,
+                    (route) => false,
+                    // arguments: {
+                    //   'pharmacyId': cartCubit.pharmacy?.id ?? '',
+                    // //   'pharmacyName': cartCubit.pharmacy?.pharmacyName ?? '',
+                    // //   'pharmacyData': cartCubit.pharmacy,
+                    //  },
                   );
                 } else if (state is PaymentError) {
                   ScaffoldMessenger.of(context).showSnackBar(

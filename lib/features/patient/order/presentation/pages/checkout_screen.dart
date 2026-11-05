@@ -6,7 +6,6 @@ import 'package:chefaa/core/utils/validator.dart';
 import 'package:chefaa/core/widgets/custem_button.dart';
 import 'package:chefaa/core/widgets/custom_text_feild.dart';
 import 'package:chefaa/features/patient/cart/presentation/cubit/cart_cubit.dart';
-
 import 'package:chefaa/features/patient/order/presentation/cubit/checkout_cubit.dart';
 import 'package:chefaa/features/patient/order/presentation/cubit/checkout_state.dart';
 import 'package:flutter/material.dart';
@@ -117,10 +116,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   },
                 );
               } else {
-                Navigator.pushReplacementNamed(
+                Navigator.pushNamedAndRemoveUntil(
                   context,
-                  Routes.orderTrack,
-                  arguments: orderId,
+                  Routes.homePatient,
+                  (route) => false,
+                  // arguments: {
+                  //   'pharmacyId': cartCubit.pharmacy?.id ?? '',
+                  //   // 'pharmacyName': cartCubit.pharmacy?.pharmacyName?? '',
+                  //   // 'pharmacyData': cartCubit.pharmacy,
+                  // },
                 );
               }
             } else if (state is CheckoutFailure) {
@@ -410,9 +414,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     const SizedBox(height: 32),
 
                     CustemButton(
-                      text: _paymentMethod == "Cash"
-                          ? "Order Tracking"
-                          : "Continue",
+                      text: _paymentMethod == "Cash" ? "Done" : "Continue",
                       isLoading: isLoading,
                       onPressed: () {
                         if (_orderType == "Delivery") {
@@ -422,9 +424,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 content: Text("Please select a delivery city."),
                               ),
                             );
+
                             return;
                           }
-                          if (!_formKey.currentState!.validate()) return;
+                          if (!_formKey.currentState!.validate()) {
+                            return;
+                          }
                         }
 
                         context.read<CheckoutCubit>().checkoutFromCart(

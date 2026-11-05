@@ -59,7 +59,7 @@ class PaymentMethodCard extends StatelessWidget {
                 height: 50,
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: borderColor,
+                
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: borderColor),
                   boxShadow: [
@@ -72,8 +72,8 @@ class PaymentMethodCard extends StatelessWidget {
                 ),
                 child: Image.asset(
                   imgPath,
-                  fit: BoxFit.cover,
-                  color: borderColor,
+                  fit: BoxFit.contain,
+                 // color: borderColor,
                 ),
               ),
 

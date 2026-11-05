@@ -1,7 +1,6 @@
 import 'package:chefaa/core/di/injection_container.dart';
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
-import 'package:chefaa/core/routes/app_router.dart';
 import 'package:chefaa/core/widgets/custem_button.dart';
 import 'package:chefaa/features/patient/order%20track/presentation/cubit/order_track_cubit.dart';
 import 'package:chefaa/features/patient/order%20track/presentation/cubit/order_track_state.dart';
@@ -78,16 +77,19 @@ class OrderTrackScreen extends StatelessWidget {
               child: CustemButton(
                 text: "Confirm Order Receipt",
                 isLoading: false,
-                onPressed: () {
-                  context.read<OrderTrackCubit>().orderConfirm(
+                onPressed: () async {
+                  await context.read<OrderTrackCubit>().orderConfirm(
                     orderId: orderId,
                   );
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                  }
 
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    Routes.homePatient,
-                    (route) => false,
-                  );
+                  // Navigator.pushNamedAndRemoveUntil(
+                  //   context,
+                  //   Routes.homePatient,
+                  //   (route) => false,
+                  // );
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

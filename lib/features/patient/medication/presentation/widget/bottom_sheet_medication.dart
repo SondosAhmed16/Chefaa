@@ -15,8 +15,8 @@ void showBottomSheetMedication(BuildContext context, {dynamic medication}) {
     cubit.nameController.text = medication.name ?? '';
     cubit.dosageController.text =
         medication.dosage?.replaceAll(' mg', '') ?? '';
-    cubit.formController.text = medication.form ?? '';
-    
+    cubit.formController.text = medication.form ?? 'Tablet';
+
     cubit.startDateController.text = _formatDateString(medication.startDate);
     cubit.endDateController.text = _formatDateString(medication.endDate);
 
@@ -25,8 +25,9 @@ void showBottomSheetMedication(BuildContext context, {dynamic medication}) {
     cubit.timesPerDayController.text = cubit.timesPerDay.toString();
   } else {
     cubit.clearControllers();
-    cubit.timesPerDay = 1;
-    cubit.timesPerDayController.text = '1';
+    cubit.formController.text;
+    cubit.timesPerDay;
+    cubit.timesPerDayController.text;
     cubit.isActive = true;
   }
 
@@ -72,11 +73,18 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
   bool get isEditing => widget.medication != null;
 
   final List<TextEditingController> _doseControllers = [];
+  final List<String> formOptions = ["Tablet", "Capsule", "Syrup", "Injection"];
 
   @override
   void initState() {
     super.initState();
     _initDoseControllers();
+
+    final cubit = context.read<MedicationCubit>();
+    if (cubit.formController.text.isEmpty ||
+        !formOptions.contains(cubit.formController.text)) {
+      cubit.formController.text = "Tablet";
+    }
   }
 
   void _initDoseControllers() {
@@ -110,7 +118,10 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
   }
 
   Future<void> _pickTime(
-      BuildContext context, TextEditingController controller, int index) async {
+    BuildContext context,
+    TextEditingController controller,
+    int index,
+  ) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -148,7 +159,9 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
   }
 
   Future<void> _pickDate(
-      BuildContext context, TextEditingController controller) async {
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -250,9 +263,49 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 6),
-                    CustomTextField(
-                      controller: cubit.formController,
-                      text: "Tablet",
+
+                    DropdownButtonFormField<String>(
+                      value: formOptions.contains(cubit.formController.text)
+                          ? cubit.formController.text
+                          : "Tablet",
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: ColorManager.white,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 14,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: const BorderSide(
+                            color: ColorManager.input,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: const BorderSide(
+                            color: ColorManager.primary,
+                            width: 1.5,
+                          ),
+                        ),
+                      ),
+                      items: formOptions.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: getRegularStyle(
+                              color: ColorManager.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          cubit.formController.text = newValue ?? "Tablet";
+                        });
+                      },
                     ),
                   ],
                 ),
@@ -270,13 +323,13 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
                     ),
                     const SizedBox(height: 12),
                     const Text(
-                      "Times per day (1 to 5)",
+                      "Times per day ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 6),
                     CustomTextField(
                       controller: cubit.timesPerDayController,
-                      text: "1",
+                      text: "(1 to 5)",
                       keyboardType: TextInputType.number,
                       onChanged: (val) {
                         int? parsed = int.tryParse(val);
@@ -315,7 +368,10 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
                               const SizedBox(height: 4),
                               GestureDetector(
                                 onTap: () => _pickTime(
-                                    context, _doseControllers[index], index),
+                                  context,
+                                  _doseControllers[index],
+                                  index,
+                                ),
                                 child: AbsorbPointer(
                                   child: CustomTextField(
                                     controller: _doseControllers[index],
@@ -346,8 +402,10 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
                               ),
                               const SizedBox(height: 4),
                               GestureDetector(
-                                onTap: () =>
-                                    _pickDate(context, cubit.startDateController),
+                                onTap: () => _pickDate(
+                                  context,
+                                  cubit.startDateController,
+                                ),
                                 child: AbsorbPointer(
                                   child: CustomTextField(
                                     controller: cubit.startDateController,
@@ -420,8 +478,9 @@ class _BottomSheetMedicationState extends State<BottomSheetMedication> {
                       text: isEditing ? "Save Medication" : "Add Medication",
                       isLoading: isLoading,
                       onPressed: () {
-                        cubit.scheduleController.text =
-                            _doseControllers.map((e) => e.text).join(',');
+                        cubit.scheduleController.text = _doseControllers
+                            .map((e) => e.text)
+                            .join(',');
 
                         if (isEditing) {
                           cubit.updateMedication(

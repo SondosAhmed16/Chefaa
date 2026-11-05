@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:chefaa/core/services/location_service.dart';
 import 'package:chefaa/features/patient/onboarding/domain/usecase/patient_all_info_usacse.dart';
 import 'all_info_state.dart';
 
@@ -80,9 +81,21 @@ class AllInfoCubit extends Cubit<AllInfoState> {
     return null;
   }
 
-  Future<void> submitAllInfo() async {
-    emit(AllInfoLoadingState());
+  Future<void> getLocationAndSubmit() async {
+  emit(AllInfoLoadingState());
 
+  final locationData = await LocationService.getLocationWithAddress();
+  
+  if (locationData != null) {
+    lat = locationData.lat;
+    lng = locationData.lng;
+    addressText = locationData.addressText; 
+  }
+
+  await submitAllInfo();
+}
+
+  Future<void> submitAllInfo() async {
     final age = _calculateAgeFromDOB(dobController.text);
     final weight = double.tryParse(weightController.text);
     final height = double.tryParse(heightController.text);

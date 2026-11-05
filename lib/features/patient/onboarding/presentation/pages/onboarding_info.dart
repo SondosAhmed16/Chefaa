@@ -1,4 +1,5 @@
 import 'package:chefaa/core/resources/color.dart';
+import 'package:chefaa/core/routes/app_router.dart';
 import 'package:chefaa/core/widgets/custem_button.dart';
 import 'package:chefaa/features/patient/onboarding/presentation/cubit/all_info_state.dart';
 import 'package:flutter/material.dart';
@@ -417,11 +418,17 @@ class OnboardingInfoScreen extends StatelessWidget {
           CustemButton(
             text: "Allow Location",
             isLoading: state is AllInfoLoadingState,
-            onPressed: () => cubit.submitAllInfo(),
+            onPressed: () {
+              cubit.getLocationAndSubmit();
+              Navigator.pushReplacementNamed(context, Routes.login);
+            },
           ),
           const SizedBox(height: 12),
           TextButton(
-            onPressed: () => cubit.submitAllInfo(),
+            onPressed: () {
+              cubit.submitAllInfo();
+              Navigator.pushReplacementNamed(context, Routes.login);
+            },
             child: const Text(
               "Not Now",
               style: TextStyle(color: Colors.grey, fontSize: 16),

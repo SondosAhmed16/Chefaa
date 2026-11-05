@@ -27,7 +27,7 @@ class SearchDoctorRemoteDsImp implements SearchDoctorRemoteDs {
       queryParams['gender'] = gender.trim();
     }
     if (location != null && location.trim().isNotEmpty) {
-      queryParams['location'] = location.trim();
+      queryParams['city'] = location.trim();
     }
 
     final response = await api.get(

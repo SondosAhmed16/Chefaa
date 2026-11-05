@@ -678,6 +678,7 @@ void _initOrderTrackModule() {
     () => OrderTrackCubit(
       usecase: getIt<OrderTrackUsecase>(),
       confirmOrderUsecase: getIt<ConfirmOrderUsecase>(),
+      getOrdersUsecase: getIt<GetOrdersUsecase>(),
     ),
   );
 }

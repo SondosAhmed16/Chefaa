@@ -4,6 +4,7 @@ import 'package:chefaa/core/utils/validator.dart';
 import 'package:chefaa/core/widgets/custom_text_feild.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class PaymentForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
@@ -75,6 +76,7 @@ class PaymentForm extends StatelessWidget {
                     "assets/images/Vector.png",
                     width: 20,
                     height: 20,
+                    color: ColorManager.green100,
                   ),
 
                   const SizedBox(width: 3),
@@ -82,7 +84,7 @@ class PaymentForm extends StatelessWidget {
                   Text(
                     "Secure payment - Your data is encrypted",
                     style: getRegularStyle(
-                      color: ColorManager.green600,
+                      color: ColorManager.green100,
                       fontSize: 12,
                     ),
                   ),
@@ -126,12 +128,33 @@ class PaymentForm extends StatelessWidget {
                     children: [
                       const Text("Expiry Date"),
                       const SizedBox(height: 6),
-                      CustomTextField(
-                        controller: expiryDateController,
-                        text: "MM/YY",
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [LengthLimitingTextInputFormatter(5)],
-                        validator: Validators.validateExpiry,
+                      GestureDetector(
+                        onTap: () async {
+                          DateTime? picked = await showMonthPicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2023),
+                            lastDate: DateTime(2040),
+                          );
+
+                          if (picked != null) {
+                            String month = picked.month.toString().padLeft(
+                              2,
+                              '0',
+                            );
+                            String year = (picked.year % 100).toString();
+
+                            expiryDateController.text = "$month/$year";
+                          }
+                        },
+                        child: AbsorbPointer(
+                          child: CustomTextField(
+                            controller: expiryDateController,
+                            text: "MM/YY",
+                            keyboardType: TextInputType.number,
+                            validator: Validators.validateExpiry,
+                          ),
+                        ),
                       ),
                     ],
                   ),

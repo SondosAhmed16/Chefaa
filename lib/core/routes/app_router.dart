@@ -69,7 +69,6 @@ import 'package:chefaa/features/patient/order/presentation/pages/orders_history_
 import 'package:chefaa/features/patient/payment/presentation/cubit/payment_cubit.dart';
 import 'package:chefaa/features/patient/payment/presentation/pages/payment_page.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/data/model/pharmacy_profile_model/data..dart';
-
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/cubit/pharmacy_search_cubit.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/pages/medicine_details_screen.dart';
 import 'package:chefaa/features/patient/pharmacy%20search/presentation/pages/pharmacy_medicine_screen.dart';
@@ -94,7 +93,6 @@ import 'package:chefaa/features/pharmacy/profile/presentation/pages/pharmacy_pro
 import 'package:chefaa/features/pharmacy/stock/presentation/cubit/stock_cubit.dart';
 import 'package:chefaa/features/pharmacy/stock/presentation/pages/stock_view.dart';
 import 'package:chefaa/features/splash/presentation/pages/splash_screen.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -144,7 +142,7 @@ class Routes {
   static const String labDashboard = "/labDashboard";
   static const String labNotification = "/labNotification";
   static const String addRequest = "/addRequest";
-    static const String uploadResult = "/uploadResult";
+  static const String uploadResult = "/uploadResult";
 
   /********************************************************** */
   static const String completeDoctorProfile = "/completeDoctorProfile";
@@ -527,7 +525,7 @@ class AppRouter {
           ),
         );
 
-        case Routes.uploadResult:
+      case Routes.uploadResult:
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [

@@ -1,11 +1,10 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
+import 'package:chefaa/core/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class LocationFilter extends StatefulWidget {
   const LocationFilter({super.key});
@@ -73,10 +72,10 @@ class _LocationFilterState extends State<LocationFilter> {
 
   Future<void> _resolveCurrentLocation() async {
     setState(() => _isResolvingLocation = true);
-    final hasPermission = await _requestLocationPermission();
-    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-    if (!hasPermission || !serviceEnabled) {
+    final locationData = await LocationService.getLocationWithAddress();
+
+    if (locationData == null) {
       if (!mounted) return;
       setState(() {
         _currentPosition ??= _fallbackPosition;
@@ -86,29 +85,27 @@ class _LocationFilterState extends State<LocationFilter> {
       return;
     }
 
-    try {
-      final position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      final currentLocation = LatLng(position.latitude, position.longitude);
+    final currentLocation = LatLng(locationData.lat, locationData.lng);
 
-      if (!mounted) return;
-      setState(() {
-        _currentPosition = currentLocation;
-        _isResolvingLocation = false;
-        _canShowMyLocation = true;
-        markers = {
-          Marker(
-            markerId: const MarkerId('current-location'),
-            position: currentLocation,
-            icon: customIcon,
-          ),
-        };
-      });
-      await _moveCamera(currentLocation);
-    } catch (_) {
-      if (mounted) setState(() => _isResolvingLocation = false);
-    }
+    if (!mounted) return;
+    setState(() {
+      _currentPosition = currentLocation;
+      _isResolvingLocation = false;
+      _canShowMyLocation = true;
+      markers = {
+        Marker(
+          markerId: const MarkerId('current-location'),
+          position: currentLocation,
+          icon: customIcon,
+        ),
+      };
+
+      if (locationData.addressText != null && _searchController.text.isEmpty) {
+        _searchController.text = locationData.addressText!;
+      }
+    });
+
+    await _moveCamera(currentLocation);
   }
 
   Future<void> _moveCamera(LatLng position) async {
@@ -119,13 +116,6 @@ class _LocationFilterState extends State<LocationFilter> {
         CameraPosition(target: position, zoom: 15),
       ),
     );
-  }
-
-  Future<bool> _requestLocationPermission() async {
-    final status = await Permission.locationWhenInUse.request();
-    if (status.isGranted) return true;
-    if (status.isPermanentlyDenied) openAppSettings();
-    return false;
   }
 
   void _confirmLocation() async {
@@ -141,13 +131,14 @@ class _LocationFilterState extends State<LocationFilter> {
         if (placemarks.isNotEmpty) {
           final place = placemarks.first;
           final cityName = place.locality?.isNotEmpty == true
-              ? place.locality
-              : place.administrativeArea ?? "Cairo";
+              ? place.locality!
+              : (place.subAdministrativeArea ?? "Tanta");
+
           Navigator.pop(context, cityName);
           return;
         }
       } catch (_) {}
-      Navigator.pop(context, "Cairo"); // fallback
+      Navigator.pop(context, "Tanta");
     } else {
       Navigator.pop(context, null);
     }

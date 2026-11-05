@@ -210,9 +210,9 @@ class OrdersHistoryScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 if (order.orderId != null) {
-                                  Navigator.push(
+                                  await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => OrderTrackScreen(
@@ -220,6 +220,10 @@ class OrdersHistoryScreen extends StatelessWidget {
                                       ),
                                     ),
                                   );
+
+                                  if (context.mounted) {
+                                    context.read<GetOrdersCubit>().getOrders();
+                                  }
                                 }
                               },
                               child: Text(
