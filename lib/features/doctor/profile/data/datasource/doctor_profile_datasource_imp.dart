@@ -44,9 +44,9 @@ class DoctorProfileDatasourceImp implements DoctorProfileDatasource {
       'prePaymentNumbers': prePaymentNumbers ?? [],
     };
 
-    if (imageUrl != null && !imageUrl.startsWith('http')) {
-      body['image'] = await MultipartFile.fromFile(imageUrl);
-    }
+   if (imageUrl != null && imageUrl.isNotEmpty && !imageUrl.startsWith('http')) {
+  body['image'] = await MultipartFile.fromFile(imageUrl);
+}
 
     FormData formData = FormData.fromMap(body);
 

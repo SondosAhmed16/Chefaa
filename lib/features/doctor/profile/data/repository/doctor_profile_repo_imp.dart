@@ -62,9 +62,10 @@ class DoctorProfileRepoImp implements DoctorProfileRepo {
         prePaymentNumbers,
         clinicConsultationPrice,
       );
-      final model = UpdateProfileModel.fromMap(
-        response as Map<String, dynamic>,
-      );
+     if (response is! Map<String, dynamic>) {
+        return Left(ErrorModel(message: "Unexpected response format"));
+      }
+      final model = UpdateProfileModel.fromMap(response);
       return Right(model);
     } on Exceptions catch (e) {
       return Left(e.errorModel);

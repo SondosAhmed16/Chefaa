@@ -1,6 +1,9 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/font.dart';
 import 'package:chefaa/core/resources/style.dart';
+import 'package:chefaa/core/services/location_service.dart';
+import 'package:chefaa/features/facility/profile/data/model/address.dart';
+import 'package:chefaa/features/facility/profile/data/model/location.dart';
 import 'package:chefaa/features/facility/profile/data/model/profile_data.dart';
 import 'package:chefaa/features/facility/profile/data/model/working_hours.dart';
 import 'package:chefaa/features/facility/profile/presentation/cubit/lab_profile_cubit.dart';
@@ -79,7 +82,7 @@ class LabProfileScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Column(
                       children: [
-                        _buildLocationCard(profile),
+                        _buildLocationCard(context, profile),
                         const SizedBox(height: 16),
                         _buildCenterDetailsCard(profile),
                         const SizedBox(height: 16),
@@ -249,7 +252,6 @@ class LabProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    // عنوان طرق الدفع متعددة الاختيار
                     Text(
                       'Payment Methods',
                       style: getSemiBoldStyle(
@@ -259,7 +261,6 @@ class LabProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
 
-                    // توليد CheckboxListTile لكل طريقة دفع
                     ...availablePaymentMethods.map((method) {
                       final isSelected = selectedPaymentMethods.contains(
                         method,
@@ -277,7 +278,6 @@ class LabProfileScreen extends StatelessWidget {
                                 selectedPaymentMethods.add(method);
                               }
                             } else {
-                              // منع إزالة جميع الطرق بحيث تظل هناك طريقة واحدة على الأقل مختارة
                               if (selectedPaymentMethods.length > 1) {
                                 selectedPaymentMethods.remove(method);
                               }
@@ -325,8 +325,7 @@ class LabProfileScreen extends StatelessWidget {
                               open: selectedOpenHour,
                               close: selectedCloseHour,
                             ),
-                            paymentMethods:
-                                selectedPaymentMethods, // إرسال القائمة المختارة كاملة
+                            paymentMethods: selectedPaymentMethods,
                             commercialRegisterNumber: commercialController.text
                                 .trim(),
                             medicalDirectorName: directorController.text.trim(),
@@ -355,7 +354,98 @@ class LabProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLocationCard(ProfileData profile) {
+  void _showEditAddressDialog(
+    BuildContext context,
+    ProfileData profile,
+    String addressText,
+    double lat,
+    double lng,
+    LabProfileCubit labCubit,
+  ) {
+    final floorController = TextEditingController(
+      text: profile.addresses?.isNotEmpty == true
+          ? profile.addresses!.first.floor?.toString() ?? ''
+          : '',
+    );
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(
+            'Confirm Address & Floor',
+            style: getBoldStyle(
+              color: ColorManager.black,
+              fontSize: FontSize.s16,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Detected Address:',
+                style: TextStyle(color: ColorManager.gray, fontSize: 12),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                addressText,
+                style: getMediumStyle(
+                  color: ColorManager.black,
+                  fontSize: FontSize.s14,
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: floorController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Floor Number',
+                  hintText: 'e.g. 2',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: ColorManager.gray),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorManager.primary,
+              ),
+              onPressed: () {
+                final floorNum =
+                    int.tryParse(floorController.text.trim()) ?? 1;
+
+                final updatedAddress = Address(
+                  addressText: addressText,
+                  floor: floorNum,
+                  location: Location(
+                    type: "Point",
+                    coordinates: [lng, lat],
+                  ),
+                );
+
+                labCubit.updateProfile(
+                  addresses: [updatedAddress],
+                );
+
+                Navigator.pop(dialogContext);
+              },
+              child: const Text('Save', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildLocationCard(BuildContext context, ProfileData profile) {
     final firstAddress = profile.addresses?.isNotEmpty == true
         ? profile.addresses!.first
         : null;
@@ -379,9 +469,34 @@ class LabProfileScreen extends StatelessWidget {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    // التقاط الكيوبت من السياق الأصلي السليم قبل فتح أي Dialog
+                    final labCubit = context.read<LabProfileCubit>();
+                    final locationData =
+                        await LocationService.getLocationWithAddress();
+
+                    if (locationData != null && context.mounted) {
+                      _showEditAddressDialog(
+                        context,
+                        profile,
+                        locationData.addressText ?? "Unknown Location",
+                        locationData.lat,
+                        locationData.lng,
+                        labCubit,
+                      );
+                    } else if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Could not get current location. Please check permissions.',
+                          ),
+                          backgroundColor: ColorManager.error,
+                        ),
+                      );
+                    }
+                  },
                   child: Text(
-                    'Open maps',
+                    'Update Location',
                     style: getMediumStyle(
                       color: ColorManager.primary,
                       fontSize: FontSize.s14,
@@ -392,7 +507,7 @@ class LabProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              '${firstAddress?.addressText ?? ''}${firstAddress?.floor != null ? ', Floor ${firstAddress!.floor}' : ''}',
+              '${firstAddress?.addressText ?? 'No address set'}${firstAddress?.floor != null ? ', Floor ${firstAddress!.floor}' : ''}',
               style: getBoldStyle(
                 color: ColorManager.black,
                 fontSize: FontSize.s14,
@@ -558,8 +673,8 @@ class LabProfileScreen extends StatelessWidget {
       ),
       value: value,
       onChanged: onChanged,
-      activeColor: ColorManager.primary,
-      inactiveTrackColor: ColorManager.darkGray.withOpacity(0.3),
+      activeThumbColor: ColorManager.primary,
+      inactiveTrackColor: ColorManager.darkGray.withValues(alpha: 0.3),
       inactiveThumbColor: ColorManager.darkGray,
       contentPadding: EdgeInsets.zero,
     );

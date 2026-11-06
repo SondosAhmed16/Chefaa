@@ -34,6 +34,12 @@ class _CompleteDoctorProfileState extends State<CompleteDoctorProfile> {
   String? _selectedGender;
 
   @override
+  void initState() {
+    super.initState();
+    context.read<DoctorProfileCubit>().getDoctorProfile();
+  }
+
+  @override
   void dispose() {
     _ageController.dispose();
     _experienceController.dispose();

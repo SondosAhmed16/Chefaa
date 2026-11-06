@@ -1,5 +1,6 @@
 import 'package:chefaa/core/resources/color.dart';
 import 'package:chefaa/core/resources/style.dart';
+import 'package:chefaa/core/services/location_service.dart';
 import 'package:chefaa/core/widgets/custem_button.dart';
 import 'package:chefaa/core/widgets/custom_text_feild.dart';
 import 'package:chefaa/features/doctor/home/data/model/clinic_model/break.dart';
@@ -8,6 +9,7 @@ import 'package:chefaa/features/doctor/home/presentation/cubit/doctor_home_state
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geocoding/geocoding.dart';
 
 class AddClinicScreen extends StatefulWidget {
   final String doctorId;
@@ -18,6 +20,7 @@ class AddClinicScreen extends StatefulWidget {
 }
 
 class _AddClinicScreenState extends State<AddClinicScreen> {
+  bool _isFetchingLocation = false;
   final Map<String, List<Break>> dayBreaks = {};
 
   @override
@@ -26,6 +29,42 @@ class _AddClinicScreenState extends State<AddClinicScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<DoctorHomeCubit>().resetForm();
     });
+  }
+
+  Future<void> _fetchAndFillLocation(DoctorHomeCubit cubit) async {
+    setState(() => _isFetchingLocation = true);
+    
+    final locationData = await LocationService.getLocationWithAddress();
+
+    if (locationData != null) {
+      cubit.currentLat = locationData.lat;
+      cubit.currentLng = locationData.lng;
+      
+      cubit.addressController.text = locationData.addressText ?? "";
+
+      try {
+        List<Placemark> placemarks = await placemarkFromCoordinates(
+          locationData.lat,
+          locationData.lng,
+        );
+        if (placemarks.isNotEmpty) {
+          final place = placemarks.first;
+          cubit.cityController.text = place.locality?.isNotEmpty == true
+              ? place.locality!
+              : (place.subAdministrativeArea ?? "Tanta");
+        }
+      } catch (_) {
+        cubit.cityController.text = "Tanta";
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Failed to get current location")),
+        );
+      }
+    }
+
+    setState(() => _isFetchingLocation = false);
   }
 
   @override
@@ -68,11 +107,32 @@ class _AddClinicScreenState extends State<AddClinicScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Clinic Information",
-                  style: getBoldStyle(color: ColorManager.black, fontSize: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Clinic Information",
+                      style: getBoldStyle(color: ColorManager.black, fontSize: 16),
+                    ),
+                    TextButton.icon(
+                      onPressed: _isFetchingLocation 
+                          ? null 
+                          : () => _fetchAndFillLocation(cubit),
+                      icon: _isFetchingLocation
+                          ? SizedBox(
+                              width: 16.w,
+                              height: 16.h,
+                              child: const CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(Icons.my_location, size: 16, color: ColorManager.primary),
+                      label: Text(
+                        "Auto-detect Location",
+                        style: getBoldStyle(color: ColorManager.primary, fontSize: 13),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 12.h),
                 CustomTextField(
                   controller: cubit.nameController,
                   text: "Clinic Name",
@@ -83,7 +143,10 @@ class _AddClinicScreenState extends State<AddClinicScreen> {
                   text: "Address",
                 ),
                 SizedBox(height: 12.h),
-                CustomTextField(controller: cubit.cityController, text: "City"),
+                CustomTextField(
+                  controller: cubit.cityController, 
+                  text: "City",
+                ),
                 SizedBox(height: 12.h),
                 CustomTextField(
                   controller: cubit.priceController,
@@ -278,7 +341,10 @@ class _AddClinicScreenState extends State<AddClinicScreen> {
                   text: "Add Clinic",
                   isLoading: isAddLoading,
                   onPressed: () {
-                    cubit.addClinic(doctorId: widget.doctorId);
+                    cubit.addClinic(
+                      doctorId: widget.doctorId,
+                      // إذا كان الـ Cubit يدعم استقبال الـ dayBreaks أرسلها هنا، أو سيتم أخذها تلقائياً
+                    );
                   },
                 ),
                 SizedBox(height: 20.h),

@@ -15,14 +15,14 @@ class UpdateProfileModel {
     return 'UpdateProfileModel(message: $message, doctor: $doctor)';
   }
 
-  factory UpdateProfileModel.fromMap(Map<String, dynamic> data) {
-    return UpdateProfileModel(
-      message: data['message'] as String?,
-      doctor: data['doctor'] == null
-          ? null
-          : Doctor.fromMap(data['doctor'] as Map<String, dynamic>),
-    );
-  }
+ factory UpdateProfileModel.fromMap(Map<String, dynamic> data) {
+  return UpdateProfileModel(
+    message: data['message'] as String?,
+    doctor: data['doctor'] != null && data['doctor'] is Map<String, dynamic>
+        ? Doctor.fromMap(data['doctor'] as Map<String, dynamic>)
+        : null,
+  );
+}
 
   Map<String, dynamic> toMap() => {
     'message': message,

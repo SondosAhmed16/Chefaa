@@ -86,6 +86,16 @@ class DoctorHomeCubit extends Cubit<DoctorHomeState> {
     });
   }
 
+  double? currentLat;
+  double? currentLng;
+
+  Map<String, dynamic> _buildLocation() {
+    return {
+      "type": "Point",
+      "coordinates": [currentLng ?? 31.2357, currentLat ?? 30.0444],
+    };
+  }
+
   Future<void> addClinic({required String doctorId}) async {
     if (!isClosed) emit(AddClinicLoading());
 
@@ -145,15 +155,15 @@ class DoctorHomeCubit extends Cubit<DoctorHomeState> {
 
   int _toMinutes(TimeOfDay t) => t.hour * 60 + t.minute;
 
-  Map<String, dynamic> _buildLocation() {
-    return {
-      "type": "Point",
-      "coordinates": [
-        double.tryParse(longitudeController.text) ?? 0.0,
-        double.tryParse(latitudeController.text) ?? 0.0,
-      ],
-    };
-  }
+  // Map<String, dynamic> _buildLocation() {
+  //   return {
+  //     "type": "Point",
+  //     "coordinates": [
+  //       double.tryParse(longitudeController.text) ?? 0.0,
+  //       double.tryParse(latitudeController.text) ?? 0.0,
+  //     ],
+  //   };
+  // }
 
   List<Map<String, dynamic>> _buildDays({Map<String, List<Break>>? dayBreaks}) {
     return selectedDays.entries.where((e) => e.value).map((e) {
