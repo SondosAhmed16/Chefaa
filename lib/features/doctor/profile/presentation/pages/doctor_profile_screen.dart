@@ -295,7 +295,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                       ),
                       _buildStatCard(
                         'Rating',
-                        '★ ${rating.toStringAsFixed(1)}',
+                        ' ${rating.toStringAsFixed(1)}',
                         Icons.star,
                       ),
                       _buildStatCard(
@@ -381,28 +381,21 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
         _buildCardContainer(
           child: Column(
             children: [
-              _buildInfoRow(Icons.email, 'Email', doctorData.email ?? 'N/A'),
+              _buildInfoRow('Email', doctorData.email ?? 'N/A'),
               const Divider(),
               _buildInfoRow(
-                Icons.phone,
                 'Contact Number',
                 doctorData.contactNumber ?? 'N/A',
               ),
               const Divider(),
               _buildInfoRow(
-                Icons.cake,
                 'Age',
                 doctorData.age != null ? '${doctorData.age} Years' : 'N/A',
               ),
               const Divider(),
-              _buildInfoRow(
-                Icons.person_outline,
-                'Gender',
-                doctorData.gender ?? 'N/A',
-              ),
+              _buildInfoRow('Gender', doctorData.gender ?? 'N/A'),
               const Divider(),
               _buildInfoRow(
-                Icons.payment,
                 'Payment Option',
                 doctorData.paymentOption ?? 'N/A',
               ),
@@ -411,7 +404,6 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                   _prePaymentNumbers.isNotEmpty) ...[
                 const Divider(),
                 _buildInfoRow(
-                  Icons.phone_android,
                   'Pre-Payment Numbers',
                   _prePaymentNumbers.join(', '),
                 ),
@@ -664,12 +656,11 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String title, String value) {
+  Widget _buildInfoRow(String title, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         children: [
-          Icon(icon, size: 18, color: ColorManager.primary),
           const SizedBox(width: 10),
           Text(
             '$title: ',

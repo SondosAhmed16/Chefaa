@@ -235,7 +235,7 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
 
                   CustomTextField(
                     controller: _nextVisitController,
-                    text: 'Next Visit (YYYY-MM-DD)',
+                    text: 'Next Visit ',
                   ),
                   const SizedBox(height: 16),
 

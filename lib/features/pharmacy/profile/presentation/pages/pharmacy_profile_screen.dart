@@ -630,7 +630,6 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
           const SizedBox(height: 12),
         ],
 
-        // قسم Working Hours المدعوم بـ TimePicker لاختيار الوقت
         _buildSectionTitle('Working Hours'),
         Container(
           padding: const EdgeInsets.all(12),
@@ -834,7 +833,6 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
         ),
         const SizedBox(height: 12),
 
-        // حقل الـ About بحجم كبير ومتعدد الأسطر
         _buildFieldLabel('About'),
         TextField(
           controller: _aboutController,

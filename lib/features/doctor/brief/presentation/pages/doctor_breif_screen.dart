@@ -34,39 +34,18 @@ class DoctorBriefScreen extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new_outlined,
-                      size: 20,
-                      color: ColorManager.white,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      "Daily Briefing",
-                      style: getBoldStyle(
-                        color: ColorManager.white,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 30),
+
+              Text(
+                "Daily Briefing",
+                style: getBoldStyle(color: ColorManager.white, fontSize: 20),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 12.0, bottom: 4.0),
-                child: Text(
-                  "Explore your daily overview and updates",
-                  style: getMediumStyle(
-                    color: ColorManager.white,
-                    fontSize: 13,
-                  ),
-                ),
+
+              const SizedBox(height: 15),
+              Text(
+                "Explore your daily overview and updates",
+                style: getMediumStyle(color: ColorManager.white, fontSize: 13),
               ),
             ],
           ),
